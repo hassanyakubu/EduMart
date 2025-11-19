@@ -112,8 +112,8 @@
         
         if ($isServer) {
             echo '<p class="success">✅ Running on SERVER</p>';
-            echo '<p><strong>Base URL:</strong> http://169.239.251.102:442/~hassan.yakubu</p>';
-            echo '<p><strong>Homepage:</strong> <a href="http://169.239.251.102:442/~hassan.yakubu/app/views/home/index.php">Click to test</a></p>';
+            echo '<p><strong>Base URL:</strong> http://169.239.251.102:442/~hassan.yakubu/EduMart</p>';
+            echo '<p><strong>Homepage:</strong> <a href="http://169.239.251.102:442/~hassan.yakubu/EduMart/app/views/home/index.php">Click to test</a></p>';
         } else {
             echo '<p class="info">ℹ️ Running LOCALLY</p>';
             echo '<p><strong>Base URL:</strong> http://localhost:8000</p>';
@@ -127,9 +127,9 @@
         <?php
         if ($isServer) {
             echo '<ol>';
-            echo '<li>If all tests pass, go to: <a href="http://169.239.251.102:442/~hassan.yakubu/app/views/home/index.php">Homepage</a></li>';
-            echo '<li>Register an account: <a href="http://169.239.251.102:442/~hassan.yakubu/app/views/auth/register.php">Register</a></li>';
-            echo '<li>Login: <a href="http://169.239.251.102:442/~hassan.yakubu/app/views/auth/login.php">Login</a></li>';
+            echo '<li>If all tests pass, go to: <a href="http://169.239.251.102:442/~hassan.yakubu/EduMart/app/views/home/index.php">Homepage</a></li>';
+            echo '<li>Register an account: <a href="http://169.239.251.102:442/~hassan.yakubu/EduMart/app/views/auth/register.php">Register</a></li>';
+            echo '<li>Login: <a href="http://169.239.251.102:442/~hassan.yakubu/EduMart/app/views/auth/login.php">Login</a></li>';
             echo '<li><strong>DELETE THIS FILE after testing!</strong></li>';
             echo '</ol>';
         } else {

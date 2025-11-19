@@ -9,8 +9,8 @@ $isServer = (isset($_SERVER['HTTP_HOST']) && strpos($_SERVER['HTTP_HOST'], '169.
 
 if ($isServer) {
     // Server configuration
-    define('BASE_URL', 'http://169.239.251.102:442/~hassan.yakubu');
-    define('BASE_PATH', '/~hassan.yakubu');
+    define('BASE_URL', 'http://169.239.251.102:442/~hassan.yakubu/EduMart');
+    define('BASE_PATH', '/~hassan.yakubu/EduMart');
     header('Location: ' . BASE_URL . '/app/views/home/index.php');
 } else {
     // Local configuration
