@@ -1,0 +1,133 @@
+EduMart Deployment Checklist
+============================
+Server: http://169.239.251.102:442/~hassan.yakubu
+
+BEFORE UPLOADING:
+=================
+[ ] 1. Run path update script:
+       chmod +x update_paths_for_server.sh
+       ./update_paths_for_server.sh
+
+[ ] 2. Verify paths updated in:
+       - app/views/layouts/header.php
+       - app/views/layouts/footer.php
+       - index.php
+       - .htaccess
+
+UPLOAD TO SERVER:
+=================
+[ ] 3. Connect via SSH:
+       ssh hassan.yakubu@169.239.251.102 -p 442
+
+[ ] 4. Upload files (from local machine):
+       scp -P 442 -r * hassan.yakubu@169.239.251.102:~/public_html/
+       
+       OR use FTP/SFTP client (FileZilla):
+       - Host: 169.239.251.102
+       - Port: 442
+       - Username: hassan.yakubu
+       - Upload all files to ~/public_html/
+
+DATABASE SETUP:
+===============
+[ ] 5. SSH into server:
+       ssh hassan.yakubu@169.239.251.102 -p 442
+
+[ ] 6. Create and import database (ONE file only):
+       mysql -u hassan.yakubu -p
+       CREATE DATABASE IF NOT EXISTS ecommerce_2025A_hassan_yakubu;
+       USE ecommerce_2025A_hassan_yakubu;
+       SOURCE ~/public_html/db/ecommerce_2025A_hassan_yakubu.sql;
+       EXIT;
+       
+       Note: Only ONE database file to import!
+
+[ ] 7. Update database credentials in settings/db_cred.php:
+       - USERNAME: hassan.yakubu
+       - PASSWD: [your MySQL password]
+       - DATABASE: ecommerce_2025A_hassan_yakubu
+
+FILE PERMISSIONS:
+=================
+[ ] 8. Set permissions (via SSH):
+       cd ~/public_html/
+       chmod -R 777 public/uploads/
+       mkdir -p public/uploads/images
+       mkdir -p public/uploads/files
+       chmod -R 777 public/uploads/images
+       chmod -R 777 public/uploads/files
+
+TESTING:
+========
+[ ] 9. Test database connection:
+       Create test_db.php in root:
+       <?php
+       require_once 'settings/db_cred.php';
+       $conn = new mysqli(SERVER, USERNAME, PASSWD, DATABASE);
+       if ($conn->connect_error) die("Failed: " . $conn->connect_error);
+       echo "✅ Connected!";
+       ?>
+       
+       Access: http://169.239.251.102:442/~hassan.yakubu/test_db.php
+       DELETE THIS FILE AFTER TESTING!
+
+[ ] 10. Test homepage:
+        http://169.239.251.102:442/~hassan.yakubu
+
+[ ] 11. Test pages:
+        - Login: /app/views/auth/login.php
+        - Register: /app/views/auth/register.php
+        - Browse: /app/views/resources/list.php
+
+[ ] 12. Register test account
+
+[ ] 13. Make account admin:
+        mysql -u hassan.yakubu -p ecommerce_2025A_hassan_yakubu
+        UPDATE customer SET user_role = 1 WHERE customer_email = 'your@email.com';
+        EXIT;
+
+[ ] 14. Test full flow:
+        - Register
+        - Login
+        - Browse resources
+        - Add to cart
+        - Checkout
+        - Pay (use any 10-digit number: 0244123456)
+        - Download
+        - Leave review
+
+[ ] 15. Test admin dashboard:
+        http://169.239.251.102:442/~hassan.yakubu/app/views/admin/dashboard.php
+
+TROUBLESHOOTING:
+================
+If CSS not loading:
+  - Check paths in header.php include /~hassan.yakubu/
+  
+If database error:
+  - Verify credentials in settings/db_cred.php
+  - Check database exists: mysql -u hassan.yakubu -p -e "SHOW DATABASES;"
+  
+If 404 errors:
+  - Check .htaccess RewriteBase is /~hassan.yakubu/
+  
+If permission errors:
+  - chmod -R 777 public/uploads/
+
+FINAL VERIFICATION:
+===================
+[ ] Homepage loads with CSS
+[ ] Can register
+[ ] Can login
+[ ] Can browse resources
+[ ] Can add to cart
+[ ] Can checkout
+[ ] Payment works
+[ ] Can download
+[ ] Can review
+[ ] Admin dashboard works
+
+DONE! ✅
+========
+Your EduMart is live at:
+http://169.239.251.102:442/~hassan.yakubu

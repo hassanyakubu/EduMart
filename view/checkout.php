@@ -17,7 +17,7 @@ if (!$cart_items || count($cart_items) == 0) {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Checkout - Aya Crafts</title>
+    <title>Checkout - EduMart</title>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body { font-family: 'Inter', sans-serif; background: #ffffff; }
@@ -55,7 +55,7 @@ if (!$cart_items || count($cart_items) == 0) {
 <body>
     <nav class="navbar">
         <div class="nav-container">
-            <a href="../index.php" class="logo">Aya Crafts</a>
+            <a href="../index.php" class="logo">EduMart</a>
             <div style="display: flex; gap: 20px;">
                 <a href="cart.php" style="color: #374151; text-decoration: none;">← Back to Cart</a>
             </div>

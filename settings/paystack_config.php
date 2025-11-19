@@ -39,7 +39,7 @@ function paystack_initialize_transaction($amount, $email, $reference = null) {
         'callback_url' => PAYSTACK_CALLBACK_URL,
         'metadata' => [
             'currency' => 'GHS',
-            'app' => 'Aya Crafts',
+            'app' => 'EduMart',
             'environment' => APP_ENVIRONMENT
         ]
     ];

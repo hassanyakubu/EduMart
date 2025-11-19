@@ -13,7 +13,7 @@ $reference = isset($_GET['reference']) ? htmlspecialchars($_GET['reference']) : 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Payment Successful - Aya Crafts</title>
+    <title>Payment Successful - EduMart</title>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body { font-family: 'Inter', sans-serif; background: #ffffff; }
@@ -129,7 +129,7 @@ $reference = isset($_GET['reference']) ? htmlspecialchars($_GET['reference']) : 
 <body>
     <nav class="navbar">
         <div class="nav-container">
-            <a href="../index.php" class="logo">Aya Crafts</a>
+            <a href="../index.php" class="logo">EduMart</a>
             <div style="display: flex; gap: 20px;">
                 <a href="all_product.php" style="color: #374151; text-decoration: none;">← Continue Shopping</a>
             </div>
