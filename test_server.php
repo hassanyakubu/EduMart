@@ -149,19 +149,3 @@
     </div>
 </body>
 </html>
-```
-
-Now upload this file to your server and access it at:
-```
-http://169.239.251.102:442/~hassan.yakubu/test_server.php
-```
-
-This will show you:
-- ✅ PHP version
-- ✅ Server info
-- ✅ Database connection status
-- ✅ File permissions
-- ✅ Required files check
-- ✅ Direct links to test pages
-
-**After testing, DELETE this file for security!**
