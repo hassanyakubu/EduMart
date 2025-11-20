@@ -4,11 +4,11 @@ if (!defined("SERVER")) {
 }
 
 if (!defined("USERNAME")) {
-    define("USERNAME", "root");
+    define("USERNAME", "hassan.yakubu");  // Changed from 'root' to your username
 }
 
 if (!defined("PASSWD")) {
-    define("PASSWD", "");
+    define("PASSWD", "jonnytest");
 }
 
 if (!defined("DATABASE")) {
