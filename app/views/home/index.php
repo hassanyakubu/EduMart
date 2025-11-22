@@ -47,7 +47,6 @@ require_once __DIR__ . '/../layouts/header.php';
     gap: 1.5rem;
     justify-content: center;
     flex-wrap: wrap;
-    margin-bottom: 3rem;
 }
 
 .hero-buttons .btn {
@@ -82,45 +81,6 @@ require_once __DIR__ . '/../layouts/header.php';
     transform: translateY(-3px);
 }
 
-.contact-info {
-    background: rgba(255, 255, 255, 0.1);
-    backdrop-filter: blur(10px);
-    padding: 1.5rem 2rem;
-    border-radius: 15px;
-    display: inline-block;
-    margin-top: 2rem;
-}
-
-.contact-info h3 {
-    font-size: 1.2rem;
-    margin-bottom: 1rem;
-    color: var(--primary-yellow);
-}
-
-.contact-details {
-    display: flex;
-    gap: 2rem;
-    flex-wrap: wrap;
-    justify-content: center;
-}
-
-.contact-item {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    font-size: 1rem;
-}
-
-.contact-item a {
-    color: white;
-    text-decoration: none;
-    transition: color 0.3s;
-}
-
-.contact-item a:hover {
-    color: var(--primary-yellow);
-}
-
 @keyframes fadeInUp {
     from {
         opacity: 0;
@@ -150,11 +110,6 @@ require_once __DIR__ . '/../layouts/header.php';
         width: 100%;
         max-width: 300px;
     }
-    
-    .contact-details {
-        flex-direction: column;
-        gap: 1rem;
-    }
 }
 </style>
 
@@ -179,20 +134,6 @@ require_once __DIR__ . '/../layouts/header.php';
                     Log In
                 </a>
             <?php endif; ?>
-        </div>
-        
-        <div class="contact-info">
-            <h3>📞 Contact Us</h3>
-            <div class="contact-details">
-                <div class="contact-item">
-                    <span>📱</span>
-                    <a href="tel:0204200934">0204200934</a>
-                </div>
-                <div class="contact-item">
-                    <span>✉️</span>
-                    <a href="mailto:yhassan677@gmail.com">yhassan677@gmail.com</a>
-                </div>
-            </div>
         </div>
     </div>
 </div>

@@ -2,26 +2,13 @@
     
     <footer class="footer">
         <div class="container">
-            <div class="footer-content">
-                <div class="footer-section">
-                    <h3>EduMart</h3>
-                    <p>Your trusted marketplace for digital learning resources.</p>
-                </div>
-                <div class="footer-section">
-                    <h4>Quick Links</h4>
-                    <ul>
-                        <li><a href="<?php echo url('app/views/home/index.php'); ?>">Home</a></li>
-                        <li><a href="<?php echo url('app/views/resources/list.php'); ?>">Browse</a></li>
-                        <li><a href="<?php echo url('app/views/auth/register.php'); ?>">Sign Up</a></li>
-                    </ul>
-                </div>
-                <div class="footer-section">
-                    <h4>Support</h4>
-                    <ul>
-                        <li><a href="#">Help Center</a></li>
-                        <li><a href="#">Contact Us</a></li>
-                        <li><a href="#">Terms of Service</a></li>
-                    </ul>
+            <div class="footer-content" style="display: flex; justify-content: center; align-items: center; gap: 3rem; padding: 2rem 0;">
+                <a href="<?php echo url('app/views/resources/list.php'); ?>" style="color: white; text-decoration: none; font-size: 1.1rem; font-weight: 600; transition: color 0.3s;">
+                    📚 View Resources
+                </a>
+                <div style="color: white; font-size: 1.1rem; font-weight: 600;">
+                    📞 Contact Us: <a href="tel:0204200934" style="color: var(--primary-yellow); text-decoration: none;">0204200934</a> | 
+                    <a href="mailto:yhassan677@gmail.com" style="color: var(--primary-yellow); text-decoration: none;">yhassan677@gmail.com</a>
                 </div>
             </div>
             <div class="footer-bottom">
