@@ -23,6 +23,7 @@
                     <?php if ($_SESSION['user_role'] == 1 || (isset($_SESSION['user_type']) && $_SESSION['user_type'] == 'creator')): ?>
                         <li><a href="<?php echo url('app/views/resources/upload.php'); ?>">Upload</a></li>
                     <?php endif; ?>
+                    <li><a href="<?php echo url('app/views/profile/my_resources.php'); ?>">My Resources</a></li>
                     <li><a href="<?php echo url('app/views/cart/view.php'); ?>">Cart</a></li>
                     <li><a href="<?php echo url('app/views/profile/dashboard.php'); ?>">Profile</a></li>
                     <li><a href="<?php echo url('app/views/auth/logout.php'); ?>">Logout</a></li>
