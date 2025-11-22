@@ -1,4 +1,8 @@
 <?php
+// Enable error reporting for debugging
+ini_set('display_errors', 1);
+error_reporting(E_ALL);
+
 session_start();
 require_once __DIR__ . '/../../config/config.php';
 require_once __DIR__ . '/../../models/resource_model.php';
@@ -128,11 +132,16 @@ if (!$file) {
 
 $resourceModel = new resource_model();
 
-if ($resourceModel->create($cat_id, $creator_id, $title, $price, $desc, $image, $keywords, $file)) {
-    $_SESSION['success'] = 'Resource uploaded successfully!';
-    header('Location: ' . url('app/views/resources/list.php'));
-} else {
-    $_SESSION['error'] = 'Failed to upload resource.';
+try {
+    if ($resourceModel->create($cat_id, $creator_id, $title, $price, $desc, $image, $keywords, $file)) {
+        $_SESSION['success'] = 'Resource uploaded successfully!';
+        header('Location: ' . url('app/views/resources/list.php'));
+    } else {
+        $_SESSION['error'] = 'Failed to save resource to database.';
+        header('Location: ' . url('app/views/resources/upload.php'));
+    }
+} catch (Exception $e) {
+    $_SESSION['error'] = 'Error: ' . $e->getMessage();
     header('Location: ' . url('app/views/resources/upload.php'));
 }
 exit;
