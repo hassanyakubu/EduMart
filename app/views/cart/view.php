@@ -1,16 +1,17 @@
 <?php
 session_start();
-require_once __DIR__ . '/../../controllers/cart_controller.php';
+require_once __DIR__ . '/../../config/config.php';
+require_once __DIR__ . '/../../models/cart_model.php';
 
 if (!isset($_SESSION['user_id'])) {
-    require_once __DIR__ . '/../../config/config.php';
     $_SESSION['error'] = 'Please log in to view your cart.';
     header('Location: ' . url('app/views/auth/login.php'));
     exit;
 }
 
-$controller = new cart_controller();
-$controller->view();
+$cartModel = new cart_model();
+$cart_items = $cartModel->getUserCart($_SESSION['user_id']);
+$total = $cartModel->getTotal($_SESSION['user_id']);
 
 $page_title = 'Shopping Cart';
 require_once __DIR__ . '/../layouts/header.php';
