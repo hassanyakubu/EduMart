@@ -1,7 +1,7 @@
 <?php
 session_start();
 require_once __DIR__ . '/../../config/config.php';
-require_once __DIR__ . '/../../models/Cart.php';
+require_once __DIR__ . '/../../models/cart_model.php';
 
 if (!isset($_SESSION['user_id'])) {
     $_SESSION['error'] = 'Please log in to add items to your cart.';
@@ -16,7 +16,7 @@ if (!isset($_GET['id']) || empty($_GET['id'])) {
     exit;
 }
 
-$cartModel = new Cart();
+$cartModel = new cart_model();
 $resource_id = intval($_GET['id']);
 
 if ($cartModel->addToCart($_SESSION['user_id'], $resource_id)) {
