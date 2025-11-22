@@ -1,16 +1,27 @@
 <?php
 session_start();
-require_once __DIR__ . '/../../controllers/resource_controller.php';
+require_once __DIR__ . '/../../config/config.php';
+require_once __DIR__ . '/../../models/category_model.php';
+require_once __DIR__ . '/../../models/creator_model.php';
 
 if (!isset($_SESSION['user_id'])) {
-    require_once __DIR__ . '/../../config/config.php';
     $_SESSION['error'] = 'Please log in to upload resources.';
     header('Location: ' . url('app/views/auth/login.php'));
     exit;
 }
 
-$controller = new resource_controller();
-$controller->upload();
+// Check if user is creator or admin
+if ($_SESSION['user_role'] != 1 && (!isset($_SESSION['user_type']) || $_SESSION['user_type'] != 'creator')) {
+    $_SESSION['error'] = 'Only creators and admins can upload resources.';
+    header('Location: ' . url('app/views/home/index.php'));
+    exit;
+}
+
+$categoryModel = new category_model();
+$creatorModel = new creator_model();
+
+$categories = $categoryModel->getAll();
+$creators = $creatorModel->getAll();
 
 $page_title = 'Upload Resource';
 require_once __DIR__ . '/../layouts/header.php';
@@ -36,16 +47,6 @@ require_once __DIR__ . '/../layouts/header.php';
             </div>
             
             <div class="form-group">
-                <label for="creator">Creator</label>
-                <select id="creator" name="creator" required>
-                    <option value="">Select Creator</option>
-                    <?php foreach ($creators as $creator): ?>
-                        <option value="<?php echo $creator['creator_id']; ?>"><?php echo htmlspecialchars($creator['creator_name']); ?></option>
-                    <?php endforeach; ?>
-                </select>
-            </div>
-            
-            <div class="form-group">
                 <label for="price">Price (₵)</label>
                 <input type="number" id="price" name="price" step="0.01" min="0" required>
             </div>
@@ -61,8 +62,11 @@ require_once __DIR__ . '/../layouts/header.php';
             </div>
             
             <div class="form-group">
-                <label for="image">Thumbnail Image</label>
-                <input type="file" id="image" name="image" accept="image/*" required>
+                <label for="image">Thumbnail Image (Optional)</label>
+                <input type="file" id="image" name="image" accept="image/*">
+                <small style="color: #666; display: block; margin-top: 0.5rem;">
+                    Upload a cover image for your resource (JPG, PNG, GIF)
+                </small>
             </div>
             
             <div class="form-group">

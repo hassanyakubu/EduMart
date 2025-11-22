@@ -1,9 +1,28 @@
 <?php
 session_start();
-require_once __DIR__ . '/../../controllers/resource_controller.php';
+require_once __DIR__ . '/../../config/config.php';
+require_once __DIR__ . '/../../models/resource_model.php';
+require_once __DIR__ . '/../../models/category_model.php';
+require_once __DIR__ . '/../../models/creator_model.php';
 
-$controller = new resource_controller();
-$controller->index();
+$resourceModel = new resource_model();
+$categoryModel = new category_model();
+$creatorModel = new creator_model();
+
+$keyword = $_GET['search'] ?? '';
+$category = $_GET['category'] ?? null;
+$creator = $_GET['creator'] ?? null;
+$minPrice = $_GET['min_price'] ?? null;
+$maxPrice = $_GET['max_price'] ?? null;
+
+if ($keyword || $category || $creator || $minPrice || $maxPrice) {
+    $resources = $resourceModel->search($keyword, $category, $minPrice, $maxPrice, $creator);
+} else {
+    $resources = $resourceModel->getAll();
+}
+
+$categories = $categoryModel->getAll();
+$creators = $creatorModel->getAll();
 
 $page_title = 'Browse Resources';
 require_once __DIR__ . '/../layouts/header.php';
@@ -12,12 +31,12 @@ require_once __DIR__ . '/../layouts/header.php';
 <div class="container">
     <h1 style="margin: 2rem 0 1rem;">Browse Resources</h1>
     
-    <div style="background: white; padding: 1.5rem; border-radius: 12px; margin-bottom: 2rem;">
+    <div style="background: white; padding: 1.5rem; border-radius: 12px; margin-bottom: 2rem; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
         <form action="" method="GET" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem;">
-            <input type="text" name="search" placeholder="Search..." value="<?php echo $_GET['search'] ?? ''; ?>" style="padding: 0.8rem; border: 1px solid #ddd; border-radius: 8px;">
+            <input type="text" name="search" placeholder="🔍 Search resources..." value="<?php echo htmlspecialchars($_GET['search'] ?? ''); ?>" style="padding: 0.8rem; border: 1px solid #ddd; border-radius: 8px;">
             
             <select name="category" style="padding: 0.8rem; border: 1px solid #ddd; border-radius: 8px;">
-                <option value="">All Categories</option>
+                <option value="">📚 All Categories</option>
                 <?php foreach ($categories as $cat): ?>
                     <option value="<?php echo $cat['cat_id']; ?>" <?php echo (isset($_GET['category']) && $_GET['category'] == $cat['cat_id']) ? 'selected' : ''; ?>>
                         <?php echo htmlspecialchars($cat['cat_name']); ?>
@@ -25,11 +44,20 @@ require_once __DIR__ . '/../layouts/header.php';
                 <?php endforeach; ?>
             </select>
             
-            <input type="number" name="min_price" placeholder="Min Price" value="<?php echo $_GET['min_price'] ?? ''; ?>" style="padding: 0.8rem; border: 1px solid #ddd; border-radius: 8px;">
+            <select name="creator" style="padding: 0.8rem; border: 1px solid #ddd; border-radius: 8px;">
+                <option value="">✍️ All Creators</option>
+                <?php foreach ($creators as $cr): ?>
+                    <option value="<?php echo $cr['creator_id']; ?>" <?php echo (isset($_GET['creator']) && $_GET['creator'] == $cr['creator_id']) ? 'selected' : ''; ?>>
+                        <?php echo htmlspecialchars($cr['creator_name']); ?>
+                    </option>
+                <?php endforeach; ?>
+            </select>
             
-            <input type="number" name="max_price" placeholder="Max Price" value="<?php echo $_GET['max_price'] ?? ''; ?>" style="padding: 0.8rem; border: 1px solid #ddd; border-radius: 8px;">
+            <input type="number" name="min_price" placeholder="₵ Min Price" value="<?php echo htmlspecialchars($_GET['min_price'] ?? ''); ?>" style="padding: 0.8rem; border: 1px solid #ddd; border-radius: 8px;">
             
-            <button type="submit" class="btn btn-primary">Filter</button>
+            <input type="number" name="max_price" placeholder="₵ Max Price" value="<?php echo htmlspecialchars($_GET['max_price'] ?? ''); ?>" style="padding: 0.8rem; border: 1px solid #ddd; border-radius: 8px;">
+            
+            <button type="submit" class="btn btn-primary">🔎 Filter</button>
         </form>
     </div>
     
@@ -44,7 +72,12 @@ require_once __DIR__ . '/../layouts/header.php';
                          class="card-image">
                     <div class="card-content">
                         <h3 class="card-title"><?php echo htmlspecialchars($resource['resource_title']); ?></h3>
-                        <p style="color: #666; font-size: 0.9rem;"><?php echo htmlspecialchars($resource['cat_name']); ?></p>
+                        <p style="color: #666; font-size: 0.9rem; margin: 0.5rem 0;">
+                            📚 <?php echo htmlspecialchars($resource['cat_name']); ?>
+                        </p>
+                        <p style="color: #888; font-size: 0.85rem; margin: 0.25rem 0;">
+                            ✍️ By <?php echo htmlspecialchars($resource['creator_name']); ?>
+                        </p>
                         <div class="card-price">₵<?php echo number_format($resource['resource_price'], 2); ?></div>
                         <div class="card-meta">
                             <div class="rating">

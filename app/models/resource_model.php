@@ -42,21 +42,28 @@ class resource_model {
         return $stmt->get_result()->fetch_assoc();
     }
     
-    public function search($keyword, $category = null, $minPrice = null, $maxPrice = null) {
+    public function search($keyword, $category = null, $minPrice = null, $maxPrice = null, $creator = null) {
         $sql = "SELECT r.*, c.cat_name, cr.creator_name,
-                COALESCE(AVG(rv.rating), 0) as avg_rating
+                COALESCE(AVG(rv.rating), 0) as avg_rating,
+                COUNT(DISTINCT rv.review_id) as review_count
                 FROM resources r
                 LEFT JOIN categories c ON r.cat_id = c.cat_id
                 LEFT JOIN creators cr ON r.creator_id = cr.creator_id
                 LEFT JOIN reviews rv ON r.resource_id = rv.resource_id
-                WHERE (r.resource_title LIKE ? OR r.resource_keywords LIKE ? OR r.resource_desc LIKE ?)";
+                WHERE (r.resource_title LIKE ? OR r.resource_keywords LIKE ? OR r.resource_desc LIKE ? OR cr.creator_name LIKE ?)";
         
-        $params = ["%$keyword%", "%$keyword%", "%$keyword%"];
-        $types = "sss";
+        $params = ["%$keyword%", "%$keyword%", "%$keyword%", "%$keyword%"];
+        $types = "ssss";
         
         if ($category) {
             $sql .= " AND r.cat_id = ?";
             $params[] = $category;
+            $types .= "i";
+        }
+        
+        if ($creator) {
+            $sql .= " AND r.creator_id = ?";
+            $params[] = $creator;
             $types .= "i";
         }
         
