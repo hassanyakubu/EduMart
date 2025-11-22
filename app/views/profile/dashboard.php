@@ -1,15 +1,22 @@
 <?php
 session_start();
-require_once __DIR__ . '/../../controllers/profile_controller.php';
+require_once __DIR__ . '/../../config/config.php';
+require_once __DIR__ . '/../../models/user_model.php';
+require_once __DIR__ . '/../../models/download_model.php';
+require_once __DIR__ . '/../../models/order_model.php';
 
 if (!isset($_SESSION['user_id'])) {
-    require_once __DIR__ . '/../../config/config.php';
     header('Location: ' . url('app/views/auth/login.php'));
     exit;
 }
 
-$controller = new profile_controller();
-$controller->dashboard();
+$userModel = new user_model();
+$downloadModel = new download_model();
+$orderModel = new order_model();
+
+$user = $userModel->getById($_SESSION['user_id']);
+$downloads = $downloadModel->getUserDownloads($_SESSION['user_id']);
+$orders = $orderModel->getOrdersByUser($_SESSION['user_id']);
 
 $page_title = 'My Dashboard';
 require_once __DIR__ . '/../layouts/header.php';
