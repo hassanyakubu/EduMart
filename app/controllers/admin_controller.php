@@ -80,5 +80,33 @@ class admin_controller {
     public function settings() {
         require_once __DIR__ . '/../views/admin/settings.php';
     }
+    
+    public function getStudents() {
+        $all_users = $this->userModel->getAll();
+        $students = array_filter($all_users, function($user) {
+            return $user['user_role'] == 2 && ($user['user_type'] ?? 'student') == 'student';
+        });
+        return $students;
+    }
+    
+    public function getCreators() {
+        $all_users = $this->userModel->getAll();
+        $creators = array_filter($all_users, function($user) {
+            return $user['user_role'] == 2 && ($user['user_type'] ?? 'student') == 'creator';
+        });
+        return $creators;
+    }
+    
+    public function getAllResources() {
+        return $this->resourceModel->getAll();
+    }
+    
+    public function deleteUser($user_id) {
+        return $this->userModel->delete($user_id);
+    }
+    
+    public function deleteResource($resource_id) {
+        return $this->resourceModel->delete($resource_id);
+    }
 }
 ?>
