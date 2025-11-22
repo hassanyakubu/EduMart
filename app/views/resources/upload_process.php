@@ -102,11 +102,21 @@ if (!isset($_FILES['file']) || $_FILES['file']['error'] !== UPLOAD_ERR_OK) {
     exit;
 }
 
-$image = uploadFile($_FILES['image'] ?? null, 'images');
+// Upload image (optional)
+$image = null;
+if (isset($_FILES['image']) && $_FILES['image']['error'] === UPLOAD_ERR_OK) {
+    $image = uploadFile($_FILES['image'], 'images');
+}
+
+// Upload resource file (required)
 $file = uploadFile($_FILES['file'], 'files');
 
 if (!$file) {
-    $_SESSION['error'] = 'Failed to save resource file. Please try again.';
+    $error_detail = '';
+    if (isset($_FILES['file'])) {
+        $error_detail = ' (Error code: ' . $_FILES['file']['error'] . ')';
+    }
+    $_SESSION['error'] = 'Failed to save resource file. Please try again.' . $error_detail;
     header('Location: ' . url('app/views/resources/upload.php'));
     exit;
 }
