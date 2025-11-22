@@ -19,7 +19,7 @@ if (!isset($_GET['id']) || empty($_GET['id'])) {
 $cartModel = new cart_model();
 $resource_id = intval($_GET['id']);
 
-if ($cartModel->addToCart($_SESSION['user_id'], $resource_id)) {
+if ($cartModel->addItem($_SESSION['user_id'], $resource_id, 1)) {
     $_SESSION['success'] = 'Resource added to cart!';
 } else {
     $_SESSION['error'] = 'Failed to add resource to cart.';
