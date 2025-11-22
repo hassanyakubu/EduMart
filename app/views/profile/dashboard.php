@@ -18,7 +18,13 @@ require_once __DIR__ . '/../layouts/header.php';
 <div class="container">
     <div style="background: linear-gradient(135deg, #FFD947 0%, #ffd000 100%); padding: 2rem; border-radius: 12px; margin: 2rem 0; box-shadow: 0 4px 15px rgba(255, 217, 71, 0.3);">
         <h1 style="margin: 0; color: #333; font-size: 2.5rem;">Hello, <?php echo htmlspecialchars(explode(' ', $user['customer_name'])[0]); ?>! 👋</h1>
-        <p style="margin: 0.5rem 0 0 0; color: #555; font-size: 1.1rem;">Welcome back to your dashboard</p>
+        <p style="margin: 0.5rem 0 0 0; color: #555; font-size: 1.1rem;">
+            <?php 
+            $user_type = $user['user_type'] ?? 'student';
+            $icon = $user_type == 'creator' ? '✍️' : '🎓';
+            echo $icon . ' ' . ucfirst($user_type) . ' Account';
+            ?>
+        </p>
     </div>
     
     <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 2rem; margin-bottom: 2rem;">

@@ -19,6 +19,8 @@
                 <?php if (isset($_SESSION['user_id'])): ?>
                     <?php if ($_SESSION['user_role'] == 1): ?>
                         <li><a href="<?php echo url('app/views/admin/dashboard.php'); ?>">Admin</a></li>
+                    <?php endif; ?>
+                    <?php if ($_SESSION['user_role'] == 1 || (isset($_SESSION['user_type']) && $_SESSION['user_type'] == 'creator')): ?>
                         <li><a href="<?php echo url('app/views/resources/upload.php'); ?>">Upload</a></li>
                     <?php endif; ?>
                     <li><a href="<?php echo url('app/views/cart/view.php'); ?>">Cart</a></li>

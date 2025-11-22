@@ -8,12 +8,12 @@ class user_model {
         $this->db = Database::getInstance()->getConnection();
     }
     
-    public function register($name, $email, $password, $country, $city, $contact) {
+    public function register($name, $email, $password, $country, $city, $contact, $user_type = 'student') {
         $hashed_password = password_hash($password, PASSWORD_DEFAULT);
         $user_role = 2; // Regular user
         
-        $stmt = $this->db->prepare("INSERT INTO customer (customer_name, customer_email, customer_pass, customer_country, customer_city, customer_contact, user_role) VALUES (?, ?, ?, ?, ?, ?, ?)");
-        $stmt->bind_param("ssssssi", $name, $email, $hashed_password, $country, $city, $contact, $user_role);
+        $stmt = $this->db->prepare("INSERT INTO customer (customer_name, customer_email, customer_pass, customer_country, customer_city, customer_contact, user_role, user_type) VALUES (?, ?, ?, ?, ?, ?, ?, ?)");
+        $stmt->bind_param("ssssssis", $name, $email, $hashed_password, $country, $city, $contact, $user_role, $user_type);
         
         return $stmt->execute();
     }
@@ -57,6 +57,8 @@ class user_model {
             return false; // Email already in use
         }
         
+        // Update profile but NEVER change user_role or user_type
+        // This prevents privilege escalation
         $stmt = $this->db->prepare("UPDATE customer SET customer_name = ?, customer_email = ?, customer_country = ?, customer_city = ?, customer_contact = ? WHERE customer_id = ?");
         $stmt->bind_param("sssssi", $name, $email, $country, $city, $contact, $id);
         return $stmt->execute();

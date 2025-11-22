@@ -17,18 +17,20 @@ class auth_controller {
             $country = $_POST['country'] ?? '';
             $city = $_POST['city'] ?? '';
             $contact = $_POST['contact'] ?? '';
+            $user_type = $_POST['user_type'] ?? 'student';
             
-            if ($this->userModel->register($name, $email, $password, $country, $city, $contact)) {
+            require_once __DIR__ . '/../config/config.php';
+            
+            if ($this->userModel->register($name, $email, $password, $country, $city, $contact, $user_type)) {
                 $_SESSION['success'] = 'Registration successful! Please login.';
-                require_once __DIR__ . '/../config/config.php';
                 header('Location: ' . url('app/views/auth/login.php'));
                 exit;
             } else {
                 $_SESSION['error'] = 'Registration failed. Email may already exist.';
+                header('Location: ' . url('app/views/auth/register.php'));
+                exit;
             }
         }
-        
-        require_once __DIR__ . '/../views/auth/register.php';
     }
     
     public function login() {
@@ -38,13 +40,14 @@ class auth_controller {
             
             $user = $this->userModel->login($email, $password);
             
+            require_once __DIR__ . '/../config/config.php';
+            
             if ($user) {
                 $_SESSION['user_id'] = $user['customer_id'];
                 $_SESSION['user_name'] = $user['customer_name'];
                 $_SESSION['user_email'] = $user['customer_email'];
                 $_SESSION['user_role'] = $user['user_role'];
-                
-                require_once __DIR__ . '/../config/config.php';
+                $_SESSION['user_type'] = $user['user_type'] ?? 'student';
                 
                 // Check if there's a redirect URL stored
                 if (isset($_SESSION['redirect_after_login'])) {
@@ -59,10 +62,10 @@ class auth_controller {
                 exit;
             } else {
                 $_SESSION['error'] = 'Invalid email or password.';
+                header('Location: ' . url('app/views/auth/login.php'));
+                exit;
             }
         }
-        
-        require_once __DIR__ . '/../views/auth/login.php';
     }
     
     public function logout() {
