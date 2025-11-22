@@ -78,11 +78,35 @@ function uploadFile($file, $folder) {
     return null;
 }
 
+// Debug: Check if files are being received
+if (!isset($_FILES['file']) || $_FILES['file']['error'] !== UPLOAD_ERR_OK) {
+    $error_msg = 'Resource file is required.';
+    if (isset($_FILES['file'])) {
+        switch ($_FILES['file']['error']) {
+            case UPLOAD_ERR_INI_SIZE:
+            case UPLOAD_ERR_FORM_SIZE:
+                $error_msg = 'File is too large. Maximum size allowed.';
+                break;
+            case UPLOAD_ERR_PARTIAL:
+                $error_msg = 'File was only partially uploaded.';
+                break;
+            case UPLOAD_ERR_NO_FILE:
+                $error_msg = 'No file was uploaded.';
+                break;
+            default:
+                $error_msg = 'File upload error. Please try again.';
+        }
+    }
+    $_SESSION['error'] = $error_msg;
+    header('Location: ' . url('app/views/resources/upload.php'));
+    exit;
+}
+
 $image = uploadFile($_FILES['image'] ?? null, 'images');
-$file = uploadFile($_FILES['file'] ?? null, 'files');
+$file = uploadFile($_FILES['file'], 'files');
 
 if (!$file) {
-    $_SESSION['error'] = 'Resource file is required.';
+    $_SESSION['error'] = 'Failed to save resource file. Please try again.';
     header('Location: ' . url('app/views/resources/upload.php'));
     exit;
 }
