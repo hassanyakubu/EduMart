@@ -81,23 +81,29 @@ function uploadFile($file, $folder) {
     return null;
 }
 
-// Debug: Check if files are being received
+// Check if files are being received
 if (!isset($_FILES['file']) || $_FILES['file']['error'] !== UPLOAD_ERR_OK) {
     $error_msg = 'Resource file is required.';
     if (isset($_FILES['file'])) {
         switch ($_FILES['file']['error']) {
             case UPLOAD_ERR_INI_SIZE:
             case UPLOAD_ERR_FORM_SIZE:
-                $error_msg = 'File is too large. Maximum size allowed.';
+                $error_msg = 'File is too large. Maximum upload size: ' . ini_get('upload_max_filesize');
                 break;
             case UPLOAD_ERR_PARTIAL:
-                $error_msg = 'File was only partially uploaded.';
+                $error_msg = 'File was only partially uploaded. Please try again.';
                 break;
             case UPLOAD_ERR_NO_FILE:
-                $error_msg = 'No file was uploaded.';
+                $error_msg = 'No file was uploaded. Please select a file.';
+                break;
+            case UPLOAD_ERR_NO_TMP_DIR:
+                $error_msg = 'Missing temporary folder on server.';
+                break;
+            case UPLOAD_ERR_CANT_WRITE:
+                $error_msg = 'Failed to write file to disk.';
                 break;
             default:
-                $error_msg = 'File upload error. Please try again.';
+                $error_msg = 'File upload error (Code: ' . $_FILES['file']['error'] . '). Please try again.';
         }
     }
     $_SESSION['error'] = $error_msg;
