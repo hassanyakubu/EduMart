@@ -74,7 +74,18 @@ function uploadFile($file, $folder) {
     $filename = uniqid() . '_' . basename($file['name']);
     $target = $upload_dir . $filename;
     
+    // Debug: Store info in session for error reporting
+    $_SESSION['debug_upload'] = [
+        'upload_dir' => $upload_dir,
+        'target' => $target,
+        'tmp_name' => $file['tmp_name'],
+        'dir_exists' => is_dir($upload_dir),
+        'dir_writable' => is_writable($upload_dir),
+        'tmp_exists' => file_exists($file['tmp_name'])
+    ];
+    
     if (move_uploaded_file($file['tmp_name'], $target)) {
+        unset($_SESSION['debug_upload']);
         return 'uploads/' . $folder . '/' . $filename;
     }
     
@@ -119,6 +130,16 @@ if (!$file) {
     if (isset($_FILES['file'])) {
         $error_detail = ' (Error code: ' . $_FILES['file']['error'] . ')';
     }
+    
+    // Add debug info
+    if (isset($_SESSION['debug_upload'])) {
+        $debug = $_SESSION['debug_upload'];
+        $error_detail .= '<br>Dir: ' . $debug['upload_dir'];
+        $error_detail .= '<br>Dir exists: ' . ($debug['dir_exists'] ? 'YES' : 'NO');
+        $error_detail .= '<br>Dir writable: ' . ($debug['dir_writable'] ? 'YES' : 'NO');
+        $error_detail .= '<br>Temp file exists: ' . ($debug['tmp_exists'] ? 'YES' : 'NO');
+    }
+    
     $_SESSION['error'] = 'Failed to save resource file. Please try again.' . $error_detail;
     header('Location: ' . url('app/views/resources/upload.php'));
     exit;
