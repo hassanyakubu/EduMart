@@ -46,13 +46,13 @@ class cart_model {
         $result = $stmt->get_result();
         
         if ($result->num_rows > 0) {
-            $item = $result->fetch_assoc();
-            $new_qty = $item['qty'] + $qty;
-            $stmt = $this->db->prepare("UPDATE cart_items SET qty = ? WHERE item_id = ?");
-            $stmt->bind_param("ii", $new_qty, $item['item_id']);
-            return $stmt->execute();
+            // For digital resources, don't increase quantity - just return true
+            // (You can only buy a digital resource once)
+            return true;
         }
         
+        // Always set qty to 1 for digital resources
+        $qty = 1;
         $stmt = $this->db->prepare("INSERT INTO cart_items (cart_id, resource_id, qty) VALUES (?, ?, ?)");
         $stmt->bind_param("iii", $cart_id, $resource_id, $qty);
         return $stmt->execute();
