@@ -3,7 +3,9 @@ session_start();
 require_once __DIR__ . '/../../controllers/cart_controller.php';
 
 if (!isset($_SESSION['user_id'])) {
-    header('Location: /app/views/auth/login.php');
+    require_once __DIR__ . '/../../config/config.php';
+    $_SESSION['error'] = 'Please log in to view your cart.';
+    header('Location: ' . url('app/views/auth/login.php'));
     exit;
 }
 

@@ -3,7 +3,9 @@ session_start();
 require_once __DIR__ . '/../../controllers/resource_controller.php';
 
 if (!isset($_SESSION['user_id'])) {
-    header('Location: /app/views/auth/login.php');
+    require_once __DIR__ . '/../../config/config.php';
+    $_SESSION['error'] = 'Please log in to upload resources.';
+    header('Location: ' . url('app/views/auth/login.php'));
     exit;
 }
 
@@ -17,7 +19,7 @@ require_once __DIR__ . '/../layouts/header.php';
 <div class="container">
     <div class="form-container" style="max-width: 700px;">
         <h2 style="text-align: center; margin-bottom: 2rem;">Upload Resource</h2>
-        <form action="/app/views/resources/upload_process.php" method="POST" enctype="multipart/form-data">
+        <form action="<?php echo url('app/views/resources/upload_process.php'); ?>" method="POST" enctype="multipart/form-data">
             <div class="form-group">
                 <label for="title">Resource Title</label>
                 <input type="text" id="title" name="title" required>

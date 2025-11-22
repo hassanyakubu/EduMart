@@ -2,8 +2,15 @@
 session_start();
 require_once __DIR__ . '/../../controllers/resource_controller.php';
 
+if (!isset($_SESSION['user_id'])) {
+    $_SESSION['error'] = 'Please log in to view resource details.';
+    $_SESSION['redirect_after_login'] = $_SERVER['REQUEST_URI'];
+    header('Location: ' . url('app/views/auth/login.php'));
+    exit;
+}
+
 if (!isset($_GET['id'])) {
-    header('Location: /app/views/resources/list.php');
+    header('Location: ' . url('app/views/resources/list.php'));
     exit;
 }
 
