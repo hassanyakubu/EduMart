@@ -1,7 +1,7 @@
 <?php
 session_start();
 require_once __DIR__ . '/../../config/config.php';
-require_once __DIR__ . '/../../controllers/cart_controller.php';
+require_once __DIR__ . '/../../models/Cart.php';
 
 if (!isset($_SESSION['user_id'])) {
     $_SESSION['error'] = 'Please log in to add items to your cart.';
@@ -10,11 +10,21 @@ if (!isset($_SESSION['user_id'])) {
     exit;
 }
 
-if (!isset($_GET['id'])) {
+if (!isset($_GET['id']) || empty($_GET['id'])) {
+    $_SESSION['error'] = 'Invalid resource ID.';
     header('Location: ' . url('app/views/resources/list.php'));
     exit;
 }
 
-$controller = new cart_controller();
-$controller->add($_GET['id']);
+$cartModel = new Cart();
+$resource_id = intval($_GET['id']);
+
+if ($cartModel->addToCart($_SESSION['user_id'], $resource_id)) {
+    $_SESSION['success'] = 'Resource added to cart!';
+} else {
+    $_SESSION['error'] = 'Failed to add resource to cart.';
+}
+
+header('Location: ' . url('app/views/cart/view.php'));
+exit;
 ?>
