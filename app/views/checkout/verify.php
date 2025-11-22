@@ -37,7 +37,7 @@ if ($result['status'] && $result['data']['status'] == 'success') {
             $downloadModel = new download_model();
             
             foreach ($cart_items as $item) {
-                $downloadModel->addDownload($order_id, $item['resource_id']);
+                $downloadModel->logDownload($_SESSION['user_id'], $item['resource_id'], $order_id);
             }
             
             // Clear cart
