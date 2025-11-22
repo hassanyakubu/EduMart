@@ -1,14 +1,22 @@
 <?php
 session_start();
-require_once __DIR__ . '/../../controllers/checkout_controller.php';
+require_once __DIR__ . '/../../config/config.php';
+require_once __DIR__ . '/../../models/cart_model.php';
 
 if (!isset($_SESSION['user_id'])) {
-    header('Location: /app/views/auth/login.php');
+    header('Location: ' . url('app/views/auth/login.php'));
     exit;
 }
 
-$controller = new checkout_controller();
-$controller->checkout();
+$cartModel = new cart_model();
+$cart_items = $cartModel->getUserCart($_SESSION['user_id']);
+$total = $cartModel->getTotal($_SESSION['user_id']);
+
+if (empty($cart_items)) {
+    $_SESSION['error'] = 'Your cart is empty.';
+    header('Location: ' . url('app/views/cart/view.php'));
+    exit;
+}
 
 $page_title = 'Checkout';
 require_once __DIR__ . '/../layouts/header.php';
