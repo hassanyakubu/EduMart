@@ -1,13 +1,14 @@
 <?php
 session_start();
-require_once __DIR__ . '/../../models/Order.php';
+require_once __DIR__ . '/../../config/config.php';
+require_once __DIR__ . '/../../models/order_model.php';
 
 if (!isset($_SESSION['user_id']) || !isset($_GET['order'])) {
-    header('Location: /app/views/home/index.php');
+    header('Location: ' . url('app/views/home/index.php'));
     exit;
 }
 
-$orderModel = new Order();
+$orderModel = new order_model();
 $order = $orderModel->getOrderById($_GET['order']);
 $order_items = $orderModel->getOrderItems($_GET['order']);
 
