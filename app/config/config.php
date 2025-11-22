@@ -1,40 +1,25 @@
 <?php
-/**
- * Base URL Configuration
- * Auto-detects server or local environment
- */
+// Base configuration for EduMart
 
-// Check if running on server
-$isServer = (isset($_SERVER['HTTP_HOST']) && strpos($_SERVER['HTTP_HOST'], '169.239.251.102') !== false);
+// Base URL for the application (subdirectory deployment)
+define('BASE_URL', '/~hassan.yakubu/EduMart');
 
-if ($isServer) {
-    // Server configuration
-    define('BASE_URL', 'http://169.239.251.102:442/~hassan.yakubu/EduMart');
-    define('BASE_PATH', '/~hassan.yakubu/EduMart');
-} else {
-    // Local configuration
-    define('BASE_URL', 'http://localhost:8000');
-    define('BASE_PATH', '');
-}
+// Asset paths
+define('CSS_PATH', BASE_URL . '/public/assets/css');
+define('JS_PATH', BASE_URL . '/public/assets/js');
+define('IMG_PATH', BASE_URL . '/public/assets/images');
 
-/**
- * Helper function to generate URLs
- */
+// Application paths
+define('APP_PATH', BASE_URL . '/app');
+define('VIEW_PATH', APP_PATH . '/views');
+
+// Helper function to generate URLs
 function url($path = '') {
     return BASE_URL . '/' . ltrim($path, '/');
 }
 
-/**
- * Helper function for assets
- */
+// Helper function for asset URLs
 function asset($path = '') {
-    return BASE_URL . '/public/assets/' . ltrim($path, '/');
-}
-
-/**
- * Helper function for views
- */
-function view_url($path = '') {
-    return BASE_URL . '/app/views/' . ltrim($path, '/');
+    return BASE_URL . '/public/' . ltrim($path, '/');
 }
 ?>

@@ -39,7 +39,7 @@ require_once __DIR__ . '/../layouts/header.php';
         <?php else: ?>
             <?php foreach ($resources as $resource): ?>
                 <div class="card">
-                    <img src="/public/<?php echo $resource['resource_image'] ?? 'assets/images/placeholder.jpg'; ?>" 
+                    <img src="<?php echo asset($resource['resource_image'] ?? 'assets/images/placeholder.jpg'); ?>" 
                          alt="<?php echo htmlspecialchars($resource['resource_title']); ?>" 
                          class="card-image">
                     <div class="card-content">
@@ -53,11 +53,11 @@ require_once __DIR__ . '/../layouts/header.php';
                             </div>
                         </div>
                         <div style="display: flex; gap: 0.5rem; margin-top: 1rem;">
-                            <a href="/app/views/resources/details.php?id=<?php echo $resource['resource_id']; ?>" 
+                            <a href="<?php echo url('app/views/resources/details.php?id=' . $resource['resource_id']); ?>" 
                                class="btn btn-secondary" style="flex: 1; text-align: center; text-decoration: none; color: white;">
                                 View
                             </a>
-                            <a href="/app/views/cart/add.php?id=<?php echo $resource['resource_id']; ?>" 
+                            <a href="<?php echo url('app/views/cart/add.php?id=' . $resource['resource_id']); ?>" 
                                class="btn btn-primary" style="flex: 1; text-align: center; text-decoration: none;">
                                 Add to Cart
                             </a>

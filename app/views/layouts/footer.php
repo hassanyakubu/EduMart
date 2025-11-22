@@ -10,9 +10,9 @@
                 <div class="footer-section">
                     <h4>Quick Links</h4>
                     <ul>
-                        <li><a href="/app/views/home/index.php">Home</a></li>
-                        <li><a href="/app/views/resources/list.php">Browse</a></li>
-                        <li><a href="/app/views/auth/register.php">Sign Up</a></li>
+                        <li><a href="<?php echo url('app/views/home/index.php'); ?>">Home</a></li>
+                        <li><a href="<?php echo url('app/views/resources/list.php'); ?>">Browse</a></li>
+                        <li><a href="<?php echo url('app/views/auth/register.php'); ?>">Sign Up</a></li>
                     </ul>
                 </div>
                 <div class="footer-section">
@@ -30,6 +30,6 @@
         </div>
     </footer>
     
-    <script src="/public/assets/js/main.js"></script>
+    <script src="<?php echo asset('assets/js/main.js'); ?>"></script>
 </body>
 </html>

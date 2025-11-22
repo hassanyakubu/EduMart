@@ -18,7 +18,7 @@ require_once __DIR__ . '/../layouts/header.php';
     <div style="background: white; border-radius: 12px; padding: 2rem; margin: 2rem 0;">
         <div style="display: grid; grid-template-columns: 1fr 2fr; gap: 2rem;">
             <div>
-                <img src="/public/<?php echo $resource['resource_image'] ?? 'assets/images/placeholder.jpg'; ?>" 
+                <img src="<?php echo asset($resource['resource_image'] ?? 'assets/images/placeholder.jpg'); ?>" 
                      alt="<?php echo htmlspecialchars($resource['resource_title']); ?>" 
                      style="width: 100%; border-radius: 12px;">
             </div>
@@ -39,11 +39,11 @@ require_once __DIR__ . '/../layouts/header.php';
                 <p style="margin: 1rem 0; line-height: 1.8;"><?php echo nl2br(htmlspecialchars($resource['resource_desc'])); ?></p>
                 
                 <div style="display: flex; gap: 1rem; margin-top: 2rem;">
-                    <a href="/app/views/cart/add.php?id=<?php echo $resource['resource_id']; ?>" 
+                    <a href="<?php echo url('app/views/cart/add.php?id=' . $resource['resource_id']); ?>" 
                        class="btn btn-primary" style="text-decoration: none;">
                         Add to Cart
                     </a>
-                    <a href="/app/views/resources/list.php" 
+                    <a href="<?php echo url('app/views/resources/list.php'); ?>" 
                        class="btn btn-secondary" style="text-decoration: none; color: white;">
                         Back to Browse
                     </a>
@@ -56,7 +56,7 @@ require_once __DIR__ . '/../layouts/header.php';
         <h2 style="margin-bottom: 1rem;">Reviews</h2>
         
         <?php if (isset($_SESSION['user_id'])): ?>
-            <form action="/app/views/resources/add_review.php" method="POST" style="margin-bottom: 2rem; padding: 1rem; background: #f8f9fa; border-radius: 8px;">
+            <form action="<?php echo url('app/views/resources/add_review.php'); ?>" method="POST" style="margin-bottom: 2rem; padding: 1rem; background: #f8f9fa; border-radius: 8px;">
                 <input type="hidden" name="resource_id" value="<?php echo $resource['resource_id']; ?>">
                 <div class="form-group">
                     <label>Rating</label>

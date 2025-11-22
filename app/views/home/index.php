@@ -14,7 +14,7 @@ require_once __DIR__ . '/../layouts/header.php';
         <h1>Welcome to EduMart</h1>
         <p>Your trusted marketplace for digital learning resources</p>
         <div class="search-bar">
-            <form action="/app/views/resources/list.php" method="GET" style="display: flex; gap: 1rem; width: 100%;">
+            <form action="<?php echo url('app/views/resources/list.php'); ?>" method="GET" style="display: flex; gap: 1rem; width: 100%;">
                 <input type="text" name="search" placeholder="Search for resources..." />
                 <button type="submit">Search</button>
             </form>
@@ -26,7 +26,7 @@ require_once __DIR__ . '/../layouts/header.php';
         <div class="card-grid">
             <?php foreach ($featured_resources as $resource): ?>
                 <div class="card stagger-item hover-lift">
-                    <img src="/public/<?php echo $resource['resource_image'] ?? 'assets/images/placeholder.jpg'; ?>" 
+                    <img src="<?php echo asset($resource['resource_image'] ?? 'assets/images/placeholder.jpg'); ?>" 
                          alt="<?php echo htmlspecialchars($resource['resource_title']); ?>" 
                          class="card-image">
                     <div class="card-content">
@@ -39,7 +39,7 @@ require_once __DIR__ . '/../layouts/header.php';
                                 (<?php echo $resource['review_count']; ?>)
                             </div>
                         </div>
-                        <a href="/app/views/resources/details.php?id=<?php echo $resource['resource_id']; ?>" 
+                        <a href="<?php echo url('app/views/resources/details.php?id=' . $resource['resource_id']); ?>" 
                            class="btn btn-primary btn-block" style="margin-top: 1rem; display: block; text-align: center; text-decoration: none;">
                             View Details
                         </a>
@@ -53,7 +53,7 @@ require_once __DIR__ . '/../layouts/header.php';
         <h2 style="margin-bottom: 1rem;" class="gradient-text-animated">Browse by Category</h2>
         <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem;">
             <?php foreach ($categories as $category): ?>
-                <a href="/app/views/resources/list.php?category=<?php echo $category['cat_id']; ?>" 
+                <a href="<?php echo url('app/views/resources/list.php?category=' . $category['cat_id']); ?>" 
                    class="category-card hover-lift stagger-item"
                    style="background: white; padding: 2rem; border-radius: 12px; text-align: center; text-decoration: none; color: #333; font-weight: 600; transition: all 0.3s; box-shadow: 0 4px 15px rgba(0,0,0,0.08);">
                     <?php echo htmlspecialchars($category['cat_name']); ?>

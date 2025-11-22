@@ -7,7 +7,7 @@ require_once __DIR__ . '/../layouts/header.php';
 <div class="container">
     <div class="form-container">
         <h2 style="text-align: center; margin-bottom: 2rem;">Create Account</h2>
-        <form action="/app/views/auth/register_process.php" method="POST">
+        <form action="register_process.php" method="POST">
             <div class="form-group">
                 <label for="name">Full Name</label>
                 <input type="text" id="name" name="name" required>
@@ -35,7 +35,7 @@ require_once __DIR__ . '/../layouts/header.php';
             <button type="submit" class="btn btn-primary btn-block">Register</button>
         </form>
         <p style="text-align: center; margin-top: 1rem;">
-            Already have an account? <a href="/app/views/auth/login.php" style="color: #FFD947; font-weight: 600;">Login</a>
+            Already have an account? <a href="login.php" style="color: #FFD947; font-weight: 600;">Login</a>
         </p>
     </div>
 </div>

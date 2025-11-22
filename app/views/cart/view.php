@@ -20,7 +20,7 @@ require_once __DIR__ . '/../layouts/header.php';
     <?php if (empty($cart_items)): ?>
         <div style="background: white; padding: 3rem; border-radius: 12px; text-align: center;">
             <p style="font-size: 1.2rem; color: #666;">Your cart is empty</p>
-            <a href="/app/views/resources/list.php" class="btn btn-primary" style="margin-top: 1rem; display: inline-block; text-decoration: none;">
+            <a href="<?php echo url('app/views/resources/list.php'); ?>" class="btn btn-primary" style="margin-top: 1rem; display: inline-block; text-decoration: none;">
                 Browse Resources
             </a>
         </div>
@@ -41,7 +41,7 @@ require_once __DIR__ . '/../layouts/header.php';
                         <tr>
                             <td>
                                 <div style="display: flex; align-items: center; gap: 1rem;">
-                                    <img src="/public/<?php echo $item['resource_image'] ?? 'assets/images/placeholder.jpg'; ?>" 
+                                    <img src="<?php echo asset($item['resource_image'] ?? 'assets/images/placeholder.jpg'); ?>" 
                                          alt="<?php echo htmlspecialchars($item['resource_title']); ?>" 
                                          style="width: 60px; height: 60px; object-fit: cover; border-radius: 8px;">
                                     <span><?php echo htmlspecialchars($item['resource_title']); ?></span>
@@ -51,7 +51,7 @@ require_once __DIR__ . '/../layouts/header.php';
                             <td><?php echo $item['qty']; ?></td>
                             <td>₵<?php echo number_format($item['resource_price'] * $item['qty'], 2); ?></td>
                             <td>
-                                <a href="/app/views/cart/remove.php?id=<?php echo $item['resource_id']; ?>" 
+                                <a href="<?php echo url('app/views/cart/remove.php?id=' . $item['resource_id']); ?>" 
                                    class="btn btn-danger" style="text-decoration: none; color: white;">
                                     Remove
                                 </a>
@@ -63,7 +63,7 @@ require_once __DIR__ . '/../layouts/header.php';
             
             <div style="margin-top: 2rem; text-align: right;">
                 <h2>Total: ₵<?php echo number_format($total, 2); ?></h2>
-                <a href="/app/views/checkout/payment.php" class="btn btn-primary" style="margin-top: 1rem; display: inline-block; text-decoration: none;">
+                <a href="<?php echo url('app/views/checkout/payment.php'); ?>" class="btn btn-primary" style="margin-top: 1rem; display: inline-block; text-decoration: none;">
                     Proceed to Checkout
                 </a>
             </div>

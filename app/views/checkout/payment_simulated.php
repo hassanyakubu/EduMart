@@ -36,7 +36,7 @@ require_once __DIR__ . '/../layouts/header.php';
                 <p>Choose your preferred mobile money provider</p>
             </div>
             
-            <form action="/app/views/checkout/process_simulated.php" method="POST" id="paymentForm">
+            <form action="<?php echo url('app/views/checkout/process_simulated.php'); ?>" method="POST" id="paymentForm">
                 <!-- Mobile Money Provider Selection -->
                 <div class="payment-methods">
                     <label class="payment-method-card">
@@ -143,7 +143,7 @@ require_once __DIR__ . '/../layouts/header.php';
             <div class="summary-items">
                 <?php foreach ($cart_items as $item): ?>
                     <div class="summary-item">
-                        <img src="/public/<?php echo $item['resource_image'] ?? 'assets/images/placeholder.jpg'; ?>" 
+                        <img src="<?php echo asset($item['resource_image'] ?? 'assets/images/placeholder.jpg'); ?>" 
                              alt="<?php echo htmlspecialchars($item['resource_title']); ?>">
                         <div class="item-details">
                             <strong><?php echo htmlspecialchars($item['resource_title']); ?></strong>

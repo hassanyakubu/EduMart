@@ -24,7 +24,7 @@ require_once __DIR__ . '/../layouts/header.php';
                 Pay securely with Paystack. Supports MTN MoMo, Vodafone Cash, AirtelTigo, and Card payments.
             </p>
             
-            <form action="/app/views/checkout/process.php" method="POST">
+            <form action="<?php echo url('app/views/checkout/process.php'); ?>" method="POST">
                 <div style="background: #f8f9fa; padding: 1.5rem; border-radius: 8px; margin-bottom: 1.5rem;">
                     <h3 style="margin-bottom: 1rem; font-size: 1.1rem;">Paystack Payment Gateway</h3>
                     <div class="form-group">
