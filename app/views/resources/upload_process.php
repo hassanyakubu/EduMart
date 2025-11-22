@@ -63,9 +63,9 @@ function uploadFile($file, $folder) {
         return null;
     }
     
-    // Get the real path to public directory
-    $base_path = dirname(dirname(__DIR__)); // Go up to EduMart root
-    $upload_dir = $base_path . '/public/uploads/' . $folder . '/';
+    // Current file is in: app/views/resources/upload_process.php
+    // We need to go up 3 levels to get to EduMart root, then into public
+    $upload_dir = dirname(dirname(dirname(__DIR__))) . '/public/uploads/' . $folder . '/';
     
     if (!is_dir($upload_dir)) {
         mkdir($upload_dir, 0777, true);
@@ -74,18 +74,7 @@ function uploadFile($file, $folder) {
     $filename = uniqid() . '_' . basename($file['name']);
     $target = $upload_dir . $filename;
     
-    // Debug: Store info in session for error reporting
-    $_SESSION['debug_upload'] = [
-        'upload_dir' => $upload_dir,
-        'target' => $target,
-        'tmp_name' => $file['tmp_name'],
-        'dir_exists' => is_dir($upload_dir),
-        'dir_writable' => is_writable($upload_dir),
-        'tmp_exists' => file_exists($file['tmp_name'])
-    ];
-    
     if (move_uploaded_file($file['tmp_name'], $target)) {
-        unset($_SESSION['debug_upload']);
         return 'uploads/' . $folder . '/' . $filename;
     }
     
@@ -126,21 +115,7 @@ if (isset($_FILES['image']) && $_FILES['image']['error'] === UPLOAD_ERR_OK) {
 $file = uploadFile($_FILES['file'], 'files');
 
 if (!$file) {
-    $error_detail = '';
-    if (isset($_FILES['file'])) {
-        $error_detail = ' (Error code: ' . $_FILES['file']['error'] . ')';
-    }
-    
-    // Add debug info
-    if (isset($_SESSION['debug_upload'])) {
-        $debug = $_SESSION['debug_upload'];
-        $error_detail .= '<br>Dir: ' . $debug['upload_dir'];
-        $error_detail .= '<br>Dir exists: ' . ($debug['dir_exists'] ? 'YES' : 'NO');
-        $error_detail .= '<br>Dir writable: ' . ($debug['dir_writable'] ? 'YES' : 'NO');
-        $error_detail .= '<br>Temp file exists: ' . ($debug['tmp_exists'] ? 'YES' : 'NO');
-    }
-    
-    $_SESSION['error'] = 'Failed to save resource file. Please try again.' . $error_detail;
+    $_SESSION['error'] = 'Failed to save resource file. Please try again.';
     header('Location: ' . url('app/views/resources/upload.php'));
     exit;
 }
