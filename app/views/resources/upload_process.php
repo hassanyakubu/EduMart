@@ -63,7 +63,10 @@ function uploadFile($file, $folder) {
         return null;
     }
     
-    $upload_dir = __DIR__ . '/../../public/uploads/' . $folder . '/';
+    // Get the real path to public directory
+    $base_path = dirname(dirname(__DIR__)); // Go up to EduMart root
+    $upload_dir = $base_path . '/public/uploads/' . $folder . '/';
+    
     if (!is_dir($upload_dir)) {
         mkdir($upload_dir, 0777, true);
     }
