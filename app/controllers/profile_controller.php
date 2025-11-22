@@ -27,5 +27,31 @@ class profile_controller {
         
         require_once __DIR__ . '/../views/profile/dashboard.php';
     }
+    
+    public function update() {
+        if (!isset($_SESSION['user_id']) || $_SERVER['REQUEST_METHOD'] !== 'POST') {
+            require_once __DIR__ . '/../config/config.php';
+            header('Location: ' . url('app/views/auth/login.php'));
+            exit;
+        }
+        
+        $name = $_POST['name'] ?? '';
+        $email = $_POST['email'] ?? '';
+        $country = $_POST['country'] ?? '';
+        $city = $_POST['city'] ?? '';
+        $contact = $_POST['contact'] ?? '';
+        
+        if ($this->userModel->updateProfile($_SESSION['user_id'], $name, $email, $country, $city, $contact)) {
+            $_SESSION['user_name'] = $name;
+            $_SESSION['user_email'] = $email;
+            $_SESSION['success'] = 'Profile updated successfully!';
+        } else {
+            $_SESSION['error'] = 'Failed to update profile. Email may already be in use.';
+        }
+        
+        require_once __DIR__ . '/../config/config.php';
+        header('Location: ' . url('app/views/profile/dashboard.php'));
+        exit;
+    }
 }
 ?>

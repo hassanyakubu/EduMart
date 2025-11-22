@@ -44,17 +44,17 @@ class auth_controller {
                 $_SESSION['user_email'] = $user['customer_email'];
                 $_SESSION['user_role'] = $user['user_role'];
                 
+                require_once __DIR__ . '/../config/config.php';
+                
                 // Check if there's a redirect URL stored
                 if (isset($_SESSION['redirect_after_login'])) {
                     $redirect = $_SESSION['redirect_after_login'];
                     unset($_SESSION['redirect_after_login']);
                     header('Location: ' . $redirect);
                 } else if ($user['user_role'] == 1) {
-                    require_once __DIR__ . '/../config/config.php';
                     header('Location: ' . url('app/views/admin/dashboard.php'));
                 } else {
-                    require_once __DIR__ . '/../config/config.php';
-                    header('Location: ' . url('app/views/home/index.php'));
+                    header('Location: ' . url('app/views/profile/dashboard.php'));
                 }
                 exit;
             } else {

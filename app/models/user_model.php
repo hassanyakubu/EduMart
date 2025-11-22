@@ -46,6 +46,22 @@ class user_model {
         return $stmt->execute();
     }
     
+    public function updateProfile($id, $name, $email, $country, $city, $contact) {
+        // Check if email is already used by another user
+        $stmt = $this->db->prepare("SELECT customer_id FROM customer WHERE customer_email = ? AND customer_id != ?");
+        $stmt->bind_param("si", $email, $id);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        
+        if ($result->num_rows > 0) {
+            return false; // Email already in use
+        }
+        
+        $stmt = $this->db->prepare("UPDATE customer SET customer_name = ?, customer_email = ?, customer_country = ?, customer_city = ?, customer_contact = ? WHERE customer_id = ?");
+        $stmt->bind_param("sssssi", $name, $email, $country, $city, $contact, $id);
+        return $stmt->execute();
+    }
+    
     public function getAll() {
         $result = $this->db->query("SELECT * FROM customer ORDER BY customer_id DESC");
         return $result->fetch_all(MYSQLI_ASSOC);

@@ -3,7 +3,8 @@ session_start();
 require_once __DIR__ . '/../../controllers/profile_controller.php';
 
 if (!isset($_SESSION['user_id'])) {
-    header('Location: /app/views/auth/login.php');
+    require_once __DIR__ . '/../../config/config.php';
+    header('Location: ' . url('app/views/auth/login.php'));
     exit;
 }
 
@@ -15,7 +16,10 @@ require_once __DIR__ . '/../layouts/header.php';
 ?>
 
 <div class="container">
-    <h1 style="margin: 2rem 0;">My Dashboard</h1>
+    <div style="background: linear-gradient(135deg, #FFD947 0%, #ffd000 100%); padding: 2rem; border-radius: 12px; margin: 2rem 0; box-shadow: 0 4px 15px rgba(255, 217, 71, 0.3);">
+        <h1 style="margin: 0; color: #333; font-size: 2.5rem;">Hello, <?php echo htmlspecialchars(explode(' ', $user['customer_name'])[0]); ?>! 👋</h1>
+        <p style="margin: 0.5rem 0 0 0; color: #555; font-size: 1.1rem;">Welcome back to your dashboard</p>
+    </div>
     
     <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 2rem; margin-bottom: 2rem;">
         <div style="background: white; padding: 2rem; border-radius: 12px; text-align: center;">
@@ -29,25 +33,87 @@ require_once __DIR__ . '/../layouts/header.php';
     </div>
     
     <div style="background: white; border-radius: 12px; padding: 2rem; margin-bottom: 2rem;">
-        <h2 style="margin-bottom: 1rem;">Profile Information</h2>
-        <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 1rem;">
-            <div>
-                <strong>Name:</strong> <?php echo htmlspecialchars($user['customer_name']); ?>
-            </div>
-            <div>
-                <strong>Email:</strong> <?php echo htmlspecialchars($user['customer_email']); ?>
-            </div>
-            <div>
-                <strong>Country:</strong> <?php echo htmlspecialchars($user['customer_country']); ?>
-            </div>
-            <div>
-                <strong>City:</strong> <?php echo htmlspecialchars($user['customer_city']); ?>
-            </div>
-            <div>
-                <strong>Contact:</strong> <?php echo htmlspecialchars($user['customer_contact']); ?>
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
+            <h2 style="margin: 0;">Profile Information</h2>
+            <button onclick="toggleEditMode()" id="editBtn" class="btn btn-primary">✏️ Edit Profile</button>
+        </div>
+        
+        <!-- View Mode -->
+        <div id="viewMode">
+            <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 1.5rem;">
+                <div>
+                    <strong style="color: #666;">Name:</strong><br>
+                    <span style="font-size: 1.1rem;"><?php echo htmlspecialchars($user['customer_name']); ?></span>
+                </div>
+                <div>
+                    <strong style="color: #666;">Email:</strong><br>
+                    <span style="font-size: 1.1rem;"><?php echo htmlspecialchars($user['customer_email']); ?></span>
+                </div>
+                <div>
+                    <strong style="color: #666;">Country:</strong><br>
+                    <span style="font-size: 1.1rem;"><?php echo htmlspecialchars($user['customer_country']); ?></span>
+                </div>
+                <div>
+                    <strong style="color: #666;">City:</strong><br>
+                    <span style="font-size: 1.1rem;"><?php echo htmlspecialchars($user['customer_city']); ?></span>
+                </div>
+                <div>
+                    <strong style="color: #666;">Contact:</strong><br>
+                    <span style="font-size: 1.1rem;"><?php echo htmlspecialchars($user['customer_contact']); ?></span>
+                </div>
             </div>
         </div>
+        
+        <!-- Edit Mode -->
+        <div id="editMode" style="display: none;">
+            <form action="<?php echo url('app/views/profile/update.php'); ?>" method="POST">
+                <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 1.5rem;">
+                    <div class="form-group">
+                        <label for="name">Full Name</label>
+                        <input type="text" id="name" name="name" value="<?php echo htmlspecialchars($user['customer_name']); ?>" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="email">Email</label>
+                        <input type="email" id="email" name="email" value="<?php echo htmlspecialchars($user['customer_email']); ?>" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="country">Country</label>
+                        <input type="text" id="country" name="country" value="<?php echo htmlspecialchars($user['customer_country']); ?>" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="city">City</label>
+                        <input type="text" id="city" name="city" value="<?php echo htmlspecialchars($user['customer_city']); ?>" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="contact">Contact</label>
+                        <input type="text" id="contact" name="contact" value="<?php echo htmlspecialchars($user['customer_contact']); ?>" required>
+                    </div>
+                </div>
+                <div style="display: flex; gap: 1rem; margin-top: 1.5rem;">
+                    <button type="submit" class="btn btn-primary">💾 Save Changes</button>
+                    <button type="button" onclick="toggleEditMode()" class="btn btn-secondary">❌ Cancel</button>
+                </div>
+            </form>
+        </div>
     </div>
+    
+    <script>
+    function toggleEditMode() {
+        const viewMode = document.getElementById('viewMode');
+        const editMode = document.getElementById('editMode');
+        const editBtn = document.getElementById('editBtn');
+        
+        if (viewMode.style.display === 'none') {
+            viewMode.style.display = 'block';
+            editMode.style.display = 'none';
+            editBtn.style.display = 'block';
+        } else {
+            viewMode.style.display = 'none';
+            editMode.style.display = 'block';
+            editBtn.style.display = 'none';
+        }
+    }
+    </script>
     
     <div style="background: white; border-radius: 12px; padding: 2rem;">
         <h2 style="margin-bottom: 1rem;">Recent Orders</h2>
@@ -78,7 +144,7 @@ require_once __DIR__ . '/../layouts/header.php';
                                 </span>
                             </td>
                             <td>
-                                <a href="/app/views/orders/invoice.php?id=<?php echo $order['purchase_id']; ?>" 
+                                <a href="<?php echo url('app/views/orders/invoice.php?id=' . $order['purchase_id']); ?>" 
                                    class="btn btn-secondary" style="text-decoration: none; color: white;">
                                     View
                                 </a>
