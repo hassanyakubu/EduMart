@@ -1,14 +1,15 @@
 <?php
 session_start();
-require_once __DIR__ . '/../../controllers/order_controller.php';
+require_once __DIR__ . '/../../config/config.php';
+require_once __DIR__ . '/../../models/order_model.php';
 
 if (!isset($_SESSION['user_id'])) {
-    header('Location: /app/views/auth/login.php');
+    header('Location: ' . url('app/views/auth/login.php'));
     exit;
 }
 
-$controller = new order_controller();
-$controller->list();
+$orderModel = new order_model();
+$orders = $orderModel->getOrdersByUser($_SESSION['user_id']);
 
 $page_title = 'My Orders';
 require_once __DIR__ . '/../layouts/header.php';
@@ -45,9 +46,9 @@ require_once __DIR__ . '/../layouts/header.php';
                                 </span>
                             </td>
                             <td>
-                                <a href="/app/views/orders/invoice.php?id=<?php echo $order['purchase_id']; ?>" 
+                                <a href="<?php echo url('app/views/profile/my_resources.php'); ?>" 
                                    class="btn btn-secondary" style="text-decoration: none; color: white;">
-                                    View Invoice
+                                    View Resources
                                 </a>
                             </td>
                         </tr>

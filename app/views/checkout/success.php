@@ -63,13 +63,13 @@ require_once __DIR__ . '/../layouts/header.php';
             <div class="resources-grid">
                 <?php foreach ($order_items as $item): ?>
                     <div class="resource-download-card">
-                        <img src="/public/<?php echo $item['resource_image'] ?? 'assets/images/placeholder.jpg'; ?>" 
+                        <img src="<?php echo asset($item['resource_image'] ?? 'assets/images/placeholder.jpg'); ?>" 
                              alt="<?php echo htmlspecialchars($item['resource_title']); ?>">
                         <div class="resource-info">
                             <strong><?php echo htmlspecialchars($item['resource_title']); ?></strong>
                             <span class="resource-price">₵<?php echo number_format($item['resource_price'], 2); ?></span>
                         </div>
-                        <a href="/app/views/downloads/download.php?id=<?php echo $item['resource_id']; ?>&order=<?php echo $order['purchase_id']; ?>" 
+                        <a href="<?php echo url('app/views/resources/download_file.php?id=' . $item['resource_id']); ?>" 
                            class="btn btn-success btn-block">
                             ⬇️ Download Now
                         </a>
@@ -79,11 +79,11 @@ require_once __DIR__ . '/../layouts/header.php';
         </div>
         
         <div class="action-buttons">
-            <a href="/app/views/orders/invoice.php?id=<?php echo $order['purchase_id']; ?>" 
+            <a href="<?php echo url('app/views/profile/my_resources.php'); ?>" 
                class="btn btn-secondary">
-                📄 View Invoice
+                📚 My Resources
             </a>
-            <a href="/app/views/resources/list.php" 
+            <a href="<?php echo url('app/views/resources/list.php'); ?>" 
                class="btn btn-primary">
                 🛍️ Continue Shopping
             </a>
