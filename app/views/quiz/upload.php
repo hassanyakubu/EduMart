@@ -39,9 +39,9 @@ require_once __DIR__ . '/../layouts/header.php';
             <strong>📝 How it works:</strong>
             <ul style="margin: 0.5rem 0 0 1.5rem; color: #856404;">
                 <li>Upload your study material</li>
+                <li>Set time limit (questions scale automatically: 1 question per 2 minutes)</li>
                 <li>System extracts key topics and concepts from the document</li>
-                <li>Generates 5 relevant multiple-choice questions</li>
-                <li>Questions are based on document content and learning objectives</li>
+                <li>Generates relevant multiple-choice questions based on content</li>
             </ul>
         </div>
         
@@ -67,9 +67,21 @@ require_once __DIR__ . '/../layouts/header.php';
             
             <div class="form-group">
                 <label for="time_limit">Time Limit (minutes)</label>
-                <input type="number" id="time_limit" name="time_limit" min="1" max="120" value="10" required>
-                <small style="color: #666;">Set how long students have to complete the quiz</small>
+                <input type="number" id="time_limit" name="time_limit" min="1" max="120" value="10" required onchange="updateQuestionCount()">
+                <small style="color: #666; display: block;">Set how long students have to complete the quiz</small>
+                <small id="question_count" style="color: #28a745; display: block; margin-top: 0.3rem; font-weight: 600;">
+                    📝 Will generate 5 questions (1 question per 2 minutes)
+                </small>
             </div>
+            
+            <script>
+            function updateQuestionCount() {
+                const timeLimit = parseInt(document.getElementById('time_limit').value) || 10;
+                const numQuestions = Math.max(5, Math.min(50, Math.ceil(timeLimit / 2)));
+                document.getElementById('question_count').textContent = 
+                    `📝 Will generate ${numQuestions} questions (1 question per 2 minutes)`;
+            }
+            </script>
             
             <div style="display: flex; gap: 1rem; margin-top: 2rem;">
                 <button type="submit" class="btn btn-primary">✨ Generate Quiz</button>

@@ -7,7 +7,11 @@ session_start();
 require_once __DIR__ . '/../../config/config.php';
 require_once __DIR__ . '/../../models/quiz_model.php';
 
+// Debug: Log that we reached this file
+error_log("Quiz upload process started");
+
 if (!isset($_SESSION['user_id']) || $_SERVER['REQUEST_METHOD'] !== 'POST') {
+    error_log("Quiz upload: User not logged in or not POST request");
     header('Location: ' . url('app/views/auth/login.php'));
     exit;
 }
@@ -45,9 +49,14 @@ function uploadFile($file, $folder) {
     return null;
 }
 
+// Debug: Check what files were received
+error_log("Quiz upload: FILES array: " . print_r($_FILES, true));
+error_log("Quiz upload: POST array: " . print_r($_POST, true));
+
 // Check if file is being received
 if (!isset($_FILES['resource_file']) || $_FILES['resource_file']['error'] !== UPLOAD_ERR_OK) {
     $error_msg = 'Resource file is required.';
+    error_log("Quiz upload: File error - " . ($_FILES['resource_file']['error'] ?? 'not set'));
     if (isset($_FILES['resource_file'])) {
         switch ($_FILES['resource_file']['error']) {
             case UPLOAD_ERR_INI_SIZE:
@@ -75,12 +84,12 @@ if (!isset($_FILES['resource_file']) || $_FILES['resource_file']['error'] !== UP
     exit;
 }
 
-// Validate file type
-$allowed_types = ['application/pdf', 'text/plain', 'application/msword', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'];
-$file_type = $_FILES['resource_file']['type'];
+// Validate file extension (more reliable than MIME type)
+$file_extension = strtolower(pathinfo($_FILES['resource_file']['name'], PATHINFO_EXTENSION));
+$allowed_extensions = ['pdf', 'txt', 'doc', 'docx'];
 
-if (!in_array($file_type, $allowed_types)) {
-    $_SESSION['error'] = 'Only PDF, TXT, DOC, and DOCX files are allowed.';
+if (!in_array($file_extension, $allowed_extensions)) {
+    $_SESSION['error'] = 'Only PDF, TXT, DOC, and DOCX files are allowed. You uploaded: .' . $file_extension;
     header('Location: ' . url('app/views/quiz/upload.php'));
     exit;
 }
@@ -98,7 +107,7 @@ if (!$file_path) {
 $full_file_path = dirname(dirname(dirname(__DIR__))) . '/public/' . $file_path;
 
 // Extract text from the uploaded document
-$document_text = extractTextFromFile($full_file_path, $_FILES['resource_file']['type']);
+$document_text = extractTextFromFile($full_file_path, $file_extension);
 
 // Create quiz in database
 $quizModel = new quiz_model();
@@ -106,14 +115,18 @@ $filename = basename($_FILES['resource_file']['name']);
 $quiz_id = $quizModel->createQuiz($_SESSION['user_id'], $title, $filename, $file_path, $time_limit);
 
 if ($quiz_id) {
+    // Calculate number of questions based on time limit
+    // Rule: 1 question per 2 minutes (minimum 5, maximum 50)
+    $num_questions = max(5, min(50, ceil($time_limit / 2)));
+    
     // Generate questions based on document content
-    generateQuestionsFromDocument($quiz_id, $quizModel, $document_text, $title);
+    generateQuestionsFromDocument($quiz_id, $quizModel, $document_text, $title, $num_questions);
     
     // Set success message based on extraction result
     if ($document_text) {
-        $_SESSION['success'] = 'Quiz created successfully with content-based questions! 🎉';
+        $_SESSION['success'] = "Quiz created successfully with {$num_questions} content-based questions! 🎉";
     } else {
-        $_SESSION['success'] = 'Quiz created with general questions. 💡 Tip: Use TXT files for content-based questions!';
+        $_SESSION['success'] = "Quiz created with {$num_questions} general questions. 💡 Tip: Use TXT files for content-based questions!";
     }
     
     header('Location: ' . url('app/views/quiz/list.php'));
@@ -124,15 +137,15 @@ if ($quiz_id) {
 exit;
 
 // Function to extract text from uploaded file
-function extractTextFromFile($file_path, $mime_type) {
+function extractTextFromFile($file_path, $file_extension) {
     $text = '';
     
     try {
-        if ($mime_type === 'text/plain') {
+        if ($file_extension === 'txt') {
             // Read plain text files - ALWAYS WORKS
             $text = file_get_contents($file_path);
         } 
-        elseif ($mime_type === 'application/pdf') {
+        elseif ($file_extension === 'pdf') {
             // Try multiple methods for PDF extraction
             
             // Method 1: Try pdftotext command (if available)
@@ -200,8 +213,10 @@ function extractPdfTextBasic($file_path) {
 }
 
 // Function to generate questions from document content
-function generateQuestionsFromDocument($quiz_id, $quizModel, $document_text, $quiz_title) {
+function generateQuestionsFromDocument($quiz_id, $quizModel, $document_text, $quiz_title, $num_questions = 5) {
     $questions = [];
+    
+    error_log("Generating {$num_questions} questions for quiz {$quiz_id}");
     
     // If we have document text, try to generate content-based questions
     if (!empty($document_text) && strlen($document_text) > 100) {
@@ -288,7 +303,7 @@ function generateQuestionsFromDocument($quiz_id, $quizModel, $document_text, $qu
     }
     
     // If we don't have enough questions, add general ones
-    while (count($questions) < 5) {
+    while (count($questions) < $num_questions) {
         $general_questions = [
             [
                 'question' => 'What is the primary purpose of studying this material?',
@@ -344,7 +359,7 @@ function generateQuestionsFromDocument($quiz_id, $quizModel, $document_text, $qu
         
         // Add questions that haven't been added yet
         foreach ($general_questions as $gq) {
-            if (count($questions) < 5) {
+            if (count($questions) < $num_questions) {
                 $already_exists = false;
                 foreach ($questions as $existing) {
                     if ($existing['question'] === $gq['question']) {
@@ -357,10 +372,47 @@ function generateQuestionsFromDocument($quiz_id, $quizModel, $document_text, $qu
                 }
             }
         }
+        
+        // If we still need more questions, repeat with variations
+        if (count($questions) < $num_questions) {
+            $variation_questions = [
+                [
+                    'question' => 'What prerequisite knowledge is needed for this topic?',
+                    'options' => ['Basic understanding of fundamentals', 'No prerequisites', 'Advanced expertise', 'Unrelated knowledge'],
+                    'correct' => 'A'
+                ],
+                [
+                    'question' => 'How can you verify your understanding of this material?',
+                    'options' => ['Practice problems and self-testing', 'Just reading once', 'Skipping exercises', 'Ignoring feedback'],
+                    'correct' => 'A'
+                ],
+                [
+                    'question' => 'What is the recommended study strategy?',
+                    'options' => ['Consistent practice over time', 'Last-minute cramming', 'Passive reading only', 'Avoiding difficult sections'],
+                    'correct' => 'A'
+                ],
+                [
+                    'question' => 'How should you approach challenging concepts?',
+                    'options' => ['Break them down into smaller parts', 'Skip them entirely', 'Memorize without understanding', 'Give up immediately'],
+                    'correct' => 'A'
+                ],
+                [
+                    'question' => 'What role does repetition play in learning?',
+                    'options' => ['Reinforces understanding and retention', 'Wastes time', 'Causes confusion', 'Has no effect'],
+                    'correct' => 'A'
+                ]
+            ];
+            
+            foreach ($variation_questions as $vq) {
+                if (count($questions) < $num_questions) {
+                    $questions[] = $vq;
+                }
+            }
+        }
     }
     
-    // Limit to 5 questions
-    $questions = array_slice($questions, 0, 5);
+    // Ensure we have exactly the requested number
+    $questions = array_slice($questions, 0, $num_questions);
     
     // Save questions to database
     foreach ($questions as $q) {
