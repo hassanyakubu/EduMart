@@ -4,6 +4,7 @@ require_once __DIR__ . '/../../config/config.php';
 require_once __DIR__ . '/../../models/user_model.php';
 require_once __DIR__ . '/../../models/download_model.php';
 require_once __DIR__ . '/../../models/order_model.php';
+require_once __DIR__ . '/../../models/quiz_model.php';
 
 if (!isset($_SESSION['user_id'])) {
     header('Location: ' . url('app/views/auth/login.php'));
@@ -13,10 +14,12 @@ if (!isset($_SESSION['user_id'])) {
 $userModel = new user_model();
 $downloadModel = new download_model();
 $orderModel = new order_model();
+$quizModel = new quiz_model();
 
 $user = $userModel->getById($_SESSION['user_id']);
 $downloads = $downloadModel->getUserDownloads($_SESSION['user_id']);
 $orders = $orderModel->getOrdersByUser($_SESSION['user_id']);
+$quiz_attempts = $quizModel->getUserAttempts($_SESSION['user_id']);
 
 $page_title = 'My Dashboard';
 require_once __DIR__ . '/../layouts/header.php';
@@ -42,6 +45,10 @@ require_once __DIR__ . '/../layouts/header.php';
         <div style="background: white; padding: 2rem; border-radius: 12px; text-align: center;">
             <h3 style="color: #666;">Downloads</h3>
             <p style="font-size: 2rem; font-weight: 700; color: #FFD947;"><?php echo count($downloads); ?></p>
+        </div>
+        <div style="background: white; padding: 2rem; border-radius: 12px; text-align: center;">
+            <h3 style="color: #666;">Quizzes Taken</h3>
+            <p style="font-size: 2rem; font-weight: 700; color: #FFD947;"><?php echo count($quiz_attempts); ?></p>
         </div>
     </div>
     
@@ -127,6 +134,51 @@ require_once __DIR__ . '/../layouts/header.php';
         }
     }
     </script>
+    
+    <div style="background: white; border-radius: 12px; padding: 2rem; margin-bottom: 2rem;">
+        <h2 style="margin-bottom: 1rem;">📝 Recent Quiz Results</h2>
+        <?php if (empty($quiz_attempts)): ?>
+            <p style="color: #666;">No quiz attempts yet. <a href="<?php echo url('app/views/quiz/list.php'); ?>" style="color: #FFD947;">Take your first quiz!</a></p>
+        <?php else: ?>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Quiz Title</th>
+                        <th>Date</th>
+                        <th>Score</th>
+                        <th>Percentage</th>
+                        <th>Time Taken</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <?php foreach (array_slice($quiz_attempts, 0, 5) as $attempt): 
+                        $percentage = round(($attempt['score'] / $attempt['total_questions']) * 100, 2);
+                        $time_minutes = floor($attempt['time_taken'] / 60);
+                        $time_seconds = $attempt['time_taken'] % 60;
+                    ?>
+                        <tr>
+                            <td><?php echo htmlspecialchars($attempt['quiz_title']); ?></td>
+                            <td><?php echo date('M d, Y', strtotime($attempt['completed_at'])); ?></td>
+                            <td><?php echo $attempt['score']; ?>/<?php echo $attempt['total_questions']; ?></td>
+                            <td>
+                                <span style="padding: 0.3rem 0.8rem; border-radius: 20px; background: <?php echo $percentage >= 70 ? '#d4edda' : ($percentage >= 50 ? '#fff3cd' : '#f8d7da'); ?>; color: <?php echo $percentage >= 70 ? '#155724' : ($percentage >= 50 ? '#856404' : '#721c24'); ?>;">
+                                    <?php echo $percentage; ?>%
+                                </span>
+                            </td>
+                            <td><?php echo $time_minutes; ?>m <?php echo $time_seconds; ?>s</td>
+                            <td>
+                                <a href="<?php echo url('app/views/quiz/results.php?attempt_id=' . $attempt['attempt_id']); ?>" 
+                                   class="btn btn-secondary" style="text-decoration: none; color: white;">
+                                    View Details
+                                </a>
+                            </td>
+                        </tr>
+                    <?php endforeach; ?>
+                </tbody>
+            </table>
+        <?php endif; ?>
+    </div>
     
     <div style="background: white; border-radius: 12px; padding: 2rem;">
         <h2 style="margin-bottom: 1rem;">Recent Orders</h2>
