@@ -64,7 +64,7 @@ require_once __DIR__ . '/../layouts/admin_header.php';
             <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
                 <h2 style="margin: 0;">🎓 Manage Students</h2>
                 <a href="<?php echo url('app/views/admin/students.php'); ?>" class="btn btn-secondary" style="text-decoration: none; color: white;">
-                    View All Students
+                    All Students
                 </a>
             </div>
             <p style="color: #666; margin: 0;">View, edit, and delete student accounts. Monitor student purchases and activity.</p>
@@ -75,7 +75,7 @@ require_once __DIR__ . '/../layouts/admin_header.php';
             <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
                 <h2 style="margin: 0;">✍️ Manage Creators</h2>
                 <a href="<?php echo url('app/views/admin/creators.php'); ?>" class="btn btn-secondary" style="text-decoration: none; color: white;">
-                    View All Creators
+                    All Creators
                 </a>
             </div>
             <p style="color: #666; margin: 0;">View, edit, and delete creator accounts. Monitor uploaded content and sales.</p>
@@ -86,7 +86,7 @@ require_once __DIR__ . '/../layouts/admin_header.php';
             <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
                 <h2 style="margin: 0;">📚 Manage Content</h2>
                 <a href="<?php echo url('app/views/admin/resources.php'); ?>" class="btn btn-secondary" style="text-decoration: none; color: white;">
-                    View All Resources
+                    All Resources
                 </a>
             </div>
             <p style="color: #666; margin: 0;">View, edit, and delete all resources on the platform. Moderate content quality.</p>

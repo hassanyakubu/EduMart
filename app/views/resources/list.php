@@ -41,7 +41,7 @@ require_once __DIR__ . '/../layouts/header.php';
     
     <div style="background: white; padding: 1.5rem; border-radius: 12px; margin-bottom: 2rem; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
         <form action="" method="GET" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem;">
-            <input type="text" name="search" placeholder="🔍 Search resources..." value="<?php echo htmlspecialchars($_GET['search'] ?? ''); ?>" style="padding: 0.8rem; border: 1px solid #ddd; border-radius: 8px;">
+            <input type="text" name="search" placeholder="Search resources..." value="<?php echo htmlspecialchars($_GET['search'] ?? ''); ?>" style="padding: 0.8rem; border: 1px solid #ddd; border-radius: 8px;">
             
             <select name="category" style="padding: 0.8rem; border: 1px solid #ddd; border-radius: 8px;">
                 <option value="">📚 All Categories</option>

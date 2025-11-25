@@ -46,10 +46,17 @@ require_once __DIR__ . '/../layouts/header.php';
             <h3 style="color: #666;">Downloads</h3>
             <p style="font-size: 2rem; font-weight: 700; color: #FFD947;"><?php echo count($downloads); ?></p>
         </div>
+        <?php 
+        // Only show quiz stats for students and admins, not creators
+        $isCreator = isset($_SESSION['user_type']) && $_SESSION['user_type'] == 'creator';
+        $isAdmin = $_SESSION['user_role'] == 1;
+        if (!$isCreator || $isAdmin): 
+        ?>
         <div style="background: white; padding: 2rem; border-radius: 12px; text-align: center;">
             <h3 style="color: #666;">Quizzes Taken</h3>
             <p style="font-size: 2rem; font-weight: 700; color: #FFD947;"><?php echo count($quiz_attempts); ?></p>
         </div>
+        <?php endif; ?>
     </div>
     
     <div style="background: white; border-radius: 12px; padding: 2rem; margin-bottom: 2rem;">
@@ -135,6 +142,10 @@ require_once __DIR__ . '/../layouts/header.php';
     }
     </script>
     
+    <?php 
+    // Only show quiz results for students and admins, not creators
+    if (!$isCreator || $isAdmin): 
+    ?>
     <div style="background: white; border-radius: 12px; padding: 2rem; margin-bottom: 2rem;">
         <h2 style="margin-bottom: 1rem;">📝 Recent Quiz Results</h2>
         <?php if (empty($quiz_attempts)): ?>
@@ -170,7 +181,7 @@ require_once __DIR__ . '/../layouts/header.php';
                             <td>
                                 <a href="<?php echo url('app/views/quiz/results.php?attempt_id=' . $attempt['attempt_id']); ?>" 
                                    class="btn btn-secondary" style="text-decoration: none; color: white;">
-                                    View Details
+                                    View
                                 </a>
                             </td>
                         </tr>
@@ -179,6 +190,7 @@ require_once __DIR__ . '/../layouts/header.php';
             </table>
         <?php endif; ?>
     </div>
+    <?php endif; ?>
     
     <div style="background: white; border-radius: 12px; padding: 2rem;">
         <h2 style="margin-bottom: 1rem;">Recent Orders</h2>

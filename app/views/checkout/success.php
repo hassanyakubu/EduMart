@@ -71,7 +71,7 @@ require_once __DIR__ . '/../layouts/header.php';
                         </div>
                         <a href="<?php echo url('app/views/resources/download_file.php?id=' . $item['resource_id']); ?>" 
                            class="btn btn-success btn-block">
-                            ⬇️ Download Now
+                            Download Now
                         </a>
                     </div>
                 <?php endforeach; ?>

@@ -74,5 +74,16 @@ class user_model {
         $stmt->bind_param("i", $id);
         return $stmt->execute();
     }
+    
+    public function updateUserRole($user_id, $new_role) {
+        // Validate role (1=Admin, 2=Creator, 3=Student)
+        if (!in_array($new_role, [1, 2, 3])) {
+            return false;
+        }
+        
+        $stmt = $this->db->prepare("UPDATE customer SET user_role = ? WHERE customer_id = ?");
+        $stmt->bind_param("ii", $new_role, $user_id);
+        return $stmt->execute();
+    }
 }
 ?>

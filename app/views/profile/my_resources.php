@@ -38,19 +38,19 @@ require_once __DIR__ . '/../layouts/header.php';
                     <div class="card-content">
                         <h3 class="card-title"><?php echo htmlspecialchars($resource['resource_title']); ?></h3>
                         <p style="color: #666; font-size: 0.9rem; margin: 0.5rem 0;">
-                            📅 Purchased: <?php echo date('M d, Y', strtotime($resource['download_date'])); ?>
+                            Purchased: <?php echo date('M d, Y', strtotime($resource['download_date'])); ?>
                         </p>
                         <div style="display: flex; gap: 0.5rem; margin-top: 1rem;">
                             <a href="<?php echo url('app/views/resources/view_file.php?id=' . $resource['resource_id']); ?>" 
                                class="btn btn-secondary" 
                                style="flex: 1; text-align: center; text-decoration: none; color: white;"
                                target="_blank">
-                                👁️ View
+                                View
                             </a>
                             <a href="<?php echo url('app/views/resources/download_file.php?id=' . $resource['resource_id']); ?>" 
                                class="btn btn-primary" 
                                style="flex: 1; text-align: center; text-decoration: none;">
-                                ⬇️ Download
+                                Download
                             </a>
                         </div>
                     </div>

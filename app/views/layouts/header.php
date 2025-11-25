@@ -23,15 +23,35 @@
                     <?php if ($_SESSION['user_role'] == 1 || (isset($_SESSION['user_type']) && $_SESSION['user_type'] == 'creator')): ?>
                         <li><a href="<?php echo url('app/views/resources/upload.php'); ?>">Upload</a></li>
                     <?php endif; ?>
-                    <li><a href="<?php echo url('app/views/profile/my_resources.php'); ?>">My Resources</a></li>
+                    
                     <?php 
-                    // Only show Quizzes for students and admins, not creators
+                    // Define user type variables
                     $isCreator = isset($_SESSION['user_type']) && $_SESSION['user_type'] == 'creator';
                     $isAdmin = $_SESSION['user_role'] == 1;
+                    
+                    // Show different menu items based on user type
+                    if ($isAdmin) {
+                        // Admin sees My Resources (purchased items)
+                        echo '<li><a href="' . url('app/views/profile/my_resources.php') . '">My Resources</a></li>';
+                    } elseif ($isCreator) {
+                        // Creator sees My Uploads (uploaded resources) and My Earnings
+                        echo '<li><a href="' . url('app/views/admin/resources.php') . '">My Uploads</a></li>';
+                        echo '<li><a href="' . url('app/views/profile/earnings.php') . '">My Earnings</a></li>';
+                    } else {
+                        // Student sees My Resources (purchased items)
+                        echo '<li><a href="' . url('app/views/profile/my_resources.php') . '">My Resources</a></li>';
+                    }
+                    
+                    // Only show Quizzes for students and admins, not creators
                     if (!$isCreator || $isAdmin): 
                     ?>
                         <li><a href="<?php echo url('app/views/quiz/list.php'); ?>">Quizzes</a></li>
                     <?php endif; ?>
+                    
+                    <?php 
+                    // Only show Cart for students (not admins or creators)
+                    if (!$isAdmin && !$isCreator): 
+                    ?>
                     <li style="position: relative;">
                         <a href="<?php echo url('app/views/cart/view.php'); ?>">Cart</a>
                         <?php
@@ -59,6 +79,8 @@
                         }
                         ?>
                     </li>
+                    <?php endif; ?>
+                    
                     <li><a href="<?php echo url('app/views/profile/dashboard.php'); ?>">Profile</a></li>
                     <li><a href="<?php echo url('app/views/auth/logout.php'); ?>">Logout</a></li>
                 <?php else: ?>

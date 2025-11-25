@@ -69,7 +69,7 @@ require_once __DIR__ . '/../layouts/header.php';
                     </p>
                     <a href="<?php echo url('app/views/resources/download_file.php?id=' . $resource_id); ?>" 
                        class="btn btn-primary" style="text-decoration: none;">
-                        ⬇️ Download File
+                        Download File
                     </a>
                 </div>
             <?php endif; ?>
@@ -78,7 +78,7 @@ require_once __DIR__ . '/../layouts/header.php';
         <div style="margin-top: 2rem;">
             <a href="<?php echo url('app/views/resources/download_file.php?id=' . $resource_id); ?>" 
                class="btn btn-primary" style="text-decoration: none;">
-                ⬇️ Download File
+                Download File
             </a>
         </div>
     </div>
