@@ -13,7 +13,7 @@
     <nav class="navbar">
         <div class="container">
             <a href="<?php echo url('app/views/home/index.php'); ?>" class="logo">EduMart</a>
-            <ul class="nav-menu">
+            <ul class="nav-menu" style="overflow-x: auto; white-space: nowrap; -webkit-overflow-scrolling: touch;">
                 <li><a href="<?php echo url('app/views/home/index.php'); ?>">Home</a></li>
                 <li><a href="<?php echo url('app/views/resources/list.php'); ?>">Browse Resources</a></li>
                 <?php if (isset($_SESSION['user_id'])): ?>
@@ -24,7 +24,14 @@
                         <li><a href="<?php echo url('app/views/resources/upload.php'); ?>">Upload</a></li>
                     <?php endif; ?>
                     <li><a href="<?php echo url('app/views/profile/my_resources.php'); ?>">My Resources</a></li>
-                    <li><a href="<?php echo url('app/views/quiz/list.php'); ?>">📝 Quizzes</a></li>
+                    <?php 
+                    // Only show Quizzes for students and admins, not creators
+                    $isCreator = isset($_SESSION['user_type']) && $_SESSION['user_type'] == 'creator';
+                    $isAdmin = $_SESSION['user_role'] == 1;
+                    if (!$isCreator || $isAdmin): 
+                    ?>
+                        <li><a href="<?php echo url('app/views/quiz/list.php'); ?>">Quizzes</a></li>
+                    <?php endif; ?>
                     <li><a href="<?php echo url('app/views/cart/view.php'); ?>">Cart</a></li>
                     <li><a href="<?php echo url('app/views/profile/dashboard.php'); ?>">Profile</a></li>
                     <li><a href="<?php echo url('app/views/auth/logout.php'); ?>">Logout</a></li>
