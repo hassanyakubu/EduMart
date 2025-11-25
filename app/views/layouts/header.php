@@ -32,7 +32,26 @@
                     ?>
                         <li><a href="<?php echo url('app/views/quiz/list.php'); ?>">Quizzes</a></li>
                     <?php endif; ?>
-                    <li><a href="<?php echo url('app/views/cart/view.php'); ?>">Cart</a></li>
+                    <li style="position: relative;">
+                        <a href="<?php echo url('app/views/cart/view.php'); ?>">Cart</a>
+                        <?php
+                        // Get cart count
+                        if (isset($_SESSION['user_id'])) {
+                            require_once __DIR__ . '/../../models/cart_model.php';
+                            $cartModel = new cart_model();
+                            $cart_items = $cartModel->getItems($_SESSION['user_id']);
+                            $cart_count = count($cart_items);
+                            if ($cart_count > 0):
+                        ?>
+                            <span class="cart-badge <?php echo isset($_SESSION['cart_updated']) ? 'cart-badge-pulse' : ''; ?>">
+                                <?php echo $cart_count; ?>
+                            </span>
+                        <?php 
+                            unset($_SESSION['cart_updated']); // Clear the flag
+                            endif;
+                        }
+                        ?>
+                    </li>
                     <li><a href="<?php echo url('app/views/profile/dashboard.php'); ?>">Profile</a></li>
                     <li><a href="<?php echo url('app/views/auth/logout.php'); ?>">Logout</a></li>
                 <?php else: ?>
@@ -44,15 +63,29 @@
     </nav>
     
     <?php if (isset($_SESSION['success'])): ?>
-        <div class="alert alert-success">
+        <div class="alert alert-success toast-notification">
             <?php echo $_SESSION['success']; unset($_SESSION['success']); ?>
         </div>
     <?php endif; ?>
     
     <?php if (isset($_SESSION['error'])): ?>
-        <div class="alert alert-error">
+        <div class="alert alert-error toast-notification">
             <?php echo $_SESSION['error']; unset($_SESSION['error']); ?>
         </div>
     <?php endif; ?>
+    
+    <script>
+    // Auto-hide toast notifications after 3 seconds
+    document.addEventListener('DOMContentLoaded', function() {
+        const toasts = document.querySelectorAll('.toast-notification');
+        toasts.forEach(toast => {
+            setTimeout(() => {
+                toast.style.opacity = '0';
+                toast.style.transform = 'translateY(-20px)';
+                setTimeout(() => toast.remove(), 300);
+            }, 3000);
+        });
+    });
+    </script>
     
     <main class="main-content">

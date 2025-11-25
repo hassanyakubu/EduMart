@@ -21,10 +21,13 @@ $resource_id = intval($_GET['id']);
 
 if ($cartModel->addItem($_SESSION['user_id'], $resource_id, 1)) {
     $_SESSION['success'] = 'Resource added to cart!';
+    $_SESSION['cart_updated'] = true; // Flag for cart badge update
 } else {
     $_SESSION['error'] = 'Failed to add resource to cart.';
 }
 
-header('Location: ' . url('app/views/cart/view.php'));
+// Redirect back to the previous page or to resources list
+$redirect_url = $_SERVER['HTTP_REFERER'] ?? url('app/views/resources/list.php');
+header('Location: ' . $redirect_url);
 exit;
 ?>

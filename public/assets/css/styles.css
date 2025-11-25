@@ -260,12 +260,24 @@ body {
    ALERTS
    ======================================== */
 .alert {
-    padding: 1rem;
+    padding: 1rem 1.5rem;
     margin: 1rem auto;
     max-width: 1200px;
-    border-radius: 8px;
+    border-radius: 12px;
     font-weight: 500;
     animation: slideDown 0.3s ease-out;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+/* Toast notification style */
+.toast-notification {
+    position: fixed;
+    top: 80px;
+    right: 20px;
+    max-width: 400px;
+    z-index: 9999;
+    margin: 0;
+    transition: all 0.3s ease;
 }
 
 @keyframes slideDown {
@@ -1041,4 +1053,44 @@ tbody tr:nth-child(even) {
     .nav-menu.active {
         max-height: 500px;
     }
+}
+
+
+/* ========================================
+   CART BADGE
+   ======================================== */
+.cart-badge {
+    position: absolute;
+    top: -8px;
+    right: -8px;
+    background: linear-gradient(135deg, #f5576c 0%, #f093fb 100%);
+    color: white;
+    font-size: 0.75rem;
+    font-weight: 700;
+    padding: 0.25rem 0.5rem;
+    border-radius: 12px;
+    min-width: 20px;
+    text-align: center;
+    box-shadow: 0 2px 8px rgba(245, 87, 108, 0.4);
+    animation: fadeIn 0.3s ease-out;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: scale(0.5);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+.cart-badge-pulse {
+    animation: fadeIn 0.3s ease-out, pulse 1s ease-in-out 3;
+}
+
+/* Ensure parent li has relative positioning */
+.nav-menu li {
+    position: relative;
 }
