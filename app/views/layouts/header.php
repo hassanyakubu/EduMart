@@ -37,18 +37,25 @@
                         <?php
                         // Get cart count
                         if (isset($_SESSION['user_id'])) {
-                            require_once __DIR__ . '/../../models/cart_model.php';
-                            $cartModel = new cart_model();
-                            $cart_items = $cartModel->getItems($_SESSION['user_id']);
-                            $cart_count = count($cart_items);
-                            if ($cart_count > 0):
+                            try {
+                                if (!class_exists('cart_model')) {
+                                    require_once __DIR__ . '/../../models/cart_model.php';
+                                }
+                                $cartModel = new cart_model();
+                                $cart_items = $cartModel->getUserCart($_SESSION['user_id']);
+                                $cart_count = count($cart_items);
+                                if ($cart_count > 0):
                         ?>
                             <span class="cart-badge <?php echo isset($_SESSION['cart_updated']) ? 'cart-badge-pulse' : ''; ?>">
                                 <?php echo $cart_count; ?>
                             </span>
                         <?php 
+                                endif;
+                            } catch (Exception $e) {
+                                // Silently fail if cart model can't be loaded
+                                error_log("Cart badge error: " . $e->getMessage());
+                            }
                             unset($_SESSION['cart_updated']); // Clear the flag
-                            endif;
                         }
                         ?>
                     </li>
