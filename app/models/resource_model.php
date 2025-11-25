@@ -42,7 +42,7 @@ class resource_model {
         return $stmt->get_result()->fetch_assoc();
     }
     
-    public function search($keyword, $category = null, $minPrice = null, $maxPrice = null, $creator = null) {
+    public function search($keyword = '', $category = null, $minPrice = null, $maxPrice = null, $creator = null) {
         $sql = "SELECT r.*, c.cat_name, cr.creator_name,
                 COALESCE(AVG(rv.rating), 0) as avg_rating,
                 COUNT(DISTINCT rv.review_id) as review_count
@@ -50,41 +50,70 @@ class resource_model {
                 LEFT JOIN categories c ON r.cat_id = c.cat_id
                 LEFT JOIN creators cr ON r.creator_id = cr.creator_id
                 LEFT JOIN reviews rv ON r.resource_id = rv.resource_id
-                WHERE (r.resource_title LIKE ? OR r.resource_keywords LIKE ? OR r.resource_desc LIKE ? OR cr.creator_name LIKE ?)";
+                WHERE 1=1";
         
-        $params = ["%$keyword%", "%$keyword%", "%$keyword%", "%$keyword%"];
-        $types = "ssss";
+        $params = [];
+        $types = "";
         
-        if ($category) {
+        // Add keyword search if provided
+        if (!empty($keyword)) {
+            $sql .= " AND (r.resource_title LIKE ? OR r.resource_keywords LIKE ? OR r.resource_desc LIKE ? OR cr.creator_name LIKE ?)";
+            $params = array_merge($params, ["%$keyword%", "%$keyword%", "%$keyword%", "%$keyword%"]);
+            $types .= "ssss";
+        }
+        
+        if ($category !== null && $category !== '') {
             $sql .= " AND r.cat_id = ?";
             $params[] = $category;
             $types .= "i";
         }
         
-        if ($creator) {
+        if ($creator !== null && $creator !== '') {
             $sql .= " AND r.creator_id = ?";
             $params[] = $creator;
             $types .= "i";
         }
         
-        if ($minPrice !== null) {
+        if ($minPrice !== null && $minPrice !== '') {
             $sql .= " AND r.resource_price >= ?";
-            $params[] = $minPrice;
+            $params[] = floatval($minPrice);
             $types .= "d";
         }
         
-        if ($maxPrice !== null) {
+        if ($maxPrice !== null && $maxPrice !== '') {
             $sql .= " AND r.resource_price <= ?";
-            $params[] = $maxPrice;
+            $params[] = floatval($maxPrice);
             $types .= "d";
         }
         
         $sql .= " GROUP BY r.resource_id ORDER BY r.resource_id DESC";
         
+        // Debug: Log the SQL query
+        error_log("Search SQL: " . $sql);
+        error_log("Search Params: " . print_r($params, true));
+        error_log("Search Types: " . $types);
+        
         $stmt = $this->db->prepare($sql);
-        $stmt->bind_param($types, ...$params);
-        $stmt->execute();
-        return $stmt->get_result()->fetch_all(MYSQLI_ASSOC);
+        
+        if (!$stmt) {
+            error_log("SQL Prepare Error: " . $this->db->error);
+            return [];
+        }
+        
+        // Only bind params if we have any
+        if (!empty($params)) {
+            $stmt->bind_param($types, ...$params);
+        }
+        
+        if (!$stmt->execute()) {
+            error_log("SQL Execute Error: " . $stmt->error);
+            return [];
+        }
+        
+        $result = $stmt->get_result()->fetch_all(MYSQLI_ASSOC);
+        error_log("Search found " . count($result) . " results");
+        
+        return $result;
     }
     
     public function create($cat_id, $creator_id, $title, $price, $desc, $image, $keywords, $file) {

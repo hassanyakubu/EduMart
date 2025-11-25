@@ -10,15 +10,23 @@ $categoryModel = new category_model();
 $creatorModel = new creator_model();
 
 $keyword = $_GET['search'] ?? '';
-$category = $_GET['category'] ?? null;
-$creator = $_GET['creator'] ?? null;
-$minPrice = $_GET['min_price'] ?? null;
-$maxPrice = $_GET['max_price'] ?? null;
+$category = isset($_GET['category']) && $_GET['category'] !== '' ? $_GET['category'] : null;
+$creator = isset($_GET['creator']) && $_GET['creator'] !== '' ? $_GET['creator'] : null;
+$minPrice = isset($_GET['min_price']) && $_GET['min_price'] !== '' ? $_GET['min_price'] : null;
+$maxPrice = isset($_GET['max_price']) && $_GET['max_price'] !== '' ? $_GET['max_price'] : null;
 
-if ($keyword || $category || $creator || $minPrice || $maxPrice) {
+// Check if any filter is applied
+$hasFilters = !empty($keyword) || $category !== null || $creator !== null || $minPrice !== null || $maxPrice !== null;
+
+// Debug: Log search parameters
+error_log("Search - Keyword: '$keyword', Category: '$category', Creator: '$creator', MinPrice: '$minPrice', MaxPrice: '$maxPrice', HasFilters: " . ($hasFilters ? 'yes' : 'no'));
+
+if ($hasFilters) {
     $resources = $resourceModel->search($keyword, $category, $minPrice, $maxPrice, $creator);
+    error_log("Search returned " . count($resources) . " resources");
 } else {
     $resources = $resourceModel->getAll();
+    error_log("GetAll returned " . count($resources) . " resources");
 }
 
 $categories = $categoryModel->getAll();
