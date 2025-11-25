@@ -1,15 +1,23 @@
 <?php
 session_start();
-require_once __DIR__ . '/../../controllers/admin_controller.php';
+require_once __DIR__ . '/../../config/config.php';
+require_once __DIR__ . '/../../models/user_model.php';
+require_once __DIR__ . '/../../models/resource_model.php';
+require_once __DIR__ . '/../../models/order_model.php';
 
 if (!isset($_SESSION['user_id']) || $_SESSION['user_role'] != 1) {
-    require_once __DIR__ . '/../../config/config.php';
     header('Location: ' . url('app/views/auth/login.php'));
     exit;
 }
 
-$controller = new admin_controller();
-$controller->dashboard();
+// Get statistics
+$userModel = new user_model();
+$resourceModel = new resource_model();
+$orderModel = new order_model();
+
+$total_users = count($userModel->getAll());
+$total_resources = count($resourceModel->getAll());
+$total_orders = count($orderModel->getAllOrders());
 
 $page_title = 'Admin Dashboard';
 require_once __DIR__ . '/../layouts/admin_header.php';

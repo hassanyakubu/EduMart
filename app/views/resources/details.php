@@ -1,6 +1,8 @@
 <?php
 session_start();
-require_once __DIR__ . '/../../controllers/resource_controller.php';
+require_once __DIR__ . '/../../config/config.php';
+require_once __DIR__ . '/../../models/resource_model.php';
+require_once __DIR__ . '/../../models/review_model.php';
 
 if (!isset($_SESSION['user_id'])) {
     $_SESSION['error'] = 'Please log in to view resource details.';
@@ -14,8 +16,17 @@ if (!isset($_GET['id'])) {
     exit;
 }
 
-$controller = new resource_controller();
-$controller->details($_GET['id']);
+$resourceModel = new resource_model();
+$reviewModel = new review_model();
+
+$resource = $resourceModel->getById($_GET['id']);
+$reviews = $reviewModel->getByResource($_GET['id']);
+
+if (!$resource) {
+    $_SESSION['error'] = 'Resource not found.';
+    header('Location: ' . url('app/views/resources/list.php'));
+    exit;
+}
 
 $page_title = $resource['resource_title'] ?? 'Resource Details';
 require_once __DIR__ . '/../layouts/header.php';
