@@ -27,7 +27,7 @@ require_once __DIR__ . '/../layouts/header.php';
 
 <div class="container">
     <div style="background: linear-gradient(135deg, #FFD947 0%, #ffd000 100%); padding: 2rem; border-radius: 12px; margin: 2rem 0; box-shadow: 0 4px 15px rgba(255, 217, 71, 0.3);">
-        <h1 style="margin: 0; color: #333; font-size: 2.5rem;">Hello, <?php echo htmlspecialchars(explode(' ', $user['customer_name'])[0]); ?>! 👋</h1>
+        <h1 style="margin: 0; color: #333; font-size: 2.5rem;">Hello, <?php echo htmlspecialchars(explode(' ', $user['customer_name'])[0]); ?>!</h1>
         <p style="margin: 0.5rem 0 0 0; color: #555; font-size: 1.1rem;">
             <?php 
             $user_type = $user['user_type'] ?? 'student';
@@ -116,8 +116,8 @@ require_once __DIR__ . '/../layouts/header.php';
                     </div>
                 </div>
                 <div style="display: flex; gap: 1rem; margin-top: 1.5rem;">
-                    <button type="submit" class="btn btn-primary">💾 Save Changes</button>
-                    <button type="button" onclick="toggleEditMode()" class="btn btn-secondary">❌ Cancel</button>
+                    <button type="submit" class="btn btn-primary">Save Changes</button>
+                    <button type="button" onclick="toggleEditMode()" class="btn btn-secondary">Cancel</button>
                 </div>
             </form>
         </div>
@@ -169,7 +169,7 @@ require_once __DIR__ . '/../layouts/header.php';
                     ?>
                         <tr>
                             <td><?php echo htmlspecialchars($attempt['quiz_title']); ?></td>
-                            <td><?php echo date('M d, Y', strtotime($attempt['completed_at'])); ?></td>
+                            <td><?php echo $attempt['completed_at'] ? date('M d, Y', strtotime($attempt['completed_at'])) : date('M d, Y', strtotime($attempt['started_at'])); ?></td>
                             <td><?php echo $attempt['score']; ?>/<?php echo $attempt['total_questions']; ?></td>
                             <td>
                                 <span style="padding: 0.3rem 0.8rem; border-radius: 20px; background: <?php echo $percentage >= 70 ? '#d4edda' : ($percentage >= 50 ? '#fff3cd' : '#f8d7da'); ?>; color: <?php echo $percentage >= 70 ? '#155724' : ($percentage >= 50 ? '#856404' : '#721c24'); ?>;">
