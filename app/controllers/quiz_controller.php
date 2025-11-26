@@ -16,7 +16,7 @@ class quiz_controller {
             exit;
         }
         
-        require_once __DIR__ . '/../views/quiz/upload.php';
+        require_once __DIR__ . '/../views/quiz/create.php';
     }
     
     // Upload processing is now handled in app/views/quiz/process_upload.php
