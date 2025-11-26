@@ -25,6 +25,10 @@
             color: #000 !important;
             font-weight: 700;
             font-size: 1.5rem;
+            background: none !important;
+            -webkit-background-clip: unset !important;
+            -webkit-text-fill-color: #000 !important;
+            background-clip: unset !important;
         }
         
         .nav-menu {
