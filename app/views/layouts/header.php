@@ -96,78 +96,92 @@
         <div class="container">
             <a href="<?php echo url('app/views/home/index.php'); ?>" class="logo">EduMart</a>
             <ul class="nav-menu">
-                <li><a href="<?php echo url('app/views/home/index.php'); ?>">Home</a></li>
-                <li><a href="<?php echo url('app/views/resources/list.php'); ?>">Browse Resources</a></li>
-                <?php if (isset($_SESSION['user_id'])): ?>
-                    <?php if ($_SESSION['user_role'] == 1): ?>
-                        <li><a href="<?php echo url('app/views/admin/dashboard.php'); ?>">Admin</a></li>
-                    <?php endif; ?>
-                    <?php if ($_SESSION['user_role'] == 1 || (isset($_SESSION['user_type']) && $_SESSION['user_type'] == 'creator')): ?>
-                        <li><a href="<?php echo url('app/views/resources/upload.php'); ?>">Upload</a></li>
-                    <?php endif; ?>
-                    
-                    <?php 
-                    // Define user type variables
-                    $isCreator = isset($_SESSION['user_type']) && $_SESSION['user_type'] == 'creator';
-                    $isAdmin = $_SESSION['user_role'] == 1;
-                    
-                    // Show different menu items based on user type
-                    if ($isAdmin) {
-                        // Admin sees My Resources (purchased items)
-                        echo '<li><a href="' . url('app/views/profile/my_resources.php') . '">My Resources</a></li>';
-                    } elseif ($isCreator) {
-                        // Creator sees My Uploads and My Earnings
-                        echo '<li><a href="' . url('app/views/admin/resources.php') . '">My Uploads</a></li>';
-                        echo '<li><a href="' . url('app/views/profile/earnings.php') . '">My Earnings</a></li>';
-                    } else {
-                        // Student sees My Resources (purchased items)
-                        echo '<li><a href="' . url('app/views/profile/my_resources.php') . '">My Resources</a></li>';
-                    }
-                    
-                    // Show Quizzes for students and admins (not creators unless they're admin)
-                    if (!$isCreator || $isAdmin): 
-                    ?>
-                        <li><a href="<?php echo url('app/views/quiz/list.php'); ?>">Quizzes</a></li>
-                    <?php endif; ?>
-                    
-                    <?php 
-                    // Only show Cart for students (not admins or creators)
-                    if (!$isAdmin && !$isCreator): 
-                    ?>
-                    <li style="position: relative;">
-                        <a href="<?php echo url('app/views/cart/view.php'); ?>">Cart</a>
-                        <?php
-                        // Get cart count
-                        if (isset($_SESSION['user_id'])) {
-                            try {
-                                if (!class_exists('cart_model')) {
-                                    require_once __DIR__ . '/../../models/cart_model.php';
-                                }
-                                $cartModel = new cart_model();
-                                $cart_items = $cartModel->getUserCart($_SESSION['user_id']);
-                                $cart_count = count($cart_items);
-                                if ($cart_count > 0):
-                        ?>
-                            <span class="cart-badge <?php echo isset($_SESSION['cart_updated']) ? 'cart-badge-pulse' : ''; ?>">
-                                <?php echo $cart_count; ?>
-                            </span>
-                        <?php 
-                                endif;
-                            } catch (Exception $e) {
-                                // Silently fail if cart model can't be loaded
-                                error_log("Cart badge error: " . $e->getMessage());
-                            }
-                            unset($_SESSION['cart_updated']); // Clear the flag
-                        }
-                        ?>
-                    </li>
-                    <?php endif; ?>
-                    
-                    <li><a href="<?php echo url('app/views/profile/dashboard.php'); ?>">Profile</a></li>
-                    <li><a href="<?php echo url('app/views/auth/logout.php'); ?>">Logout</a></li>
-                <?php else: ?>
+                <?php 
+                // Check if we're on the index page
+                $is_index_page = (basename($_SERVER['PHP_SELF']) === 'index.php');
+                
+                if ($is_index_page && !isset($_SESSION['user_id'])): 
+                    // Index page for visitors - show minimal menu
+                ?>
+                    <li><a href="<?php echo url('app/views/resources/list.php'); ?>">Browse Resources</a></li>
                     <li><a href="<?php echo url('app/views/auth/login.php'); ?>">Login</a></li>
                     <li><a href="<?php echo url('app/views/auth/register.php'); ?>" class="btn-primary">Sign Up</a></li>
+                <?php else: 
+                    // Full menu for logged-in users or internal pages
+                ?>
+                    <li><a href="<?php echo url('app/views/home/index.php'); ?>">Home</a></li>
+                    <li><a href="<?php echo url('app/views/resources/list.php'); ?>">Browse Resources</a></li>
+                    <?php if (isset($_SESSION['user_id'])): ?>
+                        <?php if ($_SESSION['user_role'] == 1): ?>
+                            <li><a href="<?php echo url('app/views/admin/dashboard.php'); ?>">Admin</a></li>
+                        <?php endif; ?>
+                        <?php if ($_SESSION['user_role'] == 1 || (isset($_SESSION['user_type']) && $_SESSION['user_type'] == 'creator')): ?>
+                            <li><a href="<?php echo url('app/views/resources/upload.php'); ?>">Upload</a></li>
+                        <?php endif; ?>
+                        
+                        <?php 
+                        // Define user type variables
+                        $isCreator = isset($_SESSION['user_type']) && $_SESSION['user_type'] == 'creator';
+                        $isAdmin = $_SESSION['user_role'] == 1;
+                        
+                        // Show different menu items based on user type
+                        if ($isAdmin) {
+                            // Admin sees My Resources (purchased items)
+                            echo '<li><a href="' . url('app/views/profile/my_resources.php') . '">My Resources</a></li>';
+                        } elseif ($isCreator) {
+                            // Creator sees My Uploads and My Earnings
+                            echo '<li><a href="' . url('app/views/admin/resources.php') . '">My Uploads</a></li>';
+                            echo '<li><a href="' . url('app/views/profile/earnings.php') . '">My Earnings</a></li>';
+                        } else {
+                            // Student sees My Resources (purchased items)
+                            echo '<li><a href="' . url('app/views/profile/my_resources.php') . '">My Resources</a></li>';
+                        }
+                        
+                        // Show Quizzes for students and admins (not creators unless they're admin)
+                        if (!$isCreator || $isAdmin): 
+                        ?>
+                            <li><a href="<?php echo url('app/views/quiz/list.php'); ?>">Quizzes</a></li>
+                        <?php endif; ?>
+                        
+                        <?php 
+                        // Only show Cart for students (not admins or creators)
+                        if (!$isAdmin && !$isCreator): 
+                        ?>
+                        <li style="position: relative;">
+                            <a href="<?php echo url('app/views/cart/view.php'); ?>">Cart</a>
+                            <?php
+                            // Get cart count
+                            if (isset($_SESSION['user_id'])) {
+                                try {
+                                    if (!class_exists('cart_model')) {
+                                        require_once __DIR__ . '/../../models/cart_model.php';
+                                    }
+                                    $cartModel = new cart_model();
+                                    $cart_items = $cartModel->getUserCart($_SESSION['user_id']);
+                                    $cart_count = count($cart_items);
+                                    if ($cart_count > 0):
+                            ?>
+                                <span class="cart-badge <?php echo isset($_SESSION['cart_updated']) ? 'cart-badge-pulse' : ''; ?>">
+                                    <?php echo $cart_count; ?>
+                                </span>
+                            <?php 
+                                    endif;
+                                } catch (Exception $e) {
+                                    // Silently fail if cart model can't be loaded
+                                    error_log("Cart badge error: " . $e->getMessage());
+                                }
+                                unset($_SESSION['cart_updated']); // Clear the flag
+                            }
+                            ?>
+                        </li>
+                        <?php endif; ?>
+                        
+                        <li><a href="<?php echo url('app/views/profile/dashboard.php'); ?>">Profile</a></li>
+                        <li><a href="<?php echo url('app/views/auth/logout.php'); ?>">Logout</a></li>
+                    <?php else: ?>
+                        <li><a href="<?php echo url('app/views/auth/login.php'); ?>">Login</a></li>
+                        <li><a href="<?php echo url('app/views/auth/register.php'); ?>" class="btn-primary">Sign Up</a></li>
+                    <?php endif; ?>
                 <?php endif; ?>
             </ul>
         </div>

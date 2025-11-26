@@ -119,21 +119,12 @@ require_once __DIR__ . '/../layouts/header.php';
         <p>Your trusted marketplace for digital learning resources</p>
         
         <div class="hero-buttons">
-            <?php if (isset($_SESSION['user_id'])): ?>
-                <a href="<?php echo url('app/views/resources/list.php'); ?>" class="btn btn-hero-primary">
-                    Browse Resources
-                </a>
-                <a href="<?php echo url('app/views/profile/dashboard.php'); ?>" class="btn btn-hero-secondary">
-                    My Dashboard
-                </a>
-            <?php else: ?>
-                <a href="<?php echo url('app/views/auth/register.php'); ?>" class="btn btn-hero-primary">
-                    Sign Up
-                </a>
-                <a href="<?php echo url('app/views/auth/login.php'); ?>" class="btn btn-hero-secondary">
-                    Log In
-                </a>
-            <?php endif; ?>
+            <a href="<?php echo url('app/views/auth/register.php'); ?>" class="btn btn-hero-primary">
+                Start Here
+            </a>
+            <a href="<?php echo url('app/views/resources/list.php'); ?>" class="btn btn-hero-secondary">
+                Browse Resources
+            </a>
         </div>
     </div>
 </div>
