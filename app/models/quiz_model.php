@@ -166,7 +166,7 @@ class quiz_model {
     }
     
     public function getUserAttempts($user_id) {
-        $stmt = $this->conn->prepare("SELECT qa.*, q.quiz_title, q.time_limit FROM quiz_attempts qa JOIN quizzes q ON qa.quiz_id = q.quiz_id WHERE qa.user_id = ? ORDER BY qa.completed_at DESC");
+        $stmt = $this->conn->prepare("SELECT qa.*, q.quiz_title, q.time_limit FROM quiz_attempts qa JOIN quizzes q ON qa.quiz_id = q.quiz_id WHERE qa.user_id = ? ORDER BY qa.started_at DESC");
         $stmt->bind_param("i", $user_id);
         $stmt->execute();
         return $stmt->get_result()->fetch_all(MYSQLI_ASSOC);

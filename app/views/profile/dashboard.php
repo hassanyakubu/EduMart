@@ -1,4 +1,7 @@
 <?php
+ini_set('display_errors', 1);
+error_reporting(E_ALL);
+
 session_start();
 require_once __DIR__ . '/../../config/config.php';
 require_once __DIR__ . '/../../models/user_model.php';
@@ -11,15 +14,26 @@ if (!isset($_SESSION['user_id'])) {
     exit;
 }
 
-$userModel = new user_model();
-$downloadModel = new download_model();
-$orderModel = new order_model();
-$quizModel = new quiz_model();
+try {
+    $userModel = new user_model();
+    $downloadModel = new download_model();
+    $orderModel = new order_model();
+    $quizModel = new quiz_model();
 
-$user = $userModel->getById($_SESSION['user_id']);
-$downloads = $downloadModel->getUserDownloads($_SESSION['user_id']);
-$orders = $orderModel->getOrdersByUser($_SESSION['user_id']);
-$quiz_attempts = $quizModel->getUserAttempts($_SESSION['user_id']);
+    $user = $userModel->getById($_SESSION['user_id']);
+    $downloads = $downloadModel->getUserDownloads($_SESSION['user_id']);
+    $orders = $orderModel->getOrdersByUser($_SESSION['user_id']);
+    
+    // Try to get quiz attempts, but handle errors gracefully
+    try {
+        $quiz_attempts = $quizModel->getUserAttempts($_SESSION['user_id']);
+    } catch (Exception $e) {
+        error_log("Quiz attempts error: " . $e->getMessage());
+        $quiz_attempts = [];
+    }
+} catch (Exception $e) {
+    die("Error loading dashboard: " . $e->getMessage() . "<br>File: " . $e->getFile() . "<br>Line: " . $e->getLine());
+}
 
 $page_title = 'My Dashboard';
 require_once __DIR__ . '/../layouts/header.php';
