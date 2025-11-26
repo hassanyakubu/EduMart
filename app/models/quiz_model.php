@@ -159,12 +159,6 @@ class quiz_model {
         return false;
     }
     
-    public function saveAnswer($attempt_id, $question_id, $user_answer, $is_correct) {
-        $stmt = $this->conn->prepare("INSERT INTO quiz_answers (attempt_id, question_id, user_answer, is_correct) VALUES (?, ?, ?, ?)");
-        $stmt->bind_param("iisi", $attempt_id, $question_id, $user_answer, $is_correct);
-        return $stmt->execute();
-    }
-    
     public function getUserAttempts($user_id) {
         $stmt = $this->conn->prepare("SELECT qa.*, q.quiz_title, q.time_limit FROM quiz_attempts qa JOIN quizzes q ON qa.quiz_id = q.quiz_id WHERE qa.user_id = ? ORDER BY qa.started_at DESC");
         $stmt->bind_param("i", $user_id);
