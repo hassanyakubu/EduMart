@@ -22,7 +22,7 @@
         }
         
         .navbar .logo {
-            color: #333;
+            color: #000 !important;
             font-weight: 700;
             font-size: 1.5rem;
         }
