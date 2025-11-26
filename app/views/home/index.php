@@ -122,8 +122,8 @@ require_once __DIR__ . '/../layouts/header.php';
             <a href="<?php echo url('app/views/auth/register.php'); ?>" class="btn btn-hero-primary">
                 Start Here
             </a>
-            <a href="<?php echo url('app/views/resources/list.php'); ?>" class="btn btn-hero-secondary">
-                Browse Resources
+            <a href="<?php echo url('app/views/auth/login.php'); ?>" class="btn btn-hero-secondary">
+                Login
             </a>
         </div>
     </div>

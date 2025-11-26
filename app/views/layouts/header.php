@@ -100,14 +100,19 @@
                 // Check if we're on the index page
                 $is_index_page = (basename($_SERVER['PHP_SELF']) === 'index.php');
                 
-                if ($is_index_page && !isset($_SESSION['user_id'])): 
-                    // Index page for visitors - show minimal menu
+                if ($is_index_page): 
+                    // Index page - show minimal menu for everyone
                 ?>
                     <li><a href="<?php echo url('app/views/resources/list.php'); ?>">Browse Resources</a></li>
-                    <li><a href="<?php echo url('app/views/auth/login.php'); ?>">Login</a></li>
-                    <li><a href="<?php echo url('app/views/auth/register.php'); ?>" class="btn-primary">Sign Up</a></li>
+                    <?php if (isset($_SESSION['user_id'])): ?>
+                        <li><a href="<?php echo url('app/views/profile/dashboard.php'); ?>">Dashboard</a></li>
+                        <li><a href="<?php echo url('app/views/auth/logout.php'); ?>">Logout</a></li>
+                    <?php else: ?>
+                        <li><a href="<?php echo url('app/views/auth/login.php'); ?>">Login</a></li>
+                        <li><a href="<?php echo url('app/views/auth/register.php'); ?>" class="btn-primary">Sign Up</a></li>
+                    <?php endif; ?>
                 <?php else: 
-                    // Full menu for logged-in users or internal pages
+                    // Full menu for internal pages
                 ?>
                     <li><a href="<?php echo url('app/views/home/index.php'); ?>">Home</a></li>
                     <li><a href="<?php echo url('app/views/resources/list.php'); ?>">Browse Resources</a></li>
