@@ -8,8 +8,13 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="<?php echo asset('assets/css/styles.css'); ?>">
     <link rel="stylesheet" href="<?php echo asset('assets/css/animations.css'); ?>">
+    <?php 
+    // Only apply enhanced styling on non-home pages
+    $current_page = basename($_SERVER['PHP_SELF']);
+    if ($current_page !== 'index.php'): 
+    ?>
     <style>
-        /* Enhanced navbar styling */
+        /* Enhanced navbar styling for internal pages */
         .navbar {
             background: linear-gradient(135deg, #FFD947 0%, #FFA500 100%);
             box-shadow: 0 4px 20px rgba(255, 217, 71, 0.3);
@@ -84,6 +89,7 @@
             color: white !important;
         }
     </style>
+    <?php endif; ?>
 </head>
 <body>
     <nav class="navbar">
