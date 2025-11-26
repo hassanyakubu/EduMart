@@ -47,11 +47,11 @@ require_once __DIR__ . '/../layouts/header.php';
 ?>
 
 <div class="container" style="margin: 3rem auto;">
-    <h1 style="margin-bottom: 2rem;">💰 My Earnings</h1>
+    <h1 style="margin-bottom: 2rem;">My Earnings</h1>
     
     <?php if (!$isAdmin): ?>
     <div style="background: #fff3cd; border-left: 4px solid #ffc107; padding: 1.5rem; margin-bottom: 2rem; border-radius: 8px;">
-        <strong style="color: #856404;">📊 Commission Structure:</strong>
+        <strong style="color: #856404;">Commission Structure:</strong>
         <p style="margin: 0.5rem 0 0 0; color: #856404;">
             You receive <strong>80%</strong> of each sale. EduMart retains 20% as platform commission.
         </p>

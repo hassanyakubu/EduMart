@@ -53,7 +53,7 @@ require_once __DIR__ . '/../layouts/header.php';
             </select>
             
             <select name="creator" style="padding: 0.8rem; border: 1px solid #ddd; border-radius: 8px;">
-                <option value="">✍️ All Creators</option>
+                <option value="">All Creators</option>
                 <?php foreach ($creators as $cr): ?>
                     <option value="<?php echo $cr['creator_id']; ?>" <?php echo (isset($_GET['creator']) && $_GET['creator'] == $cr['creator_id']) ? 'selected' : ''; ?>>
                         <?php echo htmlspecialchars($cr['creator_name']); ?>
@@ -84,7 +84,7 @@ require_once __DIR__ . '/../layouts/header.php';
                             📚 <?php echo htmlspecialchars($resource['cat_name']); ?>
                         </p>
                         <p style="color: #888; font-size: 0.85rem; margin: 0.25rem 0;">
-                            ✍️ By <?php echo htmlspecialchars($resource['creator_name']); ?>
+                            By <?php echo htmlspecialchars($resource['creator_name']); ?>
                         </p>
                         <div class="card-price">₵<?php echo number_format($resource['resource_price'], 2); ?></div>
                         <div class="card-meta">

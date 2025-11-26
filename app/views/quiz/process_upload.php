@@ -124,9 +124,9 @@ if ($quiz_id) {
     
     // Set success message based on extraction result
     if ($document_text) {
-        $_SESSION['success'] = "Quiz created successfully with {$num_questions} content-based questions! 🎉";
+        $_SESSION['success'] = "Quiz created successfully with {$num_questions} content-based questions!";
     } else {
-        $_SESSION['success'] = "Quiz created with {$num_questions} general questions. 💡 Tip: Use TXT files for content-based questions!";
+        $_SESSION['success'] = "Quiz created with {$num_questions} general questions. Tip: Use TXT files for content-based questions!";
     }
     
     header('Location: ' . url('app/views/quiz/list.php'));

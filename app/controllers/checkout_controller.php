@@ -85,9 +85,12 @@ class checkout_controller {
         $purchase_id = $this->orderModel->createOrder($_SESSION['user_id'], $invoice_no, 'completed');
         
         if ($purchase_id) {
-            // Add items to downloads
+            // Add items to downloads AND order_items
             foreach ($cart_items as $item) {
                 $this->downloadModel->logDownload($_SESSION['user_id'], $item['resource_id'], $purchase_id);
+                
+                // Add to order_items for earnings tracking
+                $this->orderModel->addOrderItem($purchase_id, $item['resource_id'], 1, $item['resource_price']);
             }
             
             // Clear cart
@@ -129,9 +132,12 @@ class checkout_controller {
             $purchase_id = $this->orderModel->createOrder($_SESSION['user_id'], $invoice_no, 'completed');
             
             if ($purchase_id) {
-                // Add items to downloads
+                // Add items to downloads AND order_items
                 foreach ($cart_items as $item) {
                     $this->downloadModel->logDownload($_SESSION['user_id'], $item['resource_id'], $purchase_id);
+                    
+                    // Add to order_items for earnings tracking
+                    $this->orderModel->addOrderItem($purchase_id, $item['resource_id'], 1, $item['resource_price']);
                 }
                 
                 // Clear cart

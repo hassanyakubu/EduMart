@@ -13,20 +13,20 @@ require_once __DIR__ . '/../layouts/header.php';
 
 <div class="container" style="max-width: 800px; margin: 3rem auto;">
     <div style="background: white; border-radius: 12px; padding: 2.5rem; box-shadow: 0 2px 10px rgba(0,0,0,0.1);">
-        <h1 style="margin-bottom: 0.5rem; color: #333;">🤖 Create AI-Generated Quiz</h1>
+        <h1 style="margin-bottom: 0.5rem; color: #333;">Create AI-Generated Quiz</h1>
         <p style="color: #666; margin-bottom: 2rem;">Upload a resource and the system will analyze it to generate relevant MCQ questions!</p>
         
         <div style="background: #d4edda; border-left: 4px solid #28a745; padding: 1.2rem; margin-bottom: 1.5rem; border-radius: 4px;">
-            <strong style="color: #155724; font-size: 1.1rem;">✅ RECOMMENDED: Use TXT Files</strong>
+            <strong style="color: #155724; font-size: 1.1rem;">RECOMMENDED: Use TXT Files</strong>
             <p style="margin: 0.5rem 0 0 0; color: #155724;">
                 For best results, upload <strong>.TXT files</strong> instead of PDFs. Text files provide 100% reliable content extraction and better question generation.
             </p>
         </div>
         
         <div style="background: #d1ecf1; border-left: 4px solid #17a2b8; padding: 1rem; margin-bottom: 2rem; border-radius: 4px;">
-            <strong>💡 File Format Guide:</strong>
+            <strong>File Format Guide:</strong>
             <ul style="margin: 0.5rem 0 0 1.5rem; color: #0c5460;">
-                <li><strong>TXT files (.txt)</strong> - ⭐ Best choice! 100% reliable extraction</li>
+                <li><strong>TXT files (.txt)</strong> - Best choice! 100% reliable extraction</li>
                 <li><strong>PDF files (.pdf)</strong> - Supported, but results may vary</li>
                 <li><strong>DOC/DOCX files</strong> - Save as TXT first for best results</li>
             </ul>
@@ -61,7 +61,7 @@ require_once __DIR__ . '/../layouts/header.php';
                     <strong>Best:</strong> .TXT files | <strong>Supported:</strong> .PDF, .DOC, .DOCX
                 </small>
                 <small style="color: #28a745; display: block; margin-top: 0.3rem; font-weight: 600;">
-                    💡 For best question generation, use TXT format!
+                    For best question generation, use TXT format!
                 </small>
             </div>
             

@@ -17,12 +17,12 @@ require_once __DIR__ . '/../layouts/header.php';
 
 <div class="container" style="margin: 3rem auto;">
     <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
-        <h1 style="margin: 0;">📝 Available Quizzes</h1>
+        <h1 style="margin: 0;">Available Quizzes</h1>
         <a href="<?php echo url('app/views/quiz/upload.php'); ?>" class="btn btn-primary">+ Create New Quiz</a>
     </div>
     
     <div style="background: #d4edda; border-left: 4px solid #28a745; padding: 1rem; margin-bottom: 2rem; border-radius: 4px;">
-        <strong style="color: #155724;">💡 Creating a Quiz?</strong>
+        <strong style="color: #155724;">Creating a Quiz?</strong>
         <p style="margin: 0.3rem 0 0 0; color: #155724; font-size: 0.95rem;">
             For best results, upload <strong>TXT files</strong> when creating quizzes. Text files provide the most reliable content extraction and better question generation!
         </p>
@@ -41,7 +41,7 @@ require_once __DIR__ . '/../layouts/header.php';
                         Created by: <?php echo htmlspecialchars($quiz['creator_name']); ?>
                     </p>
                     <div style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 1rem; color: #666;">
-                        <span>⏱️ <?php echo $quiz['time_limit']; ?> minutes</span>
+                        <span><?php echo $quiz['time_limit']; ?> minutes</span>
                     </div>
                     <a href="<?php echo url('app/views/quiz/take.php?id=' . $quiz['quiz_id']); ?>" 
                        class="btn btn-primary" style="width: 100%; text-align: center; text-decoration: none;">

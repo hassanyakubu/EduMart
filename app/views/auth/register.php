@@ -12,8 +12,8 @@ require_once __DIR__ . '/../layouts/header.php';
                 <label for="user_type">I am a:</label>
                 <select id="user_type" name="user_type" required style="padding: 0.8rem; border: 1px solid #ddd; border-radius: 8px; width: 100%; font-size: 1rem;">
                     <option value="">Select your role</option>
-                    <option value="student">🎓 Student - Browse and purchase resources</option>
-                    <option value="creator">✍️ Creator - Upload and sell resources</option>
+                    <option value="student">Student - Browse and purchase resources</option>
+                    <option value="creator">Creator - Upload and sell resources</option>
                 </select>
                 <small style="color: #666; display: block; margin-top: 0.5rem;">
                     Students can browse and purchase. Creators can upload and sell their content.

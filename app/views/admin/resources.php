@@ -56,7 +56,7 @@ require_once __DIR__ . '/../layouts/admin_header.php';
                                    class="btn btn-danger" 
                                    style="text-decoration: none; color: white; font-size: 0.9rem; padding: 0.5rem 1rem;"
                                    onclick="return confirm('Are you sure you want to delete this resource?');">
-                                    🗑️ Delete
+                                    Delete
                                 </a>
                             </td>
                         </tr>

@@ -8,12 +8,88 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="<?php echo asset('assets/css/styles.css'); ?>">
     <link rel="stylesheet" href="<?php echo asset('assets/css/animations.css'); ?>">
+    <style>
+        /* Enhanced navbar styling */
+        .navbar {
+            background: linear-gradient(135deg, #FFD947 0%, #FFA500 100%);
+            box-shadow: 0 4px 20px rgba(255, 217, 71, 0.3);
+            border-bottom: 3px solid #FFB700;
+        }
+        
+        .navbar .logo {
+            color: #333;
+            font-weight: 700;
+            font-size: 1.5rem;
+        }
+        
+        .nav-menu {
+            display: flex;
+            list-style: none;
+            gap: 0.3rem;
+            align-items: center;
+            overflow-x: auto;
+            overflow-y: hidden;
+            white-space: nowrap;
+            -webkit-overflow-scrolling: touch;
+            scrollbar-width: none;
+            -ms-overflow-style: none;
+            padding: 0.5rem 0;
+        }
+        
+        .nav-menu::-webkit-scrollbar {
+            display: none;
+        }
+        
+        .nav-menu li {
+            margin: 0;
+            flex-shrink: 0;
+        }
+        
+        .nav-menu a {
+            text-decoration: none !important;
+            color: #333;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            padding: 0.7rem 1.2rem;
+            border-radius: 8px;
+            font-size: 0.95rem;
+            display: inline-block;
+            white-space: nowrap;
+            background: rgba(255, 255, 255, 0.3);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.4);
+        }
+        
+        .nav-menu a:hover {
+            background: rgba(255, 255, 255, 0.5);
+            color: #333;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+        
+        .nav-menu a.active {
+            background: rgba(255, 255, 255, 0.6);
+            color: #333;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+        
+        .btn-primary {
+            background: linear-gradient(135deg, #333 0%, #555 100%) !important;
+            color: white !important;
+            text-decoration: none !important;
+        }
+        
+        .btn-primary:hover {
+            background: linear-gradient(135deg, #555 0%, #777 100%) !important;
+            color: white !important;
+        }
+    </style>
 </head>
 <body>
     <nav class="navbar">
         <div class="container">
             <a href="<?php echo url('app/views/home/index.php'); ?>" class="logo">EduMart</a>
-            <ul class="nav-menu" style="overflow-x: auto; white-space: nowrap; -webkit-overflow-scrolling: touch;">
+            <ul class="nav-menu">
                 <li><a href="<?php echo url('app/views/home/index.php'); ?>">Home</a></li>
                 <li><a href="<?php echo url('app/views/resources/list.php'); ?>">Browse Resources</a></li>
                 <?php if (isset($_SESSION['user_id'])): ?>
@@ -34,7 +110,7 @@
                         // Admin sees My Resources (purchased items)
                         echo '<li><a href="' . url('app/views/profile/my_resources.php') . '">My Resources</a></li>';
                     } elseif ($isCreator) {
-                        // Creator sees My Uploads (uploaded resources) and My Earnings
+                        // Creator sees My Uploads and My Earnings
                         echo '<li><a href="' . url('app/views/admin/resources.php') . '">My Uploads</a></li>';
                         echo '<li><a href="' . url('app/views/profile/earnings.php') . '">My Earnings</a></li>';
                     } else {
@@ -42,7 +118,7 @@
                         echo '<li><a href="' . url('app/views/profile/my_resources.php') . '">My Resources</a></li>';
                     }
                     
-                    // Only show Quizzes for students and admins, not creators
+                    // Show Quizzes for students and admins (not creators unless they're admin)
                     if (!$isCreator || $isAdmin): 
                     ?>
                         <li><a href="<?php echo url('app/views/quiz/list.php'); ?>">Quizzes</a></li>

@@ -85,7 +85,7 @@ require_once __DIR__ . '/../layouts/header.php';
             </a>
             <a href="<?php echo url('app/views/resources/list.php'); ?>" 
                class="btn btn-primary">
-                🛍️ Continue Shopping
+                Continue Shopping
             </a>
         </div>
     </div>

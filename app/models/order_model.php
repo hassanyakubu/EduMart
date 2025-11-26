@@ -67,5 +67,11 @@ class order_model {
                 ORDER BY p.purchase_date DESC");
         return $result->fetch_all(MYSQLI_ASSOC);
     }
+    
+    public function addOrderItem($purchase_id, $resource_id, $qty, $price) {
+        $stmt = $this->db->prepare("INSERT INTO order_items (purchase_id, resource_id, qty, price) VALUES (?, ?, ?, ?)");
+        $stmt->bind_param("iiid", $purchase_id, $resource_id, $qty, $price);
+        return $stmt->execute();
+    }
 }
 ?>

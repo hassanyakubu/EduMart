@@ -27,10 +27,10 @@ require_once __DIR__ . '/../layouts/admin_header.php';
 ?>
 
 <div class="container" style="margin: 3rem auto;">
-    <h1 style="margin-bottom: 2rem; color: #667eea;">📊 Platform Analytics</h1>
+    <h1 style="margin-bottom: 2rem; color: #667eea;">Platform Analytics</h1>
     
     <div style="background: #d4edda; border-left: 4px solid #28a745; padding: 1.5rem; margin-bottom: 2rem; border-radius: 8px;">
-        <strong style="color: #155724;">💰 Revenue Model:</strong>
+        <strong style="color: #155724;">Revenue Model:</strong>
         <p style="margin: 0.5rem 0 0 0; color: #155724;">
             EduMart earns <strong>20% commission</strong> on all sales (except your own resources where you keep 100%).
         </p>
@@ -69,7 +69,7 @@ require_once __DIR__ . '/../layouts/admin_header.php';
     </div>
     
     <div class="admin-card">
-        <h2 style="margin-bottom: 1.5rem; color: #667eea;">🏆 Top Selling Resources</h2>
+        <h2 style="margin-bottom: 1.5rem; color: #667eea;">Top Selling Resources</h2>
         
         <?php if (empty($top_resources)): ?>
             <p style="color: #666; text-align: center; padding: 2rem;">No sales data available yet.</p>
@@ -119,7 +119,7 @@ require_once __DIR__ . '/../layouts/admin_header.php';
     
     <div style="margin-top: 2rem; display: grid; grid-template-columns: 1fr 1fr; gap: 2rem;">
         <div class="admin-card">
-            <h3 style="margin-bottom: 1rem; color: #28a745;">💵 Revenue Breakdown</h3>
+            <h3 style="margin-bottom: 1rem; color: #28a745;">Revenue Breakdown</h3>
             <div style="margin-bottom: 1rem;">
                 <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem; padding: 0.5rem; background: rgba(102, 126, 234, 0.05); border-radius: 8px;">
                     <span style="font-weight: 600;">Creators (80%):</span>
@@ -138,7 +138,7 @@ require_once __DIR__ . '/../layouts/admin_header.php';
         </div>
         
         <div class="admin-card">
-            <h3 style="margin-bottom: 1rem; color: #667eea;">🎯 Quick Actions</h3>
+            <h3 style="margin-bottom: 1rem; color: #667eea;">Quick Actions</h3>
             <div style="display: flex; flex-direction: column; gap: 1rem;">
                 <a href="<?php echo url('app/views/admin/orders.php'); ?>" class="admin-btn" style="text-decoration: none; text-align: center;">View All Orders</a>
                 <a href="<?php echo url('app/views/admin/resources.php'); ?>" class="admin-btn" style="text-decoration: none; text-align: center;">Manage Resources</a>

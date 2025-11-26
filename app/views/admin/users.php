@@ -63,7 +63,7 @@ require_once __DIR__ . '/../layouts/admin_header.php';
 ?>
 
 <div class="container" style="margin: 3rem auto;">
-    <h1 style="margin-bottom: 2rem; color: #667eea;">👥 Manage Users</h1>
+    <h1 style="margin-bottom: 2rem; color: #667eea;">Manage Users</h1>
     
     <?php if ($message): ?>
         <div style="background: <?php echo $message_type === 'success' ? '#d4edda' : '#f8d7da'; ?>; 
@@ -188,7 +188,7 @@ require_once __DIR__ . '/../layouts/admin_header.php';
     <!-- Role Information -->
     <div style="margin-top: 2rem; display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 2rem;">
         <div class="admin-card">
-            <h3 style="margin-bottom: 1rem; color: #764ba2;">👑 Admin Role</h3>
+            <h3 style="margin-bottom: 1rem; color: #764ba2;">Admin Role</h3>
             <ul style="color: #666; line-height: 1.8;">
                 <li>Full platform access</li>
                 <li>Manage all users</li>
@@ -198,7 +198,7 @@ require_once __DIR__ . '/../layouts/admin_header.php';
         </div>
         
         <div class="admin-card">
-            <h3 style="margin-bottom: 1rem; color: #4CAF50;">✍️ Creator Role</h3>
+            <h3 style="margin-bottom: 1rem; color: #4CAF50;">Creator Role</h3>
             <ul style="color: #666; line-height: 1.8;">
                 <li>Upload resources</li>
                 <li>Create quizzes</li>
@@ -208,7 +208,7 @@ require_once __DIR__ . '/../layouts/admin_header.php';
         </div>
         
         <div class="admin-card">
-            <h3 style="margin-bottom: 1rem; color: #FFD947;">🎓 Student Role</h3>
+            <h3 style="margin-bottom: 1rem; color: #FFD947;">Student Role</h3>
             <ul style="color: #666; line-height: 1.8;">
                 <li>Browse resources</li>
                 <li>Purchase content</li>

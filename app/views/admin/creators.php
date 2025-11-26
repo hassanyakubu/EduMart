@@ -17,7 +17,7 @@ require_once __DIR__ . '/../layouts/admin_header.php';
 
 <div class="container">
     <div style="display: flex; justify-content: space-between; align-items: center; margin: 2rem 0;">
-        <h1>✍️ Manage Creators</h1>
+        <h1>Manage Creators</h1>
         <a href="<?php echo url('app/views/admin/dashboard.php'); ?>" class="btn btn-secondary" style="text-decoration: none; color: white;">
             ← Back to Dashboard
         </a>
@@ -53,7 +53,7 @@ require_once __DIR__ . '/../layouts/admin_header.php';
                                    class="btn btn-danger" 
                                    style="text-decoration: none; color: white; font-size: 0.9rem; padding: 0.5rem 1rem;"
                                    onclick="return confirm('Are you sure you want to delete this creator?');">
-                                    🗑️ Delete
+                                    Delete
                                 </a>
                             </td>
                         </tr>

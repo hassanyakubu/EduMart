@@ -124,7 +124,7 @@
 <body class="admin-body">
     <nav class="navbar admin-navbar">
         <div class="container">
-            <a href="<?php echo url('app/views/admin/dashboard.php'); ?>" class="logo">⚡ EduMart Admin</a>
+            <a href="<?php echo url('app/views/admin/dashboard.php'); ?>" class="logo">EduMart Admin</a>
             <ul class="nav-menu admin-nav-menu">
                 <li><a href="<?php echo url('app/views/admin/dashboard.php'); ?>" <?php echo (basename($_SERVER['PHP_SELF']) == 'dashboard.php') ? 'class="active"' : ''; ?>>Dashboard</a></li>
                 <li><a href="<?php echo url('app/views/admin/analytics.php'); ?>" <?php echo (basename($_SERVER['PHP_SELF']) == 'analytics.php') ? 'class="active"' : ''; ?>>Analytics</a></li>

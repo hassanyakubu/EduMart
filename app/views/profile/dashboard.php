@@ -31,8 +31,7 @@ require_once __DIR__ . '/../layouts/header.php';
         <p style="margin: 0.5rem 0 0 0; color: #555; font-size: 1.1rem;">
             <?php 
             $user_type = $user['user_type'] ?? 'student';
-            $icon = $user_type == 'creator' ? '✍️' : '🎓';
-            echo $icon . ' ' . ucfirst($user_type) . ' Account';
+            echo ucfirst($user_type) . ' Account';
             ?>
         </p>
     </div>
@@ -62,7 +61,7 @@ require_once __DIR__ . '/../layouts/header.php';
     <div style="background: white; border-radius: 12px; padding: 2rem; margin-bottom: 2rem;">
         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
             <h2 style="margin: 0;">Profile Information</h2>
-            <button onclick="toggleEditMode()" id="editBtn" class="btn btn-primary">✏️ Edit Profile</button>
+            <button onclick="toggleEditMode()" id="editBtn" class="btn btn-primary">Edit Profile</button>
         </div>
         
         <!-- View Mode -->
@@ -147,7 +146,7 @@ require_once __DIR__ . '/../layouts/header.php';
     if (!$isCreator || $isAdmin): 
     ?>
     <div style="background: white; border-radius: 12px; padding: 2rem; margin-bottom: 2rem;">
-        <h2 style="margin-bottom: 1rem;">📝 Recent Quiz Results</h2>
+        <h2 style="margin-bottom: 1rem;">Recent Quiz Results</h2>
         <?php if (empty($quiz_attempts)): ?>
             <p style="color: #666;">No quiz attempts yet. <a href="<?php echo url('app/views/quiz/list.php'); ?>" style="color: #FFD947;">Take your first quiz!</a></p>
         <?php else: ?>

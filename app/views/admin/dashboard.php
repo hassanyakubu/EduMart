@@ -25,14 +25,14 @@ require_once __DIR__ . '/../layouts/admin_header.php';
 
 <div class="container">
     <div style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); padding: 2rem; border-radius: 12px; margin: 2rem 0; color: white;">
-        <h1 style="margin: 0; font-size: 2.5rem;">⚙️ Admin Dashboard</h1>
+        <h1 style="margin: 0; font-size: 2.5rem;">Admin Dashboard</h1>
         <p style="margin: 0.5rem 0 0 0; font-size: 1.1rem;">Platform Overview & Management</p>
     </div>
     
     <!-- Statistics -->
     <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 2rem; margin-bottom: 3rem;">
         <div style="background: linear-gradient(135deg, #FFD947 0%, #FFC107 100%); padding: 2rem; border-radius: 12px; text-align: center; color: #333; box-shadow: 0 4px 15px rgba(0,0,0,0.1);">
-            <h3 style="margin: 0 0 1rem 0; font-size: 1.1rem;">👥 Total Users</h3>
+            <h3 style="margin: 0 0 1rem 0; font-size: 1.1rem;">Total Users</h3>
             <p style="font-size: 3rem; font-weight: 700; margin: 0;"><?php echo $total_users; ?></p>
         </div>
         <div style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); padding: 2rem; border-radius: 12px; text-align: center; color: white; box-shadow: 0 4px 15px rgba(0,0,0,0.1);">
@@ -62,7 +62,7 @@ require_once __DIR__ . '/../layouts/admin_header.php';
         <!-- Manage Students -->
         <div style="background: white; padding: 2rem; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.08);">
             <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
-                <h2 style="margin: 0;">🎓 Manage Students</h2>
+                <h2 style="margin: 0;">Manage Students</h2>
                 <a href="<?php echo url('app/views/admin/students.php'); ?>" class="btn btn-secondary" style="text-decoration: none; color: white;">
                     All Students
                 </a>
@@ -73,7 +73,7 @@ require_once __DIR__ . '/../layouts/admin_header.php';
         <!-- Manage Creators -->
         <div style="background: white; padding: 2rem; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.08);">
             <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
-                <h2 style="margin: 0;">✍️ Manage Creators</h2>
+                <h2 style="margin: 0;">Manage Creators</h2>
                 <a href="<?php echo url('app/views/admin/creators.php'); ?>" class="btn btn-secondary" style="text-decoration: none; color: white;">
                     All Creators
                 </a>
