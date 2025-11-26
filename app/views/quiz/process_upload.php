@@ -140,12 +140,21 @@ exit;
 function extractTextFromFile($file_path, $file_extension) {
     $text = '';
     
+    error_log("Extracting text from: " . $file_path . " (type: " . $file_extension . ")");
+    
     try {
         if ($file_extension === 'txt') {
             // Read plain text files - ALWAYS WORKS
-            $text = file_get_contents($file_path);
+            if (file_exists($file_path)) {
+                $text = file_get_contents($file_path);
+                error_log("TXT file read successfully. Length: " . strlen($text));
+            } else {
+                error_log("TXT file not found at: " . $file_path);
+            }
         } 
         elseif ($file_extension === 'pdf') {
+            error_log("Attempting PDF extraction");
+            
             // Try multiple methods for PDF extraction
             
             // Method 1: Try pdftotext command (if available)
@@ -153,23 +162,45 @@ function extractTextFromFile($file_path, $file_extension) {
                 $output = @shell_exec("pdftotext " . escapeshellarg($file_path) . " - 2>&1");
                 if ($output && !stripos($output, 'command not found') && !stripos($output, 'not recognized')) {
                     $text = $output;
+                    error_log("PDF extracted using pdftotext. Length: " . strlen($text));
                 }
             }
             
             // Method 2: Basic PDF text extraction (fallback)
             if (empty($text)) {
                 $text = extractPdfTextBasic($file_path);
+                error_log("PDF extracted using basic method. Length: " . strlen($text));
             }
         }
+        elseif ($file_extension === 'doc' || $file_extension === 'docx') {
+            error_log("DOC/DOCX files require conversion to TXT for best results");
+            // For DOC/DOCX, we recommend users convert to TXT first
+            $text = '';
+        }
         
-        // Clean and limit text
+        // Clean the text
         $text = trim($text);
-        if (strlen($text) > 5000) {
-            $text = substr($text, 0, 5000); // Limit to first 5000 characters
+        
+        // Remove excessive whitespace
+        $text = preg_replace('/\s+/', ' ', $text);
+        
+        // Limit text length but keep it reasonable for good question generation
+        if (strlen($text) > 10000) {
+            $text = substr($text, 0, 10000); // Limit to first 10000 characters
+            error_log("Text truncated to 10000 characters");
+        }
+        
+        error_log("Final extracted text length: " . strlen($text));
+        
+        // Log first 200 characters for debugging
+        if (strlen($text) > 0) {
+            error_log("Text preview: " . substr($text, 0, 200));
+        } else {
+            error_log("WARNING: No text extracted from file!");
         }
         
     } catch (Exception $e) {
-        // If extraction fails, return empty string (will use fallback questions)
+        error_log("Exception during text extraction: " . $e->getMessage());
         $text = '';
     }
     
@@ -217,59 +248,113 @@ function generateQuestionsFromDocument($quiz_id, $quizModel, $document_text, $qu
     $questions = [];
     
     error_log("Generating {$num_questions} questions for quiz {$quiz_id}");
+    error_log("Document text length: " . strlen($document_text));
     
     // If we have document text, try to generate content-based questions
     if (!empty($document_text) && strlen($document_text) > 100) {
+        error_log("Generating content-based questions from document");
+        
+        // Split document into sentences
+        $sentences = preg_split('/[.!?]+/', $document_text, -1, PREG_SPLIT_NO_EMPTY);
+        $sentences = array_map('trim', $sentences);
+        $sentences = array_filter($sentences, function($s) { return strlen($s) > 20; });
+        
         // Extract key information from the document
         $words = str_word_count(strtolower($document_text), 1);
         $word_freq = array_count_values($words);
         arsort($word_freq);
         
         // Remove common words
-        $common_words = ['the', 'a', 'an', 'and', 'or', 'but', 'in', 'on', 'at', 'to', 'for', 'of', 'with', 'is', 'are', 'was', 'were', 'be', 'been', 'being', 'have', 'has', 'had', 'do', 'does', 'did', 'will', 'would', 'should', 'could', 'may', 'might', 'must', 'can', 'this', 'that', 'these', 'those', 'it', 'its', 'from', 'by', 'as'];
+        $common_words = ['the', 'a', 'an', 'and', 'or', 'but', 'in', 'on', 'at', 'to', 'for', 'of', 'with', 'is', 'are', 'was', 'were', 'be', 'been', 'being', 'have', 'has', 'had', 'do', 'does', 'did', 'will', 'would', 'should', 'could', 'may', 'might', 'must', 'can', 'this', 'that', 'these', 'those', 'it', 'its', 'from', 'by', 'as', 'which', 'who', 'what', 'when', 'where', 'why', 'how'];
         foreach ($common_words as $common) {
             unset($word_freq[$common]);
         }
         
-        // Get top keywords
-        $keywords = array_slice(array_keys($word_freq), 0, 10);
+        // Get top keywords (important terms)
+        $keywords = array_slice(array_keys($word_freq), 0, 20);
+        error_log("Top keywords: " . implode(', ', array_slice($keywords, 0, 10)));
         
-        // Generate questions based on content
-        $questions[] = [
-            'question' => 'Based on the document, which of the following topics is most emphasized?',
-            'options' => [
-                ucfirst($keywords[0] ?? 'General concepts'),
-                ucfirst($keywords[1] ?? 'Basic principles'),
-                ucfirst($keywords[2] ?? 'Advanced topics'),
-                'None of the above'
-            ],
-            'correct' => 'A'
-        ];
+        // Extract sentences containing important keywords
+        $important_sentences = [];
+        foreach ($sentences as $sentence) {
+            $sentence_lower = strtolower($sentence);
+            foreach (array_slice($keywords, 0, 10) as $keyword) {
+                if (stripos($sentence_lower, $keyword) !== false && strlen($sentence) > 30) {
+                    $important_sentences[] = $sentence;
+                    break;
+                }
+            }
+        }
         
+        // Generate questions from important sentences
+        foreach (array_slice($important_sentences, 0, min(3, count($important_sentences))) as $sentence) {
+            // Find the main keyword in this sentence
+            $main_keyword = '';
+            foreach ($keywords as $kw) {
+                if (stripos($sentence, $kw) !== false) {
+                    $main_keyword = $kw;
+                    break;
+                }
+            }
+            
+            if ($main_keyword) {
+                // Create a fill-in-the-blank style question
+                $question_text = str_ireplace($main_keyword, '______', $sentence);
+                $questions[] = [
+                    'question' => 'Complete the statement: ' . $question_text,
+                    'options' => [
+                        ucfirst($main_keyword),
+                        ucfirst($keywords[rand(1, min(5, count($keywords)-1))]),
+                        ucfirst($keywords[rand(6, min(10, count($keywords)-1))]),
+                        'None of the above'
+                    ],
+                    'correct' => 'A'
+                ];
+            }
+        }
+        
+        // Generate keyword-based questions
+        for ($i = 0; $i < min(3, count($keywords)); $i++) {
+            $keyword = $keywords[$i];
+            $questions[] = [
+                'question' => 'Which of the following is a key concept discussed in the document?',
+                'options' => [
+                    ucfirst($keyword),
+                    ucfirst($keywords[($i + 5) % count($keywords)]),
+                    'Irrelevant topic',
+                    'Unrelated subject'
+                ],
+                'correct' => 'A'
+            ];
+        }
+        
+        // Generate context-based questions
         $questions[] = [
-            'question' => 'What is the main subject area covered in "' . htmlspecialchars($quiz_title) . '"?',
+            'question' => 'Based on the document "' . htmlspecialchars($quiz_title) . '", what is the primary focus?',
             'options' => [
-                ucfirst($keywords[0] ?? 'Primary topic'),
-                'Unrelated subject',
-                'General knowledge',
-                'Historical facts'
+                ucfirst($keywords[0] ?? 'Main topic') . ' and related concepts',
+                'Unrelated general knowledge',
+                'Historical events only',
+                'Mathematical formulas only'
             ],
             'correct' => 'A'
         ];
         
         // Check for specific patterns in the text
-        $has_definition = (stripos($document_text, 'define') !== false || stripos($document_text, 'definition') !== false);
-        $has_example = (stripos($document_text, 'example') !== false || stripos($document_text, 'for instance') !== false);
-        $has_steps = (stripos($document_text, 'step') !== false || stripos($document_text, 'first') !== false);
+        $has_definition = (stripos($document_text, 'define') !== false || stripos($document_text, 'definition') !== false || stripos($document_text, 'means') !== false);
+        $has_example = (stripos($document_text, 'example') !== false || stripos($document_text, 'for instance') !== false || stripos($document_text, 'such as') !== false);
+        $has_steps = (stripos($document_text, 'step') !== false || stripos($document_text, 'first') !== false || stripos($document_text, 'process') !== false);
+        $has_comparison = (stripos($document_text, 'compare') !== false || stripos($document_text, 'difference') !== false || stripos($document_text, 'versus') !== false);
+        $has_importance = (stripos($document_text, 'important') !== false || stripos($document_text, 'significant') !== false || stripos($document_text, 'crucial') !== false);
         
         if ($has_definition) {
             $questions[] = [
-                'question' => 'The document provides definitions for which of the following?',
+                'question' => 'According to the document, which statement about definitions is correct?',
                 'options' => [
-                    'Key terms and concepts',
-                    'Mathematical formulas only',
-                    'Historical dates',
-                    'None of the above'
+                    'The document provides clear definitions of key terms',
+                    'No definitions are provided',
+                    'Only mathematical formulas are defined',
+                    'Definitions are intentionally omitted'
                 ],
                 'correct' => 'A'
             ];
@@ -277,12 +362,12 @@ function generateQuestionsFromDocument($quiz_id, $quizModel, $document_text, $qu
         
         if ($has_example) {
             $questions[] = [
-                'question' => 'How does the document illustrate its concepts?',
+                'question' => 'How does the document support its explanations?',
                 'options' => [
-                    'Through examples and illustrations',
-                    'Only through theory',
-                    'Without any explanations',
-                    'Using only diagrams'
+                    'Through examples and practical illustrations',
+                    'Only through abstract theory',
+                    'Without any supporting evidence',
+                    'Using only complex diagrams'
                 ],
                 'correct' => 'A'
             ];
@@ -290,16 +375,58 @@ function generateQuestionsFromDocument($quiz_id, $quizModel, $document_text, $qu
         
         if ($has_steps) {
             $questions[] = [
-                'question' => 'What approach does the document use to explain the topic?',
+                'question' => 'What methodology does the document employ?',
                 'options' => [
-                    'Step-by-step methodology',
-                    'Random order presentation',
-                    'Only conclusions',
-                    'No structured approach'
+                    'A step-by-step or process-oriented approach',
+                    'Random, unstructured presentation',
+                    'Only final conclusions',
+                    'No clear methodology'
                 ],
                 'correct' => 'A'
             ];
         }
+        
+        if ($has_comparison) {
+            $questions[] = [
+                'question' => 'What analytical technique is used in the document?',
+                'options' => [
+                    'Comparison and contrast of concepts',
+                    'Only single-perspective analysis',
+                    'No analytical techniques',
+                    'Pure memorization approach'
+                ],
+                'correct' => 'A'
+            ];
+        }
+        
+        if ($has_importance) {
+            $questions[] = [
+                'question' => 'What does the document emphasize about the topic?',
+                'options' => [
+                    'The importance and significance of key concepts',
+                    'That the topic is not important',
+                    'Only trivial details',
+                    'No particular emphasis'
+                ],
+                'correct' => 'A'
+            ];
+        }
+        
+        // Add topic-specific questions based on keywords
+        if (count($keywords) >= 3) {
+            $questions[] = [
+                'question' => 'Which combination of topics is covered in the document?',
+                'options' => [
+                    ucfirst($keywords[0]) . ', ' . ucfirst($keywords[1]) . ', and ' . ucfirst($keywords[2]),
+                    'Unrelated random topics',
+                    'Only one narrow subject',
+                    'No specific topics'
+                ],
+                'correct' => 'A'
+            ];
+        }
+    } else {
+        error_log("No document text available, using fallback questions");
     }
     
     // If we don't have enough questions, add general ones

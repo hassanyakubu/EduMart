@@ -19,7 +19,7 @@ class sales_model {
                 c.customer_name as buyer_name
             FROM order_items oi
             JOIN resources r ON oi.resource_id = r.resource_id
-            JOIN purchase p ON oi.purchase_id = p.purchase_id
+            JOIN purchases p ON oi.purchase_id = p.purchase_id
             JOIN customer c ON p.customer_id = c.customer_id
             WHERE r.creator_id = ?
             ORDER BY p.purchase_date DESC
