@@ -48,14 +48,18 @@ sleep(2);
 $payment_successful = (rand(1, 100) <= 90);
 
 if ($payment_successful) {
-    // Create order
-    $invoice_no = rand(100000, 999999);
+    // Create order with proper invoice number
+    $invoice_no = 'INV-' . date('Ymd') . '-' . strtoupper(substr(uniqid(), -6));
     $purchase_id = $orderModel->createOrder($_SESSION['user_id'], $invoice_no, 'completed');
     
     if ($purchase_id) {
-        // Add items to downloads
+        // Add items to downloads AND order_items (CRITICAL for quiz access!)
         foreach ($cart_items as $item) {
+            // Add to downloads for resource access
             $downloadModel->logDownload($_SESSION['user_id'], $item['resource_id'], $purchase_id);
+            
+            // Add to order_items for quiz access and analytics
+            $orderModel->addOrderItem($purchase_id, $item['resource_id'], 1, $item['resource_price']);
         }
         
         // Clear cart
