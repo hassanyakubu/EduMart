@@ -71,7 +71,15 @@ class order_model {
     public function addOrderItem($purchase_id, $resource_id, $qty, $price) {
         $stmt = $this->db->prepare("INSERT INTO order_items (purchase_id, resource_id, qty, price) VALUES (?, ?, ?, ?)");
         $stmt->bind_param("iiid", $purchase_id, $resource_id, $qty, $price);
-        return $stmt->execute();
+        $result = $stmt->execute();
+        
+        if (!$result) {
+            error_log("addOrderItem FAILED: " . $stmt->error . " | purchase_id=$purchase_id, resource_id=$resource_id, qty=$qty, price=$price");
+        } else {
+            error_log("addOrderItem SUCCESS: purchase_id=$purchase_id, resource_id=$resource_id, qty=$qty, price=$price");
+        }
+        
+        return $result;
     }
 }
 ?>
