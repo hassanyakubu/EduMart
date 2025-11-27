@@ -80,8 +80,8 @@ class checkout_controller {
     }
     
     private function simulatePayment($cart_items) {
-        // Create order
-        $invoice_no = rand(100000, 999999);
+        // Create order with proper invoice number
+        $invoice_no = 'INV-' . date('Ymd') . '-' . strtoupper(substr(uniqid(), -6));
         $purchase_id = $this->orderModel->createOrder($_SESSION['user_id'], $invoice_no, 'completed');
         
         if ($purchase_id) {
@@ -130,8 +130,8 @@ class checkout_controller {
             // Get cart items before clearing
             $cart_items = $this->cartModel->getUserCart($_SESSION['user_id']);
             
-            // Create order
-            $invoice_no = rand(100000, 999999);
+            // Create order with proper invoice number
+            $invoice_no = 'INV-' . date('Ymd') . '-' . strtoupper(substr(uniqid(), -6));
             $purchase_id = $this->orderModel->createOrder($_SESSION['user_id'], $invoice_no, 'completed');
             
             if ($purchase_id) {
