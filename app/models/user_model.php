@@ -82,8 +82,17 @@ class user_model {
             return false;
         }
         
-        $stmt = $this->db->prepare("UPDATE customer SET user_role = ? WHERE customer_id = ?");
-        $stmt->bind_param("ii", $new_role, $user_id);
+        // Set user_type based on role
+        $user_type = 'student'; // default
+        if ($new_role == 1) {
+            $user_type = 'admin';
+        } elseif ($new_role == 2) {
+            $user_type = 'creator';
+        }
+        
+        // Update both user_role and user_type
+        $stmt = $this->db->prepare("UPDATE customer SET user_role = ?, user_type = ? WHERE customer_id = ?");
+        $stmt->bind_param("isi", $new_role, $user_type, $user_id);
         return $stmt->execute();
     }
 }
