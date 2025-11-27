@@ -1,14 +1,29 @@
 <?php
 session_start();
-require_once __DIR__ . '/../../controllers/admin_controller.php';
+require_once __DIR__ . '/../../config/config.php';
+require_once __DIR__ . '/../../models/category_model.php';
 
 if (!isset($_SESSION['user_id']) || $_SESSION['user_role'] != 1) {
-    header('Location: /app/views/auth/login.php');
+    header('Location: ' . url('app/views/auth/login.php'));
     exit;
 }
 
-$controller = new admin_controller();
-$controller->manageCategories();
+$categoryModel = new category_model();
+
+// Handle POST requests
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    if (isset($_POST['add_category'])) {
+        $categoryModel->create($_POST['cat_name']);
+        $_SESSION['success'] = 'Category added successfully!';
+    } elseif (isset($_POST['delete_category'])) {
+        $categoryModel->delete($_POST['cat_id']);
+        $_SESSION['success'] = 'Category deleted successfully!';
+    }
+    header('Location: ' . url('app/views/admin/categories.php'));
+    exit;
+}
+
+$categories = $categoryModel->getAll();
 
 $page_title = 'Manage Categories';
 require_once __DIR__ . '/../layouts/admin_header.php';

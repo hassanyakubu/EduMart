@@ -18,7 +18,8 @@ class admin_controller {
         $this->orderModel = new order_model();
         
         if (!isset($_SESSION['user_id']) || $_SESSION['user_role'] != 1) {
-            header('Location: /app/views/auth/login.php');
+            require_once __DIR__ . '/../config/config.php';
+            header('Location: ' . url('app/views/auth/login.php'));
             exit;
         }
     }
@@ -36,7 +37,8 @@ class admin_controller {
         
         if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['delete_user'])) {
             $this->userModel->delete($_POST['user_id']);
-            header('Location: /app/views/admin/users.php');
+            require_once __DIR__ . '/../config/config.php';
+            header('Location: ' . url('app/views/admin/users.php'));
             exit;
         }
         
@@ -48,7 +50,8 @@ class admin_controller {
         
         if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['delete_resource'])) {
             $this->resourceModel->delete($_POST['resource_id']);
-            header('Location: /app/views/admin/resources.php');
+            require_once __DIR__ . '/../config/config.php';
+            header('Location: ' . url('app/views/admin/resources.php'));
             exit;
         }
         
@@ -64,7 +67,8 @@ class admin_controller {
             } elseif (isset($_POST['delete_category'])) {
                 $this->categoryModel->delete($_POST['cat_id']);
             }
-            header('Location: /app/views/admin/categories.php');
+            require_once __DIR__ . '/../config/config.php';
+            header('Location: ' . url('app/views/admin/categories.php'));
             exit;
         }
         
