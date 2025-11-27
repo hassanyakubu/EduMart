@@ -90,7 +90,10 @@ class checkout_controller {
                 $this->downloadModel->logDownload($_SESSION['user_id'], $item['resource_id'], $purchase_id);
                 
                 // Add to order_items for earnings tracking
-                $this->orderModel->addOrderItem($purchase_id, $item['resource_id'], 1, $item['resource_price']);
+                $result = $this->orderModel->addOrderItem($purchase_id, $item['resource_id'], 1, $item['resource_price']);
+                if (!$result) {
+                    error_log("Failed to add order_item: purchase_id=$purchase_id, resource_id={$item['resource_id']}, price={$item['resource_price']}");
+                }
             }
             
             // Clear cart
@@ -137,7 +140,10 @@ class checkout_controller {
                     $this->downloadModel->logDownload($_SESSION['user_id'], $item['resource_id'], $purchase_id);
                     
                     // Add to order_items for earnings tracking
-                    $this->orderModel->addOrderItem($purchase_id, $item['resource_id'], 1, $item['resource_price']);
+                    $result = $this->orderModel->addOrderItem($purchase_id, $item['resource_id'], 1, $item['resource_price']);
+                    if (!$result) {
+                        error_log("Failed to add order_item in callback: purchase_id=$purchase_id, resource_id={$item['resource_id']}, price={$item['resource_price']}");
+                    }
                 }
                 
                 // Clear cart
