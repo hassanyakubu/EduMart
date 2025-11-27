@@ -25,8 +25,8 @@ foreach ($files_to_check as $file) {
 
 // Test 2: Check if functions are defined
 echo "\n2. Checking if controller functions are defined...\n";
-require_once 'controllers/order_controller.php';
-require_once 'controllers/cart_controller.php';
+require_once __DIR__ . '/controllers/order_controller.php';
+require_once __DIR__ . '/controllers/cart_controller.php';
 
 $functions_to_check = [
     'create_order_ctr',
@@ -47,7 +47,7 @@ foreach ($functions_to_check as $func) {
 // Test 3: Check database connection
 echo "\n3. Testing database connection...\n";
 try {
-    require_once 'app/config/database.php';
+    require_once __DIR__ . '/app/config/database.php';
     $db = Database::getInstance()->getConnection();
     echo "   ✓ Database connection successful\n";
     

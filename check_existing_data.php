@@ -4,7 +4,7 @@
  * This script shows what data exists and what's missing
  */
 
-require_once 'app/config/database.php';
+require_once __DIR__ . '/app/config/database.php';
 
 echo "=== Checking Existing Payment Data ===\n\n";
 

@@ -1,5 +1,5 @@
 <?php
-require_once 'settings/db_cred.php';
+require_once __DIR__ . '/settings/db_cred.php';
 
 echo "Testing database connection...\n";
 echo "Host: " . SERVER . "\n";

@@ -4,7 +4,7 @@
  * This script fixes the database schema to properly support payments
  */
 
-require_once 'app/config/database.php';
+require_once __DIR__ . '/app/config/database.php';
 
 echo "=== EduMart Payment System Fix ===\n\n";
 
