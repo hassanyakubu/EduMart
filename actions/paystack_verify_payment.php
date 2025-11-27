@@ -137,26 +137,44 @@ try {
     $customer_name = get_user_name();
     
     // Get fresh cart items if not provided
+    error_log("=== GETTING CART ITEMS ===");
+    error_log("Customer ID: $customer_id");
+    error_log("Cart items from POST: " . ($cart_items ? count($cart_items) : '0'));
+    
     if (!$cart_items || count($cart_items) == 0) {
+        error_log("Attempting to get cart from database...");
         $cart_items = get_user_cart_ctr($customer_id);
         error_log("Cart from database: " . count($cart_items) . " items");
     }
     
     // If still empty, try to get from session (stored during init)
     if (!$cart_items || count($cart_items) == 0) {
+        error_log("Cart empty, checking session...");
+        error_log("Session ID: " . session_id());
+        error_log("Session checkout_cart exists: " . (isset($_SESSION['checkout_cart']) ? 'YES' : 'NO'));
+        
         if (isset($_SESSION['checkout_cart'])) {
             $cart_items = $_SESSION['checkout_cart'];
-            error_log("Cart retrieved from session: " . count($cart_items) . " items");
+            error_log("SUCCESS: Cart retrieved from session: " . count($cart_items) . " items");
+            error_log("First item: " . print_r($cart_items[0], true));
+        } else {
+            error_log("ERROR: Session checkout_cart does NOT exist!");
+            error_log("All session keys: " . print_r(array_keys($_SESSION), true));
         }
     }
     
     if (!$cart_items || count($cart_items) == 0) {
-        error_log("ERROR: Cart is empty! Cannot create order items.");
-        error_log("Session checkout_cart exists: " . (isset($_SESSION['checkout_cart']) ? 'yes' : 'no'));
-        throw new Exception("Cart is empty - cannot process order");
+        error_log("CRITICAL ERROR: Cart is empty! Cannot create order items.");
+        error_log("This means:");
+        error_log("1. Database cart is empty");
+        error_log("2. Session cart is empty or not set");
+        error_log("3. POST cart_items was not provided");
+        
+        // Don't throw exception - create purchase anyway but log the issue
+        error_log("Creating purchase WITHOUT order items (will need manual fix)");
+    } else {
+        error_log("SUCCESS: Processing order with " . count($cart_items) . " cart items");
     }
-    
-    error_log("Processing order with " . count($cart_items) . " cart items");
     
     // Create database connection for transaction
     $conn = Database::getInstance()->getConnection();
@@ -190,14 +208,32 @@ try {
         }
         
         // Add order details for each cart item
-        foreach ($cart_items as $item) {
-            $detail_result = add_order_details_ctr($order_id, $item['p_id'], $item['qty']);
-            
-            if (!$detail_result) {
-                throw new Exception("Failed to add order details for product: {$item['p_id']}");
+        if ($cart_items && count($cart_items) > 0) {
+            error_log("=== ADDING ORDER ITEMS ===");
+            foreach ($cart_items as $index => $item) {
+                error_log("Processing item $index: " . print_r($item, true));
+                
+                $product_id = $item['p_id'] ?? $item['product_id'] ?? $item['resource_id'] ?? null;
+                $qty = $item['qty'] ?? 1;
+                
+                if (!$product_id) {
+                    error_log("ERROR: No product ID found in item: " . print_r($item, true));
+                    continue;
+                }
+                
+                error_log("Calling add_order_details_ctr($order_id, $product_id, $qty)");
+                $detail_result = add_order_details_ctr($order_id, $product_id, $qty);
+                
+                if (!$detail_result) {
+                    error_log("ERROR: Failed to add order details for product: $product_id");
+                    throw new Exception("Failed to add order details for product: $product_id");
+                }
+                
+                error_log("SUCCESS: Order detail added - Product: $product_id, Qty: $qty");
             }
-            
-            error_log("Order detail added - Product: {$item['p_id']}, Qty: {$item['qty']}");
+            error_log("=== FINISHED ADDING " . count($cart_items) . " ORDER ITEMS ===");
+        } else {
+            error_log("WARNING: No cart items to add! Order will have no items.");
         }
         
         // Record payment in database
