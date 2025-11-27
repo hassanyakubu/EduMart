@@ -10,7 +10,8 @@ class user_model {
     
     public function register($name, $email, $password, $country, $city, $contact, $user_type = 'student') {
         $hashed_password = password_hash($password, PASSWORD_DEFAULT);
-        $user_role = 2; // Regular user
+        // Set user_role based on user_type: 2 for creator, 3 for student
+        $user_role = ($user_type === 'creator') ? 2 : 3;
         
         $stmt = $this->db->prepare("INSERT INTO customer (customer_name, customer_email, customer_pass, customer_country, customer_city, customer_contact, user_role, user_type) VALUES (?, ?, ?, ?, ?, ?, ?, ?)");
         $stmt->bind_param("ssssssis", $name, $email, $hashed_password, $country, $city, $contact, $user_role, $user_type);
