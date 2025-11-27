@@ -166,6 +166,16 @@ try {
         
         error_log("Order created - ID: $order_id, Invoice: $invoice_no");
         
+        // DEBUG: Log cart information
+        error_log("DEBUG: About to add order items");
+        error_log("DEBUG: Cart items count: " . count($cart_items));
+        error_log("DEBUG: Customer ID: $customer_id");
+        if (count($cart_items) > 0) {
+            error_log("DEBUG: First cart item: " . print_r($cart_items[0], true));
+        } else {
+            error_log("ERROR: Cart is EMPTY! Cannot create order items!");
+        }
+        
         // Add order details for each cart item
         foreach ($cart_items as $item) {
             $detail_result = add_order_details_ctr($order_id, $item['p_id'], $item['qty']);
