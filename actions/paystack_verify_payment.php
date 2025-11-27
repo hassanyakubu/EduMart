@@ -91,7 +91,9 @@ try {
     }
     
     // Ensure we have expected total server-side (calculate from cart if frontend didn't send it)
-    require_once '../controllers/cart_controller.php';
+    require_once __DIR__ . '/../controllers/cart_controller.php';
+    require_once __DIR__ . '/../controllers/order_controller.php';
+    
     if (!$cart_items || count($cart_items) == 0) {
         $cart_items = get_user_cart_ctr(get_user_id());
     }
@@ -128,9 +130,8 @@ try {
     }
     
     // Payment is verified! Now create the order in our system
-    require_once '../controllers/cart_controller.php';
-    require_once '../controllers/order_controller.php';
-    require_once '../settings/db_class.php';
+    require_once __DIR__ . '/../controllers/cart_controller.php';
+    require_once __DIR__ . '/../controllers/order_controller.php';
     
     $customer_id = get_user_id();
     $customer_name = get_user_name();
@@ -145,8 +146,7 @@ try {
     }
     
     // Create database connection for transaction
-    $db = new db_connection();
-    $conn = $db->db_conn();
+    $conn = Database::getInstance()->getConnection();
     
     // Begin database transaction
     mysqli_begin_transaction($conn);
