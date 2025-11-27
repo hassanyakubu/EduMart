@@ -11,7 +11,7 @@ $controller = new admin_controller();
 $controller->manageCategories();
 
 $page_title = 'Manage Categories';
-require_once __DIR__ . '/../layouts/header.php';
+require_once __DIR__ . '/../layouts/admin_header.php';
 ?>
 
 <div class="container">
