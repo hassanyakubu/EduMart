@@ -23,8 +23,8 @@ if ($result['status'] && $result['data']['status'] == 'success') {
     $cart_items = $cartModel->getUserCart($_SESSION['user_id']);
     
     if (!empty($cart_items)) {
-        // Create order
-        $invoice_no = $reference; // Use Paystack reference as invoice number
+        // Create order with proper invoice number
+        $invoice_no = 'INV-' . date('Ymd') . '-' . strtoupper(substr(uniqid(), -6));
         $order_id = $orderModel->createOrder(
             $_SESSION['user_id'],
             $invoice_no,
@@ -32,12 +32,16 @@ if ($result['status'] && $result['data']['status'] == 'success') {
         );
         
         if ($order_id) {
-            // Add items to downloads table (this gives user access to resources)
+            // Add items to downloads AND order_items (CRITICAL for quiz access!)
             require_once __DIR__ . '/../../models/download_model.php';
             $downloadModel = new download_model();
             
             foreach ($cart_items as $item) {
+                // Add to downloads for resource access
                 $downloadModel->logDownload($_SESSION['user_id'], $item['resource_id'], $order_id);
+                
+                // Add to order_items for quiz access and analytics (CRITICAL!)
+                $orderModel->addOrderItem($order_id, $item['resource_id'], 1, $item['resource_price']);
             }
             
             // Clear cart
