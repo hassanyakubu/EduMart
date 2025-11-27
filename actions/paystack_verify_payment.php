@@ -139,11 +139,24 @@ try {
     // Get fresh cart items if not provided
     if (!$cart_items || count($cart_items) == 0) {
         $cart_items = get_user_cart_ctr($customer_id);
+        error_log("Cart from database: " . count($cart_items) . " items");
+    }
+    
+    // If still empty, try to get from session (stored during init)
+    if (!$cart_items || count($cart_items) == 0) {
+        if (isset($_SESSION['checkout_cart'])) {
+            $cart_items = $_SESSION['checkout_cart'];
+            error_log("Cart retrieved from session: " . count($cart_items) . " items");
+        }
     }
     
     if (!$cart_items || count($cart_items) == 0) {
-        throw new Exception("Cart is empty");
+        error_log("ERROR: Cart is empty! Cannot create order items.");
+        error_log("Session checkout_cart exists: " . (isset($_SESSION['checkout_cart']) ? 'yes' : 'no'));
+        throw new Exception("Cart is empty - cannot process order");
     }
+    
+    error_log("Processing order with " . count($cart_items) . " cart items");
     
     // Create database connection for transaction
     $conn = Database::getInstance()->getConnection();
@@ -223,6 +236,9 @@ try {
         unset($_SESSION['paystack_ref']);
         unset($_SESSION['paystack_amount']);
         unset($_SESSION['paystack_timestamp']);
+        unset($_SESSION['checkout_cart']);
+        unset($_SESSION['checkout_total']);
+        unset($_SESSION['checkout_customer_id']);
         
         // Log user activity
         log_user_activity("Completed payment via Paystack - Invoice: $invoice_no, Amount: GHS $total_amount, Reference: $reference");

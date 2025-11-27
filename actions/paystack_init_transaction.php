@@ -52,7 +52,26 @@ try {
     $customer_id = get_user_id();
     $reference = 'AYA-' . $customer_id . '-' . time();
     
+    // IMPORTANT: Store cart items in session BEFORE redirecting to Paystack
+    // This ensures cart data is available when payment verification runs
+    require_once __DIR__ . '/../controllers/cart_controller.php';
+    $cart_items = get_user_cart_ctr($customer_id);
+    
+    if (!$cart_items || count($cart_items) == 0) {
+        echo json_encode([
+            'status' => 'error',
+            'message' => 'Your cart is empty. Please add items before checkout.'
+        ]);
+        exit();
+    }
+    
+    // Store in session as backup
+    $_SESSION['checkout_cart'] = $cart_items;
+    $_SESSION['checkout_total'] = $amount;
+    $_SESSION['checkout_customer_id'] = $customer_id;
+    
     error_log("Initializing transaction - Customer: $customer_id, Amount: $amount GHS, Email: $customer_email");
+    error_log("Cart items stored in session: " . count($cart_items) . " items");
     
     // Initialize Paystack transaction
     $paystack_response = paystack_initialize_transaction($amount, $customer_email, $reference);
