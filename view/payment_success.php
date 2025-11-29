@@ -167,7 +167,7 @@ $reference = isset($_GET['reference']) ? htmlspecialchars($_GET['reference']) : 
             </div>
             
             <div class="buttons-container">
-                <a href="orders.php" class="btn btn-primary">📦 View My Orders</a>
+                <a href="orders.php" class="btn btn-primary">View My Orders</a>
                 <a href="all_product.php" class="btn btn-secondary">Continue Shopping</a>
             </div>
         </div>

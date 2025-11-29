@@ -81,7 +81,7 @@ require_once __DIR__ . '/../layouts/header.php';
         <div class="action-buttons">
             <a href="<?php echo url('app/views/profile/my_resources.php'); ?>" 
                class="btn btn-secondary">
-                📚 My Resources
+                My Resources
             </a>
             <a href="<?php echo url('app/views/resources/list.php'); ?>" 
                class="btn btn-primary">

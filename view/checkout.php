@@ -76,7 +76,7 @@ if (!$cart_items || count($cart_items) == 0) {
                 Total: <span id="checkoutTotal">GHS 0.00</span>
             </div>
             
-            <button onclick="showPaymentModal()" class="btn btn-primary">💳 Proceed to Payment</button>
+            <button onclick="showPaymentModal()" class="btn btn-primary">Proceed to Payment</button>
         </div>
     </div>
 
@@ -103,7 +103,7 @@ if (!$cart_items || count($cart_items) == 0) {
             
             <div class="modal-buttons">
                 <button onclick="closePaymentModal()" class="btn btn-secondary">Cancel</button>
-                <button onclick="processCheckout()" id="confirmPaymentBtn" class="btn btn-primary">💳 Pay Now</button>
+                <button onclick="processCheckout()" id="confirmPaymentBtn" class="btn btn-primary">Pay Now</button>
             </div>
         </div>
     </div>

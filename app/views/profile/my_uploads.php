@@ -54,7 +54,7 @@ require_once __DIR__ . '/../layouts/header.php';
         <a href="<?php echo url('app/views/resources/upload.php'); ?>" 
            class="btn btn-primary" 
            style="text-decoration: none; padding: 0.75rem 1.5rem; background: #667eea; color: white; border-radius: 8px;">
-            ➕ Upload New Resource
+            Upload New Resource
         </a>
     </div>
     
@@ -119,7 +119,7 @@ require_once __DIR__ . '/../layouts/header.php';
                     <div style="display: flex; flex-direction: column; gap: 0.5rem;">
                         <a href="<?php echo url('app/views/resources/details.php?id=' . $resource['resource_id']); ?>" 
                            style="padding: 0.5rem 1rem; background: #667eea; color: white; border-radius: 6px; text-decoration: none; text-align: center; font-size: 0.9rem;">
-                            👁️ View
+                            View
                         </a>
                     </div>
                 </div>
