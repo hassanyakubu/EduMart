@@ -131,10 +131,7 @@
                 <li><a href="<?php echo url('app/views/admin/quiz_analytics.php'); ?>" <?php echo (basename($_SERVER['PHP_SELF']) == 'quiz_analytics.php') ? 'class="active"' : ''; ?>>Quiz Analytics</a></li>
                 <li><a href="<?php echo url('app/views/admin/users.php'); ?>" <?php echo (basename($_SERVER['PHP_SELF']) == 'users.php') ? 'class="active"' : ''; ?>>Users</a></li>
                 <li><a href="<?php echo url('app/views/admin/resources.php'); ?>" <?php echo (basename($_SERVER['PHP_SELF']) == 'resources.php') ? 'class="active"' : ''; ?>>Resources</a></li>
-                <li><a href="<?php echo url('app/views/admin/orders.php'); ?>" <?php echo (basename($_SERVER['PHP_SELF']) == 'orders.php') ? 'class="active"' : ''; ?>>Orders</a></li>
                 <li><a href="<?php echo url('app/views/admin/categories.php'); ?>" <?php echo (basename($_SERVER['PHP_SELF']) == 'categories.php') ? 'class="active"' : ''; ?>>Categories</a></li>
-                <li><a href="<?php echo url('app/views/admin/settings.php'); ?>" <?php echo (basename($_SERVER['PHP_SELF']) == 'settings.php') ? 'class="active"' : ''; ?>>Settings</a></li>
-                <li><a href="<?php echo url('app/views/home/index.php'); ?>">Main Site</a></li>
                 <li><a href="<?php echo url('app/views/auth/logout.php'); ?>">Logout</a></li>
             </ul>
         </div>

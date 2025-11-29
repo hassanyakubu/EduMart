@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost:3306
--- Generation Time: Nov 27, 2025 at 06:49 PM
+-- Generation Time: Nov 29, 2025 at 06:06 PM
 -- Server version: 8.0.44-0ubuntu0.24.04.1
 -- PHP Version: 8.3.6
 
@@ -45,7 +45,10 @@ INSERT INTO `carts` (`cart_id`, `user_id`, `created_at`, `updated_at`) VALUES
 (5, 21, '2025-11-26 20:38:30', '2025-11-26 20:38:30'),
 (6, 22, '2025-11-27 17:00:16', '2025-11-27 17:00:16'),
 (7, 23, '2025-11-27 17:05:12', '2025-11-27 17:05:12'),
-(8, 25, '2025-11-27 17:50:25', '2025-11-27 17:50:25');
+(8, 25, '2025-11-27 17:50:25', '2025-11-27 17:50:25'),
+(9, 26, '2025-11-27 19:44:39', '2025-11-27 19:44:39'),
+(10, 27, '2025-11-27 20:25:17', '2025-11-27 20:25:17'),
+(11, 28, '2025-11-29 13:57:00', '2025-11-29 13:57:00');
 
 -- --------------------------------------------------------
 
@@ -66,7 +69,12 @@ CREATE TABLE `cart_items` (
 
 INSERT INTO `cart_items` (`item_id`, `cart_id`, `resource_id`, `qty`) VALUES
 (17, 6, 5, 1),
-(18, 6, 4, 1);
+(18, 6, 4, 1),
+(60, 10, 3, 1),
+(61, 10, 8, 1),
+(62, 10, 6, 1),
+(63, 10, 4, 1),
+(64, 10, 7, 1);
 
 -- --------------------------------------------------------
 
@@ -90,7 +98,8 @@ INSERT INTO `categories` (`cat_id`, `cat_name`) VALUES
 (6, 'SHS Social Studies'),
 (7, 'JHS French'),
 (8, 'SHS Physics'),
-(9, 'JHS ICT');
+(9, 'JHS ICT'),
+(10, 'JHS BDT ');
 
 -- --------------------------------------------------------
 
@@ -112,7 +121,8 @@ INSERT INTO `creators` (`creator_id`, `creator_name`, `created_by`) VALUES
 (4, 'Seth Tekper', 18),
 (5, 'Kwame Nkrumah', 19),
 (6, 'Hassan Yakubu', 11),
-(7, 'Aki Ola', 24);
+(7, 'Aki Ola', 24),
+(8, 'Approacher\'s Series', 29);
 
 -- --------------------------------------------------------
 
@@ -146,7 +156,11 @@ INSERT INTO `customer` (`customer_id`, `customer_name`, `customer_email`, `custo
 (22, 'Salma Yakubu', 'salma@gmail.com', '$2y$10$kJE1vB9JwnDI/avk/SKsOut8.PYnY9M9fPkOsX.wDbPYEzkvhfb8u', 'Canada', 'Ontario', '+1 (519) 317-5817', NULL, 3, 'creator'),
 (23, 'Ama Brown', 'amab@gmail.com', '$2y$10$ofZZ5XwppWh26AIm.mxEJ.JikGZ3cWYfYG7JBs8Ljs/i5ztpLooRi', 'Ghana', 'Takoradi', '0592349177', NULL, 3, 'student'),
 (24, 'Aki Ola', 'akiola@gmail.com', '$2y$10$PwBnztm5PpowER.l3jo29.ytxAjLZPLrM5/a.b1H6tv2xI1OovCOu', 'Ghana', 'Sunyani', '0204200671', NULL, 2, 'creator'),
-(25, 'Peter Griffin', 'pgriff@gmail.com', '$2y$10$w6QJxPynb7MqWcTW8uORPeDSVht/FGiXLmhkpUl7ydxMauhO0B7x6', 'USA', 'Rhode Island', '+1 (401) 555-3890', NULL, 3, 'student');
+(25, 'Peter Griffin', 'pgriff@gmail.com', '$2y$10$w6QJxPynb7MqWcTW8uORPeDSVht/FGiXLmhkpUl7ydxMauhO0B7x6', 'USA', 'Rhode Island', '+1 (401) 555-3890', NULL, 3, 'student'),
+(26, 'Shemuel', 'shemueldery@gmail.com', '$2y$10$kgbXiYMF7JGsnzbPFR.WYOS3Fb4mX/cjH5rmgfCaycVvhaLrD5ZK6', 'Ghana', 'accra', '0243333339', NULL, 3, 'student'),
+(27, 'EAnt ', 'jedilak1@gmail.com', '$2y$10$0kkq0N6sYj1aJGsxP5wfoeoMDxCs1eO14rp5kxVq7aypncrABhWNS', 'Ghana', 'Acc', '0204982170', NULL, 3, 'student'),
+(28, 'Kwabena Kyei Poakwa', 'kkyeipoakwa@gmail.com', '$2y$10$U23dx78T0tsyJtFkLnr.suBUx9cB9OQGJqfTY3ZK03aKhNM60sb6q', 'Ghana', 'Accra', '0530252978', NULL, 3, 'student'),
+(29, 'Approacher\'s Series', 'approach@gmail.com', '$2y$10$0Xvp96PEHCU/k5tF0zFTFu6eSKer9ftb6rUWrPQ8bp1/Ixsst/acu', 'Ghana', 'Takoradi', '0302551287', NULL, 2, 'creator');
 
 -- --------------------------------------------------------
 
@@ -201,7 +215,29 @@ INSERT INTO `downloads` (`download_id`, `customer_id`, `resource_id`, `purchase_
 (32, 25, 5, 17, '2025-11-27 18:48:40'),
 (33, 25, 6, 17, '2025-11-27 18:48:40'),
 (34, 25, 7, 17, '2025-11-27 18:48:40'),
-(35, 25, 8, 17, '2025-11-27 18:48:40');
+(35, 25, 8, 17, '2025-11-27 18:48:40'),
+(36, 25, 3, 18, '2025-11-27 18:59:39'),
+(38, 25, 3, 20, '2025-11-27 19:04:57'),
+(39, 25, 3, 21, '2025-11-27 19:06:56'),
+(40, 25, 3, 22, '2025-11-27 19:11:06'),
+(41, 25, 3, 23, '2025-11-27 19:16:55'),
+(42, 25, 3, 24, '2025-11-27 19:19:20'),
+(43, 25, 4, 24, '2025-11-27 19:19:20'),
+(44, 25, 5, 24, '2025-11-27 19:19:20'),
+(45, 25, 6, 24, '2025-11-27 19:19:20'),
+(46, 25, 7, 24, '2025-11-27 19:19:20'),
+(47, 25, 8, 24, '2025-11-27 19:19:20'),
+(48, 26, 8, 25, '2025-11-27 19:45:50'),
+(49, 26, 7, 25, '2025-11-27 19:45:50'),
+(50, 26, 3, 25, '2025-11-27 19:45:50'),
+(51, 26, 6, 26, '2025-11-27 19:50:57'),
+(52, 26, 3, 27, '2025-11-27 19:52:58'),
+(53, 26, 3, 28, '2025-11-27 19:55:50'),
+(54, 28, 8, 29, '2025-11-29 13:59:07'),
+(55, 28, 7, 29, '2025-11-29 13:59:07'),
+(56, 28, 6, 29, '2025-11-29 13:59:07'),
+(57, 28, 5, 29, '2025-11-29 13:59:07'),
+(58, 28, 4, 29, '2025-11-29 13:59:07');
 
 -- --------------------------------------------------------
 
@@ -232,7 +268,42 @@ INSERT INTO `order_items` (`order_item_id`, `purchase_id`, `resource_id`, `qty`,
 (7, 8, 4, 1, 25.00, '2025-11-26 00:00:00'),
 (8, 6, 5, 1, 25.00, '2025-11-25 00:00:00'),
 (9, 7, 5, 1, 25.00, '2025-11-25 00:00:00'),
-(10, 8, 5, 1, 25.00, '2025-11-26 00:00:00');
+(10, 8, 5, 1, 25.00, '2025-11-26 00:00:00'),
+(17, 11, 3, 1, 15.00, '2025-11-27 19:16:04'),
+(18, 12, 3, 1, 15.00, '2025-11-27 19:16:04'),
+(19, 15, 3, 1, 15.00, '2025-11-27 19:16:04'),
+(20, 16, 3, 1, 15.00, '2025-11-27 19:16:04'),
+(21, 17, 3, 1, 15.00, '2025-11-27 19:16:04'),
+(22, 18, 3, 1, 15.00, '2025-11-27 19:16:04'),
+(23, 20, 3, 1, 15.00, '2025-11-27 19:16:04'),
+(24, 21, 3, 1, 15.00, '2025-11-27 19:16:04'),
+(25, 22, 3, 1, 15.00, '2025-11-27 19:16:04'),
+(26, 10, 4, 1, 25.00, '2025-11-27 19:16:04'),
+(27, 12, 4, 1, 25.00, '2025-11-27 19:16:04'),
+(28, 16, 4, 1, 25.00, '2025-11-27 19:16:04'),
+(29, 17, 4, 1, 25.00, '2025-11-27 19:16:04'),
+(30, 9, 5, 1, 25.00, '2025-11-27 19:16:04'),
+(31, 10, 5, 1, 25.00, '2025-11-27 19:16:04'),
+(32, 12, 5, 1, 25.00, '2025-11-27 19:16:04'),
+(33, 16, 5, 1, 25.00, '2025-11-27 19:16:04'),
+(34, 17, 5, 1, 25.00, '2025-11-27 19:16:04'),
+(35, 12, 6, 1, 15.00, '2025-11-27 19:16:04'),
+(36, 13, 6, 1, 15.00, '2025-11-27 19:16:04'),
+(37, 14, 6, 1, 15.00, '2025-11-27 19:16:04'),
+(38, 16, 6, 1, 15.00, '2025-11-27 19:16:04'),
+(39, 17, 6, 1, 15.00, '2025-11-27 19:16:04'),
+(40, 12, 7, 1, 10.00, '2025-11-27 19:16:04'),
+(41, 16, 7, 1, 10.00, '2025-11-27 19:16:04'),
+(42, 17, 7, 1, 10.00, '2025-11-27 19:16:04'),
+(43, 12, 8, 1, 25.00, '2025-11-27 19:16:04'),
+(44, 16, 8, 1, 25.00, '2025-11-27 19:16:04'),
+(45, 17, 8, 1, 25.00, '2025-11-27 19:16:04'),
+(49, 28, 3, 1, 15.00, '2025-11-27 19:55:50'),
+(50, 29, 8, 1, 25.00, '2025-11-29 13:59:07'),
+(51, 29, 7, 1, 10.00, '2025-11-29 13:59:07'),
+(52, 29, 6, 1, 15.00, '2025-11-29 13:59:07'),
+(53, 29, 5, 1, 25.00, '2025-11-29 13:59:07'),
+(54, 29, 4, 1, 25.00, '2025-11-29 13:59:07');
 
 -- --------------------------------------------------------
 
@@ -290,7 +361,18 @@ INSERT INTO `purchases` (`purchase_id`, `customer_id`, `invoice_no`, `purchase_d
 (14, 25, 'INV-20251127-000014', '2025-11-27', 'completed'),
 (15, 25, 'INV-20251127-000015', '2025-11-27', 'completed'),
 (16, 25, '0', '2025-11-27', 'completed'),
-(17, 25, '0', '2025-11-27', 'completed');
+(17, 25, '0', '2025-11-27', 'completed'),
+(18, 25, '0', '2025-11-27', 'completed'),
+(20, 25, '0', '2025-11-27', 'completed'),
+(21, 25, '0', '2025-11-27', 'completed'),
+(22, 25, '0', '2025-11-27', 'completed'),
+(23, 25, '0', '2025-11-27', 'completed'),
+(24, 25, '0', '2025-11-27', 'completed'),
+(25, 26, '0', '2025-11-27', 'completed'),
+(26, 26, '0', '2025-11-27', 'completed'),
+(27, 26, '0', '2025-11-27', 'completed'),
+(28, 26, '0', '2025-11-27', 'completed'),
+(29, 28, '0', '2025-11-29', 'completed');
 
 -- --------------------------------------------------------
 
@@ -339,7 +421,17 @@ INSERT INTO `quiz_answers` (`answer_id`, `attempt_id`, `question_id`, `user_answ
 (7, 2, 32, 'B', 1),
 (8, 2, 33, 'B', 1),
 (9, 2, 34, 'A', 1),
-(10, 2, 35, 'D', 1);
+(10, 2, 35, 'D', 1),
+(11, 3, 31, 'C', 1),
+(12, 3, 32, 'B', 1),
+(13, 3, 33, 'B', 1),
+(14, 3, 34, 'A', 1),
+(15, 3, 35, 'D', 1),
+(16, 4, 36, 'D', 0),
+(17, 4, 37, 'B', 1),
+(18, 4, 38, 'D', 1),
+(19, 4, 39, 'B', 0),
+(20, 4, 40, 'D', 1);
 
 -- --------------------------------------------------------
 
@@ -362,7 +454,9 @@ CREATE TABLE `quiz_attempts` (
 --
 
 INSERT INTO `quiz_attempts` (`attempt_id`, `quiz_id`, `user_id`, `score`, `total_questions`, `time_taken`, `completed_at`) VALUES
-(2, 7, 21, 4, 5, 19, '2025-11-26 21:45:42');
+(2, 7, 21, 4, 5, 19, '2025-11-26 21:45:42'),
+(3, 7, 26, 5, 5, 123, '2025-11-27 19:58:28'),
+(4, 8, 28, 3, 5, 96, '2025-11-29 14:01:21');
 
 -- --------------------------------------------------------
 
@@ -425,7 +519,8 @@ INSERT INTO `resources` (`resource_id`, `cat_id`, `creator_id`, `resource_title`
 (5, 1, 6, '2023', 25, 'WASSCE Core Math paper written in 2023', 'uploads/images/6925c98fd696d_Screenshot 2025-11-25 at 3.21.28 PM.png', 'math, core math, WASSCE, 2023', 'uploads/files/6925c98fd6cd7_wassce 2023 mathematics.pdf'),
 (6, 6, 7, '2023', 15, 'WASSCE Social Studies paper written in 2023', 'uploads/images/69288b21f23f6_Screenshot 2025-11-27 at 5.20.44 PM.png', 'WASSCE, SHS, social studies, 2023', 'uploads/files/69288b21f2695_wassce 2023 social studies.pdf'),
 (7, 7, 7, '2022', 10, 'BECE French paper written in 2022', 'uploads/images/69288bbbea04b_Screenshot 2025-11-27 at 5.34.22 PM.png', 'BECE, JHS, french, 2022', 'uploads/files/69288bbbea329_bece 2022 french.pdf'),
-(8, 8, 7, '2020', 25, 'WASSCE Physics paper written in 2020', 'uploads/images/69288c71ba22d_Screenshot 2025-11-27 at 5.37.22 PM.png', 'WASSCE, SHS, physics, 2020', 'uploads/files/69288c71ba41c_wassce 2020 physics.pdf');
+(8, 8, 7, '2020', 25, 'WASSCE Physics paper written in 2020', 'uploads/images/69288c71ba22d_Screenshot 2025-11-27 at 5.37.22 PM.png', 'WASSCE, SHS, physics, 2020', 'uploads/files/69288c71ba41c_wassce 2020 physics.pdf'),
+(9, 10, 8, '2022', 15, 'BECE BDT Paper written in 2022', 'uploads/images/692b05aac55a2_Screenshot 2025-11-29 at 2.37.10 PM.png', '2022, bdt, jhs, BECE', 'uploads/files/692b05aac59bf_BECE-BDT-Past-Question-2022.pdf');
 
 -- --------------------------------------------------------
 
@@ -594,55 +689,55 @@ ALTER TABLE `settings`
 -- AUTO_INCREMENT for table `carts`
 --
 ALTER TABLE `carts`
-  MODIFY `cart_id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+  MODIFY `cart_id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
 
 --
 -- AUTO_INCREMENT for table `cart_items`
 --
 ALTER TABLE `cart_items`
-  MODIFY `item_id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=43;
+  MODIFY `item_id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=71;
 
 --
 -- AUTO_INCREMENT for table `categories`
 --
 ALTER TABLE `categories`
-  MODIFY `cat_id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
+  MODIFY `cat_id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
 
 --
 -- AUTO_INCREMENT for table `creators`
 --
 ALTER TABLE `creators`
-  MODIFY `creator_id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+  MODIFY `creator_id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
 
 --
 -- AUTO_INCREMENT for table `customer`
 --
 ALTER TABLE `customer`
-  MODIFY `customer_id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=26;
+  MODIFY `customer_id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=30;
 
 --
 -- AUTO_INCREMENT for table `downloads`
 --
 ALTER TABLE `downloads`
-  MODIFY `download_id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=36;
+  MODIFY `download_id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=59;
 
 --
 -- AUTO_INCREMENT for table `order_items`
 --
 ALTER TABLE `order_items`
-  MODIFY `order_item_id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
+  MODIFY `order_item_id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=55;
 
 --
 -- AUTO_INCREMENT for table `payments`
 --
 ALTER TABLE `payments`
-  MODIFY `payment_id` int NOT NULL AUTO_INCREMENT;
+  MODIFY `payment_id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT for table `purchases`
 --
 ALTER TABLE `purchases`
-  MODIFY `purchase_id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=18;
+  MODIFY `purchase_id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=30;
 
 --
 -- AUTO_INCREMENT for table `quizzes`
@@ -654,13 +749,13 @@ ALTER TABLE `quizzes`
 -- AUTO_INCREMENT for table `quiz_answers`
 --
 ALTER TABLE `quiz_answers`
-  MODIFY `answer_id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
+  MODIFY `answer_id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=21;
 
 --
 -- AUTO_INCREMENT for table `quiz_attempts`
 --
 ALTER TABLE `quiz_attempts`
-  MODIFY `attempt_id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `attempt_id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT for table `quiz_questions`
@@ -672,7 +767,7 @@ ALTER TABLE `quiz_questions`
 -- AUTO_INCREMENT for table `resources`
 --
 ALTER TABLE `resources`
-  MODIFY `resource_id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+  MODIFY `resource_id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
 
 --
 -- AUTO_INCREMENT for table `reviews`

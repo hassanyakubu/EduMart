@@ -1,141 +1,128 @@
-# EduMart - Digital Learning Resources Marketplace
+# EduMart - Educational Resources Marketplace
 
-A complete e-commerce platform for selling and downloading educational resources (ebooks, PDFs, past questions, notes, videos).
+A web-based platform where students can purchase educational materials and take quizzes, while creators can upload and sell their content.
 
-## Features
 
-- User registration and authentication
-- Browse and search educational resources
-- Shopping cart system
-- Mobile money payment (MTN MoMo, Vodafone Cash, AirtelTigo) - Simulated
-- Secure downloads after purchase
-- Rating and review system
-- Order history and invoices
-- Admin dashboard for management
+## About This Project
 
-## Technology Stack
+EduMart is an e-learning marketplace that connects students (JHS and SHS) with educational resources from previous years (past questions and sample questions). Students can buy study materials and access quizzes, while content creators earn money by sharing their knowledge.
 
-- **Backend**: PHP 8+
-- **Database**: MySQL 8.0
-- **Architecture**: MVC (Model-View-Controller)
-- **Frontend**: HTML5, CSS3, JavaScript
-- **Design**: Light Grey (#F4F4F4) + Yellow (#FFD947)
+## Main Features
 
-## Quick Setup
+### Students Can:
+- Browse educational resources by category
+- Purchase materials using mobile money or card
+- Download purchased resources anytime
+- Take quizzes for subjects they've purchased
+- View their order history
 
-### 1. Import Database (Single File)
+### Creators Can:
+- Upload educational resources (PDFs, documents)
+- Set prices for their materials
+- Create quizzes for their content
+- Earn 80% commission on sales
+- Track their earnings
+
+### Admin Can:
+- Manage users and resources
+- View platform analytics
+- Monitor sales and revenue
+- Manage quizzes
+
+## How It Works
+
+1. **Students** browse resources and add items to cart
+2. **Checkout** with secure Paystack payment (mobile money or card)
+3. **Access** purchased materials immediately
+4. **Take quizzes** for subjects they've purchased
+5. **Creators** earn money when their resources are sold
+
+## Technologies Used
+
+- PHP (Backend)
+- MySQL (Database)
+- HTML/CSS/JavaScript (Frontend)
+- Paystack (Payment Gateway)
+- Apache Server
+
+## Setup Instructions
+
+### 1. Database Setup
+- Import `db/ecommerce_2025A_hassan_yakubu.sql` into MySQL
+- Update database credentials in `settings/db_cred.php`
+
+### 2. Payment Setup
+- Get Paystack API keys from paystack.com
+- Update keys in `settings/paystack_config.php`
+- Use test mode for development
+
+### 3. File Permissions
+Make sure the uploads folder is writable:
 ```bash
-mysql -u root -p < db/ecommerce_2025A_hassan_yakubu.sql
+chmod -R 755 uploads/
 ```
 
-**Note**: There is only ONE database file.
+### 4. Access the Site
+- Local: `http://localhost/EduMart`
+- Server: `http://169.239.251.102:442/~hassan.yakubu/EduMart`
 
-### 2. Configure Database
-Edit `settings/db_cred.php` if needed (default settings work for most setups)
+## Testing the Site
 
-### 3. Create Upload Directories
-```bash
-mkdir -p public/uploads/images public/uploads/files
-chmod -R 777 public/uploads
-```
+### Test Payment (No Real Money!)
+When testing payments, use these Paystack test credentials:
+- **Card Number:** 4084084084084081
+- **CVV:** 408
+- **Expiry Date:** 12/25
+- **PIN:** 0000
+- **OTP:** 123456
 
-### 4. Start Server
-```bash
-php -S localhost:8000
-```
+Or use test mobile money numbers:
+- MTN: 0241234567
+- Vodafone: 0201234567
 
-### 5. Access Application
-Open `http://localhost:8000` in your browser
+## How Quiz Access Works
+
+Students can only take quizzes for subjects they've purchased. For example:
+- Buy "JHS English Language" resource → Can take JHS English Language quizzes
+- Buy "SHS Core Mathematics" resource → Can take SHS Core Mathematics quizzes
+
+This ensures students have the study materials before taking quizzes.
+
+## Revenue Sharing
+
+- **Creators earn:** 80% of each sale
+- **Platform earns:** 20% commission
+- **Example:** Resource sells for GHS 25 → Creator gets GHS 20, Platform gets GHS 5
 
 ## Project Structure
 
 ```
 EduMart/
-├── app/
-│   ├── controllers/    # Business logic (snake_case)
-│   ├── models/         # Database operations (snake_case)
-│   ├── views/          # HTML templates
-│   ├── config/         # Configuration files
-│   └── helpers/        # Utility functions
-├── public/
-│   ├── assets/         # CSS, JS, images
-│   └── uploads/        # User uploaded files
-├── settings/           # Database and payment config
-├── db/                 # Database SQL files
-└── view/               # Template files
+├── app/                # Main application code
+│   ├── controllers/    # Handles business logic
+│   ├── models/         # Database operations
+│   └── views/          # Page templates
+├── settings/           # Configuration files
+├── view/               # Public pages
+├── uploads/            # Uploaded resources
+└── db/                 # Database files
 ```
 
-## Default Admin Account
+## Key Features Implemented
 
-To create an admin account:
-```sql
-UPDATE customer SET user_role = 1 WHERE customer_email = 'your@email.com';
-```
-
-## Testing Payment
-
-The platform uses simulated mobile money payment:
-1. Add items to cart
-2. Proceed to checkout
-3. Select payment method (MTN MoMo, Vodafone Cash, or AirtelTigo)
-4. Enter any 10-digit phone number (e.g., 0244123456)
-5. Complete payment (90% success rate for realistic simulation)
-6. Download your resources
-
-## Key Features
-
-### For Students
-- Browse resources by category
-- Search and filter
-- Add to cart
-- Secure payment
-- Instant downloads
-- Leave reviews
-
-### For Creators
-- Upload resources
-- Set pricing
-- Add descriptions
-- Manage content
-
-### For Admins
-- Dashboard with statistics
-- User management
-- Resource management
-- Category management
+- User authentication (students, creators, admin)
+- Shopping cart system
+- Secure payment with Paystack
+- Resource upload and management
+- Quiz creation and taking
 - Order tracking
+- Sales analytics
+- Commission tracking
+- Download management
 
-## Design
+## Credits
 
-- **Colors**: Light Grey background (#F4F4F4) with Yellow accents (#FFD947)
-- **Typography**: Inter font family
-- **Style**: Modern, clean, rounded edges
-- **Responsive**: Mobile, tablet, and desktop optimized
-
-## Security
-
-- Password hashing (bcrypt)
-- SQL injection prevention (prepared statements)
-- XSS protection
-- Session-based authentication
-- Download access control
-
-## Documentation
-
-- **PAYSTACK_ARCHITECTURE.md** - Payment system architecture
-- **PAYSTACK_SETUP.md** - Payment setup guide
-
-## Support
-
-For issues or questions, check the code comments or review the database structure.
-
-## License
-
-Educational project for Ashesi University
-
----
-
-**Status**: Ready for testing and demonstration
-**Platform**: EduMart
-**Architecture**: MVC with snake_case naming
-**Payment**: Simulated mobile money (safe for testing)
+**Developer:** Hassan Yakubu
+**Institution:** Ashesi University
+**Course:** E-Commerce 
+**Git Repo:** https://github.com/hassanyakubu/EduMart
