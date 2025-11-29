@@ -139,7 +139,7 @@
                             echo '<li><a href="' . url('app/views/profile/my_resources.php') . '">My Resources</a></li>';
                         } elseif ($isCreator) {
                             // Creator sees My Uploads, My Quizzes, and My Earnings
-                            echo '<li><a href="' . url('app/views/admin/resources.php') . '">My Uploads</a></li>';
+                            echo '<li><a href="' . url('app/views/profile/my_uploads.php') . '">My Uploads</a></li>';
                             echo '<li><a href="' . url('app/views/quiz/my_quizzes.php') . '">My Quizzes</a></li>';
                             echo '<li><a href="' . url('app/views/profile/earnings.php') . '">My Earnings</a></li>';
                         } else {
