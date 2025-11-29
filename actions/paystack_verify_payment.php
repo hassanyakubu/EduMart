@@ -115,7 +115,7 @@ try {
 
     error_log("Expected order total (server): $total_amount GHS");
 
-    // Verify amount matches (with 1 pesewa tolerance)
+    // Verify amount matches (with 1 pesewa tolerance for rounding)
     if (abs($amount_paid - $total_amount) > 0.01) {
         error_log("Amount mismatch - Expected: $total_amount GHS, Paid: $amount_paid GHS");
 
@@ -179,12 +179,12 @@ try {
     // Create database connection for transaction
     $conn = Database::getInstance()->getConnection();
     
-    // Begin database transaction
+    // Begin database transaction (ensures all-or-nothing operation)
     mysqli_begin_transaction($conn);
     error_log("Database transaction started");
     
     try {
-        // Generate invoice number
+        // Generate unique invoice number in format: INV-YYYYMMDD-XXXXXX
         $invoice_no = 'INV-' . date('Ymd') . '-' . strtoupper(substr(uniqid(), -6));
         $order_date = date('Y-m-d');
         
@@ -197,7 +197,7 @@ try {
         
         error_log("Order created - ID: $order_id, Invoice: $invoice_no");
         
-        // DEBUG: Log cart information
+        // Log cart information for debugging
         error_log("DEBUG: About to add order items");
         error_log("DEBUG: Cart items count: " . count($cart_items));
         error_log("DEBUG: Customer ID: $customer_id");
@@ -207,7 +207,7 @@ try {
             error_log("ERROR: Cart is EMPTY! Cannot create order items!");
         }
         
-        // Add order details for each cart item
+        // Add order details for each cart item (CRITICAL for quiz access and analytics)
         if ($cart_items && count($cart_items) > 0) {
             error_log("=== ADDING ORDER ITEMS ===");
             foreach ($cart_items as $index => $item) {
@@ -255,7 +255,7 @@ try {
         
         error_log("Payment recorded - ID: $payment_id, Reference: $reference");
         
-        // Empty the customer's cart
+        // Empty the customer's cart after successful purchase
         $empty_result = empty_cart_ctr($customer_id);
         
         if (!$empty_result) {
@@ -264,7 +264,7 @@ try {
         
         error_log("Cart emptied for customer: $customer_id");
         
-        // Commit database transaction
+        // Commit database transaction (make all changes permanent)
         mysqli_commit($conn);
         error_log("Database transaction committed successfully");
         
@@ -276,7 +276,7 @@ try {
         unset($_SESSION['checkout_total']);
         unset($_SESSION['checkout_customer_id']);
         
-        // Log user activity
+        // Log user activity for audit trail
         log_user_activity("Completed payment via Paystack - Invoice: $invoice_no, Amount: GHS $total_amount, Reference: $reference");
         
         // Return success response

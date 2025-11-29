@@ -1,4 +1,5 @@
 <?php
+// Checkout Controller - handles payments with Paystack and mobile money
 session_start();
 require_once __DIR__ . '/../models/cart_model.php';
 require_once __DIR__ . '/../models/order_model.php';
@@ -19,6 +20,7 @@ class checkout_controller {
         $this->userModel = new user_model();
     }
     
+    // Show checkout page
     public function checkout() {
         if (!isset($_SESSION['user_id'])) {
             header('Location: /app/views/auth/login.php');
@@ -38,6 +40,7 @@ class checkout_controller {
         require_once __DIR__ . '/../views/checkout/payment_simulated.php';
     }
     
+    // Process payment with Paystack
     public function processPayment() {
         if (!isset($_SESSION['user_id']) || $_SERVER['REQUEST_METHOD'] !== 'POST') {
             header('Location: /app/views/auth/login.php');
@@ -57,7 +60,7 @@ class checkout_controller {
         // Get user details
         $user = $this->userModel->getById($_SESSION['user_id']);
         
-        // Initialize Paystack payment
+        // Start Paystack payment
         $response = edumart_initialize_payment(
             $total,
             $user['customer_email'],
@@ -66,37 +69,34 @@ class checkout_controller {
         );
         
         if ($response['status'] === true && isset($response['data']['authorization_url'])) {
-            // Store reference in session for verification
             $_SESSION['payment_reference'] = $response['data']['reference'];
             $_SESSION['payment_amount'] = $total;
             
-            // Redirect to Paystack payment page
+            // Send user to Paystack
             header('Location: ' . $response['data']['authorization_url']);
             exit;
         } else {
-            // Fallback: Simulate payment for testing
+            // If Paystack fails, use simulated payment
             $this->simulatePayment($cart_items);
         }
     }
     
+    // Simulate payment for testing
     private function simulatePayment($cart_items) {
-        // Create order with proper invoice number
         $invoice_no = 'INV-' . date('Ymd') . '-' . strtoupper(substr(uniqid(), -6));
         $purchase_id = $this->orderModel->createOrder($_SESSION['user_id'], $invoice_no, 'completed');
         
         if ($purchase_id) {
-            // Add items to downloads AND order_items
+            // Add to downloads and order_items (needed for quiz access)
             foreach ($cart_items as $item) {
                 $this->downloadModel->logDownload($_SESSION['user_id'], $item['resource_id'], $purchase_id);
                 
-                // Add to order_items for earnings tracking
                 $result = $this->orderModel->addOrderItem($purchase_id, $item['resource_id'], 1, $item['resource_price']);
                 if (!$result) {
                     error_log("Failed to add order_item: purchase_id=$purchase_id, resource_id={$item['resource_id']}, price={$item['resource_price']}");
                 }
             }
             
-            // Clear cart
             $this->cartModel->clearCart($_SESSION['user_id']);
             
             $_SESSION['success'] = 'Payment successful! You can now download your resources.';
@@ -108,8 +108,8 @@ class checkout_controller {
         exit;
     }
     
+    // Handle Paystack callback after payment
     public function callback() {
-        // Paystack callback handler
         if (!isset($_SESSION['user_id'])) {
             header('Location: /app/views/auth/login.php');
             exit;
@@ -123,23 +123,20 @@ class checkout_controller {
             exit;
         }
         
-        // Verify payment with Paystack
+        // Verify with Paystack that payment is real
         $result = edumart_process_successful_payment($reference, $_SESSION['user_id']);
         
         if ($result['success']) {
-            // Get cart items before clearing
             $cart_items = $this->cartModel->getUserCart($_SESSION['user_id']);
             
-            // Create order with proper invoice number
             $invoice_no = 'INV-' . date('Ymd') . '-' . strtoupper(substr(uniqid(), -6));
             $purchase_id = $this->orderModel->createOrder($_SESSION['user_id'], $invoice_no, 'completed');
             
             if ($purchase_id) {
-                // Add items to downloads AND order_items
+                // Add to downloads and order_items
                 foreach ($cart_items as $item) {
                     $this->downloadModel->logDownload($_SESSION['user_id'], $item['resource_id'], $purchase_id);
                     
-                    // Add to order_items for earnings tracking
                     $result = $this->orderModel->addOrderItem($purchase_id, $item['resource_id'], 1, $item['resource_price']);
                     if (!$result) {
                         error_log("Failed to add order_item in callback: purchase_id=$purchase_id, resource_id={$item['resource_id']}, price={$item['resource_price']}");

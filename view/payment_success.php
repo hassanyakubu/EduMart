@@ -16,112 +16,168 @@ $reference = isset($_GET['reference']) ? htmlspecialchars($_GET['reference']) : 
     <title>Payment Successful - EduMart</title>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { font-family: 'Inter', sans-serif; background: #ffffff; }
+        body { 
+            font-family: 'Inter', sans-serif; 
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
         
-        .navbar { background: linear-gradient(135deg, #ffffff 0%, #fafafa 100%); padding: 20px 0; box-shadow: 0 4px 30px rgba(0, 0, 0, 0.05); }
-        .nav-container { max-width: 1400px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; padding: 0 40px; }
-        .logo { font-family: 'Cormorant Garamond', serif; font-size: 28px; background: linear-gradient(135deg, #dc2626 0%, #ef4444 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; text-decoration: none; }
+        .navbar { 
+            background: rgba(255, 255, 255, 0.95); 
+            padding: 20px 0; 
+            box-shadow: 0 2px 20px rgba(0, 0, 0, 0.1); 
+        }
+        .nav-container { 
+            max-width: 1400px; 
+            margin: 0 auto; 
+            display: flex; 
+            justify-content: space-between; 
+            align-items: center; 
+            padding: 0 40px; 
+        }
+        .logo { 
+            font-size: 28px; 
+            font-weight: 800;
+            color: #667eea;
+            text-decoration: none; 
+        }
         
-        .container { max-width: 900px; margin: 60px auto; padding: 0 20px; }
+        .container { max-width: 800px; margin: 40px auto; padding: 0 20px; }
         
-        .success-box { 
-            background: linear-gradient(135deg, #d1fae5 0%, #a7f3d0 100%); 
-            border: 2px solid #6ee7b7; 
-            border-radius: 20px; 
-            padding: 50px 40px; 
+        .success-card { 
+            background: white;
+            border-radius: 24px; 
+            padding: 60px 40px; 
             text-align: center;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.2);
+            position: relative;
+            overflow: hidden;
         }
         
-        .success-icon { 
-            font-size: 80px; 
-            margin-bottom: 20px; 
-            animation: bounce 1s ease-in-out;
+        .success-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 6px;
+            background: linear-gradient(90deg, #10b981, #3b82f6, #8b5cf6);
         }
         
-        @keyframes bounce {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-10px); }
+        .check-circle { 
+            width: 100px;
+            height: 100px;
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+            border-radius: 50%;
+            margin: 0 auto 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            animation: scaleUp 0.5s ease-out;
+            box-shadow: 0 10px 30px rgba(16, 185, 129, 0.3);
+        }
+        
+        @keyframes scaleUp {
+            0% { transform: scale(0); }
+            50% { transform: scale(1.1); }
+            100% { transform: scale(1); }
+        }
+        
+        .checkmark {
+            width: 50px;
+            height: 50px;
+            border: 4px solid white;
+            border-top: none;
+            border-left: none;
+            transform: rotate(45deg);
+            animation: drawCheck 0.4s ease-out 0.3s both;
+        }
+        
+        @keyframes drawCheck {
+            0% { height: 0; width: 0; }
+            100% { height: 50px; width: 25px; }
         }
         
         h1 { 
-            font-family: 'Cormorant Garamond', serif; 
-            font-size: 3rem; 
-            color: #065f46; 
-            margin-bottom: 10px; 
+            font-size: 2.5rem; 
+            color: #1f2937; 
+            margin-bottom: 10px;
+            font-weight: 800;
         }
         
         .subtitle { 
             font-size: 18px; 
-            color: #047857; 
-            margin-bottom: 30px; 
+            color: #6b7280; 
+            margin-bottom: 40px; 
         }
         
-        .order-details { 
-            background: white; 
+        .order-info { 
+            background: #f9fafb;
             padding: 30px; 
-            border-radius: 12px; 
+            border-radius: 16px; 
             margin: 30px 0; 
             text-align: left;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
         }
         
-        .detail-row { 
+        .info-row { 
             display: flex; 
             justify-content: space-between; 
-            padding: 12px 0; 
-            border-bottom: 1px solid #f3f4f6;
-            color: #374151;
+            padding: 15px 0; 
+            border-bottom: 1px solid #e5e7eb;
         }
         
-        .detail-row:last-child { border-bottom: none; }
-        .detail-label { font-weight: 600; }
-        .detail-value { color: #6b7280; word-break: break-all; }
+        .info-row:last-child { border-bottom: none; }
+        .info-label { font-weight: 600; color: #374151; }
+        .info-value { color: #6b7280; }
         
         .btn { 
-            padding: 16px 40px; 
+            padding: 14px 32px; 
             border: none; 
-            border-radius: 50px; 
+            border-radius: 12px; 
             font-size: 16px; 
             font-weight: 600; 
             cursor: pointer; 
-            transition: all 0.4s ease; 
+            transition: all 0.3s ease; 
             text-decoration: none; 
             display: inline-block;
-            margin: 0 10px;
+            margin: 0 8px;
         }
         
         .btn-primary { 
-            background: linear-gradient(135deg, #dc2626 0%, #ef4444 100%); 
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             color: white; 
-            box-shadow: 0 8px 25px rgba(220, 38, 38, 0.3); 
         }
         
         .btn-primary:hover { 
             transform: translateY(-2px); 
-            box-shadow: 0 12px 35px rgba(220, 38, 38, 0.4); 
+            box-shadow: 0 8px 20px rgba(102, 126, 234, 0.4);
         }
         
         .btn-secondary { 
             background: white; 
-            color: #374151; 
-            border: 2px solid #e5e7eb; 
+            color: #667eea; 
+            border: 2px solid #667eea; 
         }
         
-        .btn-secondary:hover { background: #f9fafb; }
+        .btn-secondary:hover { 
+            background: #f3f4f6; 
+        }
         
-        .buttons-container { 
+        .action-buttons { 
             display: flex; 
             justify-content: center; 
             margin-top: 40px; 
             flex-wrap: wrap;
+            gap: 12px;
         }
         
-        .confirmation-message { 
-            background: #eff6ff; 
-            border: 2px solid #3b82f6; 
-            padding: 20px; 
-            border-radius: 12px; 
-            color: #1e40af;
+        .success-badge { 
+            background: #d1fae5;
+            color: #065f46; 
+            padding: 12px 24px; 
+            border-radius: 50px; 
+            font-weight: 600;
+            display: inline-block;
             margin-bottom: 20px;
         }
     </style>
@@ -137,95 +193,40 @@ $reference = isset($_GET['reference']) ? htmlspecialchars($_GET['reference']) : 
     </nav>
 
     <div class="container">
-        <div class="success-box">
-            <div class="success-icon">🎉</div>
-            <h1>Order Successful!</h1>
-            <p class="subtitle">Your payment has been processed successfully</p>
-            
-            <div class="confirmation-message">
-                <strong>✓ Payment Confirmed</strong><br>
-                Thank you for your purchase! Your order has been confirmed and will be processed shortly.
+        <div class="success-card">
+            <div class="check-circle">
+                <div class="checkmark"></div>
             </div>
             
-            <div class="order-details">
-                <div class="detail-row">
-                    <span class="detail-label">Invoice Number</span>
-                    <span class="detail-value"><?php echo $invoice_no; ?></span>
+            <div class="success-badge">✓ Payment Confirmed</div>
+            
+            <h1>Payment Successful!</h1>
+            <p class="subtitle">Thank you for your purchase. Your order is being processed.</p>
+            
+            <div class="order-info">
+                <div class="info-row">
+                    <span class="info-label">Invoice Number</span>
+                    <span class="info-value"><?php echo $invoice_no; ?></span>
                 </div>
-                <div class="detail-row">
-                    <span class="detail-label">Payment Reference</span>
-                    <span class="detail-value"><?php echo $reference; ?></span>
+                <div class="info-row">
+                    <span class="info-label">Payment Reference</span>
+                    <span class="info-value"><?php echo $reference; ?></span>
                 </div>
-                <div class="detail-row">
-                    <span class="detail-label">Order Date</span>
-                    <span class="detail-value"><?php echo date('F j, Y'); ?></span>
+                <div class="info-row">
+                    <span class="info-label">Order Date</span>
+                    <span class="info-value"><?php echo date('F j, Y'); ?></span>
                 </div>
-                <div class="detail-row">
-                    <span class="detail-label">Status</span>
-                    <span class="detail-value" style="color: #059669; font-weight: 600;">Paid ✓</span>
+                <div class="info-row">
+                    <span class="info-label">Status</span>
+                    <span class="info-value" style="color: #10b981; font-weight: 600;">Completed</span>
                 </div>
             </div>
             
-            <div class="buttons-container">
+            <div class="action-buttons">
                 <a href="orders.php" class="btn btn-primary">View My Orders</a>
-                <a href="all_product.php" class="btn btn-secondary">Continue Shopping</a>
+                <a href="all_product.php" class="btn btn-secondary">Browse Resources</a>
             </div>
         </div>
     </div>
-
-    <script>
-        // Confetti effect
-        function createConfetti() {
-            const colors = ['#dc2626', '#ef4444', '#10b981', '#3b82f6', '#f59e0b'];
-            const confettiCount = 50;
-            
-            for (let i = 0; i < confettiCount; i++) {
-                setTimeout(() => {
-                    const confetti = document.createElement('div');
-                    confetti.style.cssText = `
-                        position: fixed;
-                        width: 10px;
-                        height: 10px;
-                        background: ${colors[Math.floor(Math.random() * colors.length)]};
-                        left: ${Math.random() * 100}%;
-                        top: -10px;
-                        opacity: 1;
-                        transform: rotate(${Math.random() * 360}deg);
-                        z-index: 10001;
-                        pointer-events: none;
-                    `;
-                    
-                    document.body.appendChild(confetti);
-                    
-                    const duration = 2000 + Math.random() * 1000;
-                    const startTime = Date.now();
-                    
-                    function animateConfetti() {
-                        const elapsed = Date.now() - startTime;
-                        const progress = elapsed / duration;
-                        
-                        if (progress < 1) {
-                            const top = progress * (window.innerHeight + 50);
-                            const wobble = Math.sin(progress * 10) * 50;
-                            
-                            confetti.style.top = top + 'px';
-                            confetti.style.left = `calc(${confetti.style.left} + ${wobble}px)`;
-                            confetti.style.opacity = 1 - progress;
-                            confetti.style.transform = `rotate(${progress * 720}deg)`;
-                            
-                            requestAnimationFrame(animateConfetti);
-                        } else {
-                            confetti.remove();
-                        }
-                    }
-                    
-                    animateConfetti();
-                }, i * 30);
-            }
-        }
-        
-        // Trigger confetti on page load
-        window.addEventListener('load', createConfetti);
-    </script>
 </body>
 </html>

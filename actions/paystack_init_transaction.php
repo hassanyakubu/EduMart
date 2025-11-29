@@ -52,8 +52,6 @@ try {
     $customer_id = get_user_id();
     $reference = 'AYA-' . $customer_id . '-' . time();
     
-    // IMPORTANT: Store cart items in session BEFORE redirecting to Paystack
-    // This ensures cart data is available when payment verification runs
     require_once __DIR__ . '/../controllers/cart_controller.php';
     $cart_items = get_user_cart_ctr($customer_id);
     

@@ -1,4 +1,5 @@
 <?php
+// Resource Model - handles past questions and study materials
 require_once __DIR__ . '/../config/database.php';
 
 class resource_model {
@@ -8,6 +9,7 @@ class resource_model {
         $this->db = Database::getInstance()->getConnection();
     }
     
+    // Get all resources with their ratings and creator info
     public function getAll($limit = null) {
         $sql = "SELECT r.*, c.cat_name, cr.creator_name, 
                 COALESCE(AVG(rv.rating), 0) as avg_rating,
@@ -27,6 +29,7 @@ class resource_model {
         return $result->fetch_all(MYSQLI_ASSOC);
     }
     
+    // Get one resource by its ID
     public function getById($id) {
         $stmt = $this->db->prepare("SELECT r.*, c.cat_name, cr.creator_name,
                 COALESCE(AVG(rv.rating), 0) as avg_rating,
@@ -42,6 +45,7 @@ class resource_model {
         return $stmt->get_result()->fetch_assoc();
     }
     
+    // Search resources with filters (keyword, category, price range, creator)
     public function search($keyword = '', $category = null, $minPrice = null, $maxPrice = null, $creator = null) {
         $sql = "SELECT r.*, c.cat_name, cr.creator_name,
                 COALESCE(AVG(rv.rating), 0) as avg_rating,
@@ -55,7 +59,7 @@ class resource_model {
         $params = [];
         $types = "";
         
-        // Add keyword search if provided
+        // Search by keyword in title, keywords, description, or creator name
         if (!empty($keyword)) {
             $sql .= " AND (r.resource_title LIKE ? OR r.resource_keywords LIKE ? OR r.resource_desc LIKE ? OR cr.creator_name LIKE ?)";
             $params = array_merge($params, ["%$keyword%", "%$keyword%", "%$keyword%", "%$keyword%"]);
@@ -88,48 +92,41 @@ class resource_model {
         
         $sql .= " GROUP BY r.resource_id ORDER BY r.resource_id DESC";
         
-        // Debug: Log the SQL query
-        error_log("Search SQL: " . $sql);
-        error_log("Search Params: " . print_r($params, true));
-        error_log("Search Types: " . $types);
-        
         $stmt = $this->db->prepare($sql);
         
         if (!$stmt) {
-            error_log("SQL Prepare Error: " . $this->db->error);
+            error_log("SQL Error: " . $this->db->error);
             return [];
         }
         
-        // Only bind params if we have any
         if (!empty($params)) {
             $stmt->bind_param($types, ...$params);
         }
         
         if (!$stmt->execute()) {
-            error_log("SQL Execute Error: " . $stmt->error);
+            error_log("Execute Error: " . $stmt->error);
             return [];
         }
         
-        $result = $stmt->get_result()->fetch_all(MYSQLI_ASSOC);
-        error_log("Search found " . count($result) . " results");
-        
-        return $result;
+        return $stmt->get_result()->fetch_all(MYSQLI_ASSOC);
     }
     
+    // Create a new resource
     public function create($cat_id, $creator_id, $title, $price, $desc, $image, $keywords, $file) {
         $stmt = $this->db->prepare("INSERT INTO resources (cat_id, creator_id, resource_title, resource_price, resource_desc, resource_image, resource_keywords, resource_file) VALUES (?, ?, ?, ?, ?, ?, ?, ?)");
         $stmt->bind_param("iidsssss", $cat_id, $creator_id, $title, $price, $desc, $image, $keywords, $file);
         return $stmt->execute();
     }
     
+    // Delete a resource
     public function delete($id) {
         $stmt = $this->db->prepare("DELETE FROM resources WHERE resource_id = ?");
         $stmt->bind_param("i", $id);
         return $stmt->execute();
     }
     
+    // Track downloads (can add download counter later if needed)
     public function updateDownloads($id) {
-        // This can be extended if you add a downloads_count column
         return true;
     }
 }
